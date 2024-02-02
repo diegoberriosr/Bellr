@@ -25,7 +25,7 @@ import GeneralContext from '../context/GeneralContext';
 const NewPost = ({ post, handleAction, postView }) => {
 
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode } = useContext(GeneralContext);
+    const { darkMode, setPfpBig, handleImageModal } = useContext(GeneralContext);
 
     const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ const NewPost = ({ post, handleAction, postView }) => {
         return [...prev, curr, ' '];
     }, []);
 
-   
+    console.log(post.image)
     
     return <div className={`border border-t-0 border-l-0 ${ darkMode ? 'border-gray-600' : 'border-gray-300'} w-full cursor-pointer`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
@@ -93,8 +93,11 @@ const NewPost = ({ post, handleAction, postView }) => {
                 <p className='w-full mt-[3px] overflow-hidden pr-5 whitespace-normal'>
                     {contentWithSpaces}
                 </p>
+                {post.image && <figure className={`mt-2 w-[98%] h-6/12 overflow-hidden border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} rounded-xl`}>
+                        <img src={post.image} alt='post pic' className='w-full h-full object-cover' onClick={() => {setPfpBig(post.image); handleImageModal() }}/>
+                    </figure>}
                 <footer className='w-full'>
-                    <ul className='flex items-center mt-3 mb-1.5 text-twitter-light-gray'>
+                    <ul className='flex items-center my-3 text-twitter-light-gray'>
                         <div className='flex w-6/12 items-center justify-between'>
                             <li className='group flex items-center space-x-1 text-icon-gray'>
                                 <FaRegComment className='group-hover:bg-blue-300 group-hover:text-blue-600 group-hover:rounded-full duration-300 cursor-pointer text-[19px]' onClick={() => { navigate(`/post/${post.reply ? post.origin.id : post.id}`)}}/>
