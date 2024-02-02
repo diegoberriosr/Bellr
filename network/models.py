@@ -52,6 +52,7 @@ class Post(models.Model):
     origin = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'posts')
     content = models.CharField(max_length=280)
+    image = models.TextField(blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(User, blank=True, related_name='liked')
     bookmarks = models.ManyToManyField(User, blank=True, related_name='bookmarked')
@@ -159,3 +160,4 @@ class Code (models.Model):
 
     def validate(self):
         return timezone.now() < self.expiration_date
+
