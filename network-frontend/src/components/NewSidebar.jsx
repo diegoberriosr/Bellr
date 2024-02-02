@@ -105,7 +105,7 @@ const Sidebar = () => {
     
 
 
-    return <nav className={`sticky w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${darkMode ? 'border-gray-600' : 'border-gray-300'} border-t-0 border-l-0 border-b-0 text-3xl`}>
+    return <nav className={`sticky top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${darkMode ? 'border-gray-600' : 'border-gray-300'} border-t-0 border-l-0 border-b-0 text-3xl`}>
         <ul className='h-screen'>
             <li className='p-2.5 px-4'>
                 <LuDog/>
