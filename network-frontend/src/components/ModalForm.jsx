@@ -8,6 +8,8 @@ import { CiImageOn } from "react-icons/ci";
 import { HiOutlineGif } from "react-icons/hi2";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { TiWorld } from "react-icons/ti";
+import { GoPaperclip } from "react-icons/go";
+import { LiaEraserSolid } from "react-icons/lia";
 
 // Component imports
 import CircleProgressBar from './CircleProgressBar';
@@ -20,11 +22,14 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
 
     const { darkMode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost } = useContext(GeneralContext);
     const [ isFocused, setIsFocused ] = useState(isEditing);
+    const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
+
     const { user, authTokens } = useContext(AuthContext);
 
     const { values, handleChange } = useFormik({
         initialValues: {
-            'content' : isEditing ? editedPost.content : "What's happening !?" 
+            'content' : isEditing ? editedPost.content : "What's happening !?",
+            'image' : isEditing ? editedPost.image : null
         }
     })
     
@@ -32,6 +37,10 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
     const percentage = (values.content.length/280) * 100 
 
     const handleNewPost = () => {
+        if (isAttatchingImage){
+            setIsAttatchingImage(!isAttatchingImage);
+            return;
+        }
         const url = isEditing ? `edit/${editedPost.id}` : 'new';
         const headers = {
             'Content-type' : 'application/json',
@@ -44,7 +53,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
         fetch(`http://127.0.0.1:8000/${url}`, {
             method : isEditing ? 'PUT' : 'POST',
             headers : headers,
-            body : JSON.stringify({'content' : values.content})
+            body : JSON.stringify({'content' : values.content, 'image' : values.image})
         })
         .then(response => response.json())
         .then( () => {
@@ -52,6 +61,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
             setIsEditing(false);
             setEditedPost(null);
             values.content = "What's happening !?";
+            values.image = null;
             handleModal();
         });
     }
@@ -70,17 +80,29 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
                 <img src={user.pfp} alt='user profile pic' className='h-full w-full object-fit' />
             </div>
             <div className={`w-full pr-2 ${!isFocused ? 'flex items-center' : ''}`}>
+                {isAttatchingImage ?
+                <input value={values.image} name='image' className={`ml-4 bg-transparent w-[94%] ${ darkMode ? 'text-white' : 'text-black'} mb-20 focus:outline-none`} placeholder='Insert your image link here' onChange={handleChange}/>
+                :
                 <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${ darkMode ? 'text-white' : 'text-black'} w-full` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 h-24 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} defaultValue={placeholder} onFocus={handleFocus} onChange={handleChange}/>
-                <span className='absolute -bottom-9 left-2 flex items-center text-twitter-blue font-bold'> <TiWorld className='mr-1 text-lg'/> Everyone can reply </span>
+                }
+                {values.image ?
+                    <>
+                         <span className='absolute -bottom-9 left-2 flex items-center text-twitter-blue font-bold'> <GoPaperclip className='mr-1 text-lg'/> Image attatched </span>
+                         <span className='absolute -bottom-10 right-6 flex items-center text-red-900 font bold cursor-pointer' onClick={() => { setIsAttatchingImage(false); values.image = null}}><LiaEraserSolid className='mr-1 text-lg'/> Delete attatchment</span>
+                    </>
+                    :
+                    <span className='absolute -bottom-9 left-2 flex items-center text-twitter-blue font-bold'> <TiWorld className='mr-1 text-lg'/> Everyone can reply </span>
+                
+                }
             </div>
         </div>
         <footer className={`w-[95%] ml-3 h-auto absolute bottom-3 flex justify-between items-center border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} border-l-0 border-r-0 border-b-0`}>
             <ul className='w-3/12 flex items-center justify-between text-twitter-blue text-lg mt-1.5'>
                 <li>
-                    <CiImageOn className='cursor-pointer'/>
+                    <CiImageOn className='cursor-pointer' onClick={() => {setIsAttatchingImage(!isAttatchingImage)}}/>
                 </li>
                 <li>
-                    <HiOutlineGif className='cursor-pointer'/>
+                    <HiOutlineGif className='cursor-pointer' onClick={() => {setIsAttatchingImage(!isAttatchingImage)}}/>
                 </li>
                 <li>
                     <BsEmojiSmile className='cursor-pointer' />
@@ -107,7 +129,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
                         <span className='absolute top-1 left-2.5 text-red-900 text-xs'>0</span>  
                     }
                 </div>
-                <button onClick={handleNewPost} disabled={(!isFocused || values.content.length === 0 )} className={`${ !isFocused || values.content.length === 0 ? 'opacity-50' : ''} ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center`}>{message}</button>
+                <button onClick={handleNewPost} disabled={(!isFocused || values.content.length === 0 )} className={`${ !isFocused || values.content.length === 0 ? 'opacity-50' : ''} ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center`}>{ isAttatchingImage ? 'Continue' : message}</button>
             </li>
         </footer>
     </header>

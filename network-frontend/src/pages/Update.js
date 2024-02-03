@@ -12,7 +12,7 @@ import SinglePostView from '../components/SinglePostView';
 import Notifications from '../components/Notifications';
 import Recomendations from '../components/Recomendations';
 import Modal from '../components/Modal';
-import Form from '../components/Form';
+import ImageInput from '../components/Forms/ImageInput';
 import ModalForm from '../components/ModalForm';
 import Users from '../components/Users';
 import EditProfile from '../components/EditProfile';
@@ -23,7 +23,7 @@ import GeneralContext from '../context/GeneralContext';
 
 const Update = () => {
 
-  const { darkMode, modalOpen, handleModal, isEditing, editedPost, setEditedPost, pfpBig, handleImageModal, imageModal, usersModal, userFilter } = useContext(GeneralContext);
+  const { darkMode, modalOpen, isEditing, setEditedPost, pfpBig, setPfpBig, handleImageModal, imageModal, userFilter } = useContext(GeneralContext);
 
   const navigate = useNavigate();
 
@@ -70,7 +70,7 @@ const Update = () => {
                 </Modal>
                 <Modal isVisible={imageModal}>
                     <div className='relative flex h-screen justify-center items-center'>
-                        <IoCloseSharp className='absolute top-0 left-0' onClick={handleImageModal}/>
+                        <IoCloseSharp className='absolute top-0 left-0' onClick={() => { handleImageModal() ; setPfpBig(null)}}/>
                         {pfpBig && <img src={pfpBig} alt='user profile pic' width='368' className='rounded-full'/>}
                     </div>
                 </Modal>

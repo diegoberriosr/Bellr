@@ -25,8 +25,8 @@ export const GeneralProvider = ({ children }) => {
     };
 
     const handleImageModal = () => {
-        setImageModal(!imageModal);
-    };
+        setImageModal(!imageModal); 
+      };
 
     const handleUsersModal = (filter, username) => {
       setUserFilter({
@@ -54,10 +54,6 @@ export const GeneralProvider = ({ children }) => {
       userFilter:userFilter,
       handleUsersModal:handleUsersModal    
     };
-
-    useEffect(() => {
-      console.log(pfpBig);
-    } , [pfpBig]);
 
     return (
         <GeneralContext.Provider value={contextData}>

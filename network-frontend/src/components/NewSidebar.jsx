@@ -15,7 +15,6 @@ import { CiBookmark } from "react-icons/ci";
 import { FaBookmark, FaFeather } from "react-icons/fa";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
-import { BsFeather } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 
 import { CiLogout } from "react-icons/ci";

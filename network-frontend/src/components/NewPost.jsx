@@ -55,8 +55,6 @@ const NewPost = ({ post, handleAction, postView }) => {
     const contentWithSpaces = parsedContent.reduce((prev, curr, i) => { // Transform it into an HTML element
         return [...prev, curr, ' '];
     }, []);
-
-    console.log(post.image)
     
     return <div className={`border border-t-0 border-l-0 ${ darkMode ? 'border-gray-600' : 'border-gray-300'} w-full cursor-pointer`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>

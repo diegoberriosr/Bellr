@@ -217,9 +217,10 @@ def get_feed(request):
 def create_post(request):
 
     content = json.loads(request.body).get('content', '')
+    image = json.loads(request.body).get('image', '')
 
     # Make a new post and add it to the database
-    newpost = Post(user=request.user, content=content)
+    newpost = Post(user=request.user, content=content, image=image)
     newpost.save()
 
     # Check if there are any mentions inside the post
@@ -250,7 +251,9 @@ def edit_post(request, post_id):
         print('inside contitional')
         # Get content 
         content = json.loads(request.body).get('content', '')
+        image = json.loads(request.body).get('image', '')
         post.content = content
+        post.image = image
         post.save()
         print('saved')
         return JsonResponse({'SUCCESS' : f'post with id={post_id} was sucessfully edited'}, status=200)
