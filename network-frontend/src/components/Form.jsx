@@ -54,7 +54,6 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
         setIsFocused(true);
     }
 
-    console.log(values.image)
     return <header className={`relative flex flex-col w-full p-2 border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} ${borderStyle} pt-1 pr-2.5 pb-2.5 transition-all`}>
         { (values.image ) && 
               ( isAttatchingImage ? 

@@ -48,8 +48,6 @@ const Update = () => {
     .catch(error => {console.log(error)})
   };
 
-  console.log(pfpBig);
-
   return (
         <div className={`flex md:px-20 lg:px-32 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} duration-300 transition-colors`}>
               <NewSidebar darkMode={darkMode}/>

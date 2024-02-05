@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 
 // Icon imports
@@ -10,6 +10,8 @@ import { RegisterSchema } from '../schemas';
 // Component imports
 import Input from './Forms/Input.jsx';
 import Header from './General/Header.jsx';
+import Modal from './Modal.jsx';
+import EditImage from './Forms/EditImage.jsx';
 
 // Context imports
 import AuthContext from '../context/AuthContext';
@@ -18,6 +20,8 @@ import GeneralContext from '../context/GeneralContext';
 const EditProfile = () => {
 
     const { user, authTokens } = useContext(AuthContext); 
+    const [ isVisible, setIsVisible] = useState(false);
+
     const { setPfpBig, handleImageModal } = useContext(GeneralContext);
 
     const { values, errors, touched, handleChange, handleBlur } = useFormik({
@@ -45,7 +49,7 @@ const EditProfile = () => {
                         <img src={user.pfp} alt='user profile pic' className='h-full w-full object-fill cursor-pointer' onClick={() => {setPfpBig(user.pfp) ; handleImageModal()}}/>
                     </div>
                     <button className='w-5 h-5 flex items-center justify-center absolute bottom-2 text-white bg-twitter-blue opacity-90 hover:opacity-100 rounded-full'>
-                        <MdModeEditOutline/>
+                        <MdModeEditOutline onClick={() => {setIsVisible(!isVisible)}}/>
                     </button>
                 </figure>
                 <p>{user.username}</p>
@@ -60,6 +64,9 @@ const EditProfile = () => {
                 <Input type='password' value={values.profilename} name='confirmation' id="Confirmation" handleChange={handleChange} handleBlur={handleBlur}
                     inputStyle='w-full h-[56px] bg-transparent text-white' error={errors['confirmation']} touched={touched['confirmation']} placeholder='Confirm password' />
             </div>
+            <Modal isVisible={isVisible}>
+                <EditImage handleCloseModal={() => {setIsVisible(!isVisible)}} name='image' value={values.image} handleOnChange={handleChange} handleOnBlur={handleBlur}/>
+            </Modal>
         </div>
     )
 }

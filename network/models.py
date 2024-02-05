@@ -52,7 +52,6 @@ class Post(models.Model):
     origin = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'posts')
     content = models.CharField(max_length=280)
-    image = models.TextField(blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(User, blank=True, related_name='liked')
     bookmarks = models.ManyToManyField(User, blank=True, related_name='bookmarked')
@@ -61,7 +60,7 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.content} \n \tBy {self.user.username} on {self.timestamp}'
     
-    def serialize(self):
+    def serialize(self, user):
         return {
             'id' : self.id,
             'pinned' : self.pinned,
@@ -69,27 +68,29 @@ class Post(models.Model):
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
             'user' : self.user.serialize(),
             'content' : self.content,
-            'image' : self.image,
             'timestamp' : self.timestamp,
-            'likes' : [user.id for user in self.likes.all()],
-            'transmissions' : [transmission.user.id for transmission in self.transmissions.all()],
-            'bookmarks' : [user.id for user in self.bookmarks.all()],
+            'likes' : len(self.likes.all()),
+            'liked' : user in self.likes.all(),
+            'transmissions' : len(self.transmissions.all()),
+            'transmitted' : user in self.transmissions.all(),
+            'bookmarked' : user in self.bookmarks.all(),
             'replies' : len(self.replies.all())
         }
     
-    def fserialize(self):
+    def fserialize(self, user):
           return {
             'id' : self.id,
             'reply' : self.reply,
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
             'user' : self.user.serialize(),
             'content' : self.content,
-            'image' : self.image,
             'timestamp' : self.timestamp,
-            'likes' : [user.id for user in self.likes.all()],
-            'transmissions' : [transmission.user.id for transmission in self.transmissions.all()],
-            'bookmarks' : [user.id for user in self.bookmarks.all()],
-            'replies' : len(self.replies.all())
+            'likes' : len(self.likes.all()),
+            'liked' : user in self.likes.all(),
+            'transmissions' : len(self.transmissions.all()),
+            'transmitted' : user in [transmission.user for transmission in self.transmissions.all()],
+            'bookmarked' : self in user.bookmarked.all() if user else False,
+            'replies' : len(self.replies.all())     
         }
 
 class Transmission(models.Model):
@@ -97,7 +98,7 @@ class Transmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transmitted')
     timestamp = models.DateTimeField(default=timezone.now)
 
-    def serialize(self):
+    def serialize(self, user):
         return {
             'transmission' : True,
             'transmitter' : self.user.username,
@@ -105,12 +106,14 @@ class Transmission(models.Model):
             'user' : self.post.user.serialize(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,
-            'likes' : [user.id for user in self.post.likes.all()],
-            'transmissions' : [transmission.user.id for transmission in self.post.transmissions.all()],
-            'bookmarks' : [user.id for user in self.post.bookmarks.all()]
+            'likes' : len(self.post.likes.all()),
+            'liked' : user in self.post.likes.all(),
+            'transmissions' : len(self.post.transmissions.all()),
+            'transmitted' : user in [transmission.user for transmission in self.transmissions.all()],
+            'bookmarked' : self in user.bookmarked.all() if user else False,
         }
     
-    def fserialize(self):
+    def fserialize(self, user):
         return {
             'transmission' : True,
             'transmitter' : self.user.username,
@@ -118,9 +121,11 @@ class Transmission(models.Model):
             'user' : self.post.user.serialize(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,
-            'likes' : [user.id for user in self.post.likes.all()],
-            'transmissions' : [transmission.user.id for transmission in self.post.transmissions.all()],
-            'bookmarks' : [user.id for user in self.post.bookmarks.all()]
+            'likes' : len(self.post.likes.all()),
+            'liked' : user in self.post.likes.all(),
+            'transmissions' : len(self.post.transmissions.all()),
+            'transmitted' : user == self.user,
+            'bookmarked' : self in user.bookmarked.all() if user else False,
         }
     
 class Notification(models.Model):

@@ -18,6 +18,8 @@ from .models import User, Post, Transmission, Notification, Code
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .utils import paginate
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -104,17 +106,32 @@ def register(request):
 
 @api_view(['GET'])
 def get_posts_all(request):
+    
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    
+
+    # Get posts and transmissions.
     posts = list(Post.objects.all())
     transmissions = list(Transmission.objects.all())
 
-    posts =  sorted(posts + transmissions, key=lambda x: x.timestamp, reverse=True)
-    return JsonResponse([post.fserialize() for post in posts], safe=False)
+    # Merge post and transmissions and sort them by inverse chronological order.
+    sorted_posts =  sorted(posts + transmissions, key=lambda x: x.timestamp, reverse=True)
+    
+    # Paginate posts and check if there are any values left to be rendered.
+    paginated_posts, hasMore = paginate(sorted_posts, 10, page_index)
+
+    return JsonResponse({
+        'posts' : [post.fserialize(request.user) for post in paginated_posts],
+        'hasMore' : hasMore
+        }, safe=False)
 
 
 @api_view(['GET'])
 def get_post_by_id(request, post_id):
-    origin = Post.objects.get(id=post_id)
 
+    origin = Post.objects.get(id=post_id)
+    
 
     return JsonResponse({
         'origin' : origin.serialize(),
@@ -202,14 +219,25 @@ def get_posts_by_user(request, user_id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_feed(request):    
+def get_feed(request):
+
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+
+    # Get all the users that the requester is following.
     following = request.user.following.all()
+
+    # Fetch all the posts and transmissions.
     posts = list(Post.objects.filter(user__in=following))
     transmissions = list(Transmission.objects.filter(user__in=following))
 
+    # Sort the feed and paginate it.
     feed = sorted(posts + transmissions, key=lambda x: x.timestamp, reverse=True)
+    sorted_feed, hasMore = paginate(feed, 10, page_index)
 
-    return JsonResponse([post.fserialize() for post in feed], safe=False)
+    return JsonResponse({
+        'hasMore' : hasMore,
+        'posts' : [post.fserialize(request.user) for post in sorted_feed]}, safe=False)
 
 
 @api_view(['POST'])
@@ -220,7 +248,7 @@ def create_post(request):
     image = json.loads(request.body).get('image', '')
 
     # Make a new post and add it to the database
-    newpost = Post(user=request.user, content=content, image=image)
+    newpost = Post(user=request.user, content=content)
     newpost.save()
 
     # Check if there are any mentions inside the post
@@ -347,8 +375,17 @@ def bookmark(request, post_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_bookmarked(request):
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
 
-    return JsonResponse([post.fserialize() for post in request.user.bookmarked.all().order_by('-timestamp')], safe=False)
+    bookmarked_posts = request.user.bookmarked.all().order_by('-timestamp')
+
+    paginated_bookmarked_posts, hasMore = paginate(bookmarked_posts, 10, page_index)
+
+    return JsonResponse({
+        'hasMore' : hasMore,
+        'posts' : [post.fserialize(request.user) for post in paginated_bookmarked_posts]
+        }, safe=False)
 
 
 @api_view(['GET'])
