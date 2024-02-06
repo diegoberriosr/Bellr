@@ -27,13 +27,13 @@ class User(AbstractUser):
             'profilename' : self.profilename,
             'verified' : self.verified,
             'followed' : user in self.followers.all(),
-            'isBlocked' : user in self.user.blocklist.all(),
+            'isBlocked' : user in self.blocklist.all(),
             'date_joined' : self.date_joined,
             'bio' : self.bio,
             'pfp' : self.pfp if self.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
             'number_of_posts' : len(self.posts.all()),
-            'followers' : [profile.serialize() for profile in self.followers.all()],
-            'following' : [profile.serialize() for profile in self.following.all()]
+            'followers' : len(self.followers.all()),
+            'following' : len(self.following.all())
         }
     
     def fserialize(self, user):
@@ -47,6 +47,14 @@ class User(AbstractUser):
             'verified' : self.verified,
             'followed' : user in self.followers.all()
         }
+    
+    def pserialize(self):
+        return {
+        'username' : self.username,
+        'profilename' : self.profilename,
+        'pfp' : self.pfp if self.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
+        }
+
     
 
 class Post(models.Model):
@@ -70,7 +78,7 @@ class Post(models.Model):
             'pinned' : self.pinned,
             'reply' : self.reply,
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
-            'user' : self.user.serialize(),
+            'user' : self.user.pserialize(),
             'followed' : user in self.user.followers.all(),
             'content' : self.content,
             'timestamp' : self.timestamp,
@@ -87,7 +95,7 @@ class Post(models.Model):
             'id' : self.id,
             'reply' : self.reply,
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
-            'user' : self.user.serialize(),
+            'user' : self.user.pserialize(),
             'followed' : user in self.user.followers.all(),
             'content' : self.content,
             'timestamp' : self.timestamp,
@@ -109,7 +117,7 @@ class Transmission(models.Model):
             'transmission' : True,
             'transmitter' : self.user.username,
             'id' : self.post.id,
-            'user' : self.post.user.serialize(),
+            'user' : self.post.user.pserialize(),
             'followed' : user in self.user.followers.all(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,
@@ -125,7 +133,7 @@ class Transmission(models.Model):
             'transmission' : True,
             'transmitter' : self.user.username,
             'id' : self.post.id,
-            'user' : self.post.user.serialize(),
+            'user' : self.post.user.pserialize(),
             'followed' : user in self.user.followers.all(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,

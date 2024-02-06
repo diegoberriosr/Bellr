@@ -33,8 +33,6 @@ const ProfileHeader = ({ account }) => {
             }
         };
 
-        
-
         axios({
             url : `http://127.0.0.1:8000/${url}`,
             method : 'GET',
@@ -48,11 +46,12 @@ const ProfileHeader = ({ account }) => {
     }
 
 
-
     return (
-        <header className={`relative border ${ darkMode ? 'border-gray-600' : 'border-gray-300' } border-l-0 w-full`}>
+        <header className={`border ${ darkMode ? 'border-gray-600' : 'border-gray-300' } border-l-0 w-full`}>
         <figure className='relative h-64 w-full '>
-            <img src='https://picsum.photos/100' alt="user's background pic" className='absolute top-0 w-full h-48 object-cover' />
+            <div className='absolute h-full w-full overflow-hidden'>
+                <img src='https://picsum.photos/100' alt="user's background pic" className='absolute top-0 w-full h-full object-fill' />
+            </div>
             <div className={`absolute left-3 bottom-0 w-[130px] h-[130px] rounded-full overflow-hidden ${ darkMode ? 'border-black' : 'border-white' } border-[3.5px]`}>
                 <img src={account.pfp} alt="user's profile pic" width='130' className='object-cover w-full h-full cursor-pointer' onClick={() => {setPfpBig(account.pfp) ; handleImageModal()}} />
             </div>

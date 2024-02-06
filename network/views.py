@@ -111,7 +111,7 @@ def get_posts_all(request):
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
     page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
     
-    
+
     # Get posts and transmissions.
     posts = list(Post.objects.all())
     transmissions = list(Transmission.objects.all())
@@ -201,7 +201,7 @@ def get_posts_by_user(request, user_id):
     # Get all posts by user and order them chronologically
     posts = Post.objects.filter(user=user).order_by('-timestamp')
     
-    return JsonResponse([post.serialize() for post in posts.all()], safe=False)
+    return JsonResponse([post.serialize(request.user) for post in posts.all()], safe=False)
 
 
 @api_view(['GET'])
