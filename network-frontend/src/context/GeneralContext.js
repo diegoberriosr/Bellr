@@ -1,12 +1,12 @@
 import { createContext, useState, useEffect } from 'react';
-
+import useSearch from '../useSearch';
 
 const GeneralContext = createContext();
 
 export default GeneralContext;
 
 export const GeneralProvider = ({ children }) => {
-    
+    const {posts, setPosts, account, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, handleEdit, handleNew, handleBlock} = useSearch(1);
     const [ darkMode, setDarkMode ] = useState(true);
     const [ modalOpen, setModalOpen] = useState(false);
     const [ isEditing, setIsEditing ] = useState(false);
@@ -37,6 +37,21 @@ export const GeneralProvider = ({ children }) => {
     }
 
     const contextData = {
+      posts:posts,
+      setPosts:setPosts,
+      account:account,
+      hasMore:hasMore,
+      error:error,
+      loading:loading,
+      setLoading:setLoading,
+      handleLike:handleLike,
+      handleTransmit:handleTransmit,
+      handleBookmark:handleBookmark,
+      handleDelete:handleDelete,
+      handleFollow:handleFollow,
+      handleEdit:handleEdit, 
+      handleNew:handleNew,
+      handleBlock:handleBlock,
       darkMode:darkMode,
       handleSetDarkMode:handleSetDarkMode,
       modalOpen:modalOpen,
@@ -48,11 +63,7 @@ export const GeneralProvider = ({ children }) => {
       pfpBig: pfpBig,
       setPfpBig:setPfpBig,
       imageModal:imageModal,
-      handleImageModal: handleImageModal,
-      usersModal:usersModal,
-      setUsersModal:setUsersModal,
-      userFilter:userFilter,
-      handleUsersModal:handleUsersModal    
+      handleImageModal: handleImageModal, 
     };
 
     return (

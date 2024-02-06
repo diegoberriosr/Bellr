@@ -20,7 +20,7 @@ import AuthContext from '../context/AuthContext';
 
 const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
 
-    const { darkMode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost } = useContext(GeneralContext);
+    const { darkMode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
     const [ isFocused, setIsFocused ] = useState(isEditing);
     const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
 
@@ -41,29 +41,14 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
             setIsAttatchingImage(!isAttatchingImage);
             return;
         }
-        const url = isEditing ? `edit/${editedPost.id}` : 'new';
-        const headers = {
-            'Content-type' : 'application/json',
-        }
-
-        if (user) {
-            headers['Authorization'] = 'Bearer ' + String(authTokens.access); 
-        }
-
-        fetch(`http://127.0.0.1:8000/${url}`, {
-            method : isEditing ? 'PUT' : 'POST',
-            headers : headers,
-            body : JSON.stringify({'content' : values.content, 'image' : values.image})
-        })
-        .then(response => response.json())
-        .then( () => {
+            
+        isEditing ? handleEdit(editedPost.id, values.content) : handleNew(values.content);
             setIsFocused(false);
             setIsEditing(false);
             setEditedPost(null);
             values.content = "What's happening !?";
             values.image = null;
             handleModal();
-        });
     }
 
     const handleFocus = () => {

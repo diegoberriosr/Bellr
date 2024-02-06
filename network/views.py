@@ -4,6 +4,7 @@ import random
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http404, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -110,7 +111,7 @@ def get_posts_all(request):
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
     page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
     
-
+    
     # Get posts and transmissions.
     posts = list(Post.objects.all())
     transmissions = list(Transmission.objects.all())
@@ -128,58 +129,44 @@ def get_posts_all(request):
 
 
 @api_view(['GET'])
-def get_post_by_id(request, post_id):
-
-    origin = Post.objects.get(id=post_id)
-    
-
-    return JsonResponse({
-        'origin' : origin.serialize(),
-        'replies' : [reply.serialize() for reply in origin.replies.all().order_by('-timestamp')]
-    }, safe=False)
-
-
-@api_view(['GET'])
 def get_posts_by_username(request, username):
+    
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+
+    # Get user by username, raise an exception otherwise.
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404(f'user with username={username} does not exist.')
     
-
+    # If requester is inside user's blocklist, cancel the request.
     if request.user in user.blocklist.all():
         return HttpResponseForbidden(f"Forbidden: current user is in username={username}'s blocklist.")
     
-    pinned = list(Post.objects.filter(user=user, pinned=True).all())
-    posts = list(Post.objects.filter(user=user, pinned=False).all())
-    transmissions = list(user.transmitted.all())
+    # Get the user's posts
+    pinned = list(Post.objects.filter(user=user, pinned=True).all()) # Get pinned posts.
+    posts = list(Post.objects.filter(user=user, pinned=False).all()) # Get non-pinned posts.
+    transmissions = list(user.transmitted.all()) # Get transmissions.
 
-    posts =  sorted(posts + transmissions, key=lambda x: x.timestamp, reverse=True)
-    posts = pinned + posts
+    posts =  sorted(posts + transmissions, key=lambda x: x.timestamp, reverse=True)  # Sort non-pinned posts and transmissions.
+    posts = pinned + posts # Stack pinned posts on top of the list.
+
+    # Paginate posts (10 per page).
+    paginated_posts, hasMore = paginate(posts, 10, page_index)
 
     return JsonResponse(
         {
-        'account' : {
-            'user_id' : user.pk,
-            'username' : user.username,
-            'profilename' : user.profilename,
-            'verified' : user.verified,
-            'followed' : request.user in user.followers.all(),
-            'isBlocked' : user in request.user.blocklist.all(),
-            'date_joined' : user.date_joined,
-            'bio' : user.bio,
-            'pfp' : user.pfp if user.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
-            'number_of_posts' : len(user.posts.all()),
-            'followers' : [user.serialize() for user in user.followers.all()],
-            'following' : [user.serialize() for user in user.following.all()]
-        },
-        'posts' : [post.serialize() for post in posts]
+        'hasMore' : hasMore,
+        'account' : user.serialize(request.user),
+        'posts' : [post.serialize(request.user) for post in paginated_posts]
         }, safe=False)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_profile_posts(request):
+     
      pinned = list(Post.objects.filter(user=request.user, pinned=True).all())
      posts = list(Post.objects.filter(user=request.user, pinned=False).all())
      transmissions = list(request.user.transmitted.all())
@@ -199,7 +186,7 @@ def get_profile_posts(request):
             'followers' : [user.serialize() for user in request.user.followers.all()],
             'following' : [user.serialize() for user in request.user.following.all()]
         },
-        'posts' : [post.serialize() for post in posts]
+        'posts' : [post.serialize(request.user) for post in posts]
         }, safe=False)
 
 
@@ -244,6 +231,7 @@ def get_feed(request):
 @permission_classes([IsAuthenticated])
 def create_post(request):
 
+    # Get the content and image of the post from the request's body.
     content = json.loads(request.body).get('content', '')
     image = json.loads(request.body).get('image', '')
 
@@ -252,15 +240,16 @@ def create_post(request):
     newpost.save()
 
     # Check if there are any mentions inside the post
-    mentions = set(re.findall('@[a-zA-Z0-9_]+', content))
+    mentions = set(re.findall('@[a-zA-Z0-9_]+', content)) # Get the mentioned users inside the post. Use a set to avoid multiple mentions.
 
+    # If so, generate notifications for each user's mention.
     for mention in mentions:
         user = User.objects.get(username=mention[1:])
         if user:
             newmention = Notification(origin=request.user, post=newpost, target=user)
             newmention.save()
 
-    return JsonResponse(newpost.serialize(), safe=False)
+    return JsonResponse(newpost.serialize(request.user), safe=False)
 
 
 @api_view(['PUT'])
@@ -322,19 +311,20 @@ def like_post(request, post_id):
 @permission_classes([IsAuthenticated])
 def follow(request, user_id):
 
-    if request.method != 'PUT':
-        return JsonResponse({'ERROR' : 'PUT method is required'}, status=400)
-   
+    # Get user
     user = User.objects.get(id=user_id)
 
+    # If user does not exist return an error
     if user == None:
         return JsonResponse({'ERROR' : f'user with id={user_id} does not exist'}, status=404)
     
-    if user in request.user.following.all():
-        request.user.following.remove(user)
+
+    # Check if request user follows the account
+    if user in request.user.following.all(): 
+        request.user.following.remove(user) # Add it to follower's list if not
 
     else:
-        request.user.following.add(user)
+        request.user.following.add(user) # Remove it from the list otherwise
 
     user.save()
     return JsonResponse({'Success' : f'user with id={user_id} is now being followed/unfollowed by user with id={request.user.id}'})
@@ -344,15 +334,19 @@ def follow(request, user_id):
 @permission_classes([IsAuthenticated])
 def transmit(request, post_id):
 
+    # Get the origin post and the transmission.
     post = Post.objects.get(id=post_id)   
     transmission =  Transmission.objects.filter(post=post, user=request.user).first()
+    
+    # If the post was already transmitted by the request user, delete the transmission.
     if transmission:
         transmission.delete()
-  
+    
+    # Otherwise make a new transmission.
     else: 
         transmission = Transmission(post=post, user=request.user)
        
-        if request.user != post.user:
+        if request.user != post.user: # Check that the transmission requester is not the same as the origin post's author.
             notification = Notification(type='transmission', post=post, target=post.user, origin=request.user)
             notification.save()
 
@@ -365,7 +359,10 @@ def transmit(request, post_id):
 @permission_classes([IsAuthenticated])
 def bookmark(request, post_id):
 
+    # Search the post
     post = Post.objects.get(id=post_id)
+
+    # Bookmark it if it was not bookmarked by request user, otherwise remove it from bookmark's list.
     post.bookmarks.remove(request.user) if request.user in post.bookmarks.all() else post.bookmarks.add(request.user)
     post.save()
 
@@ -375,11 +372,14 @@ def bookmark(request, post_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_bookmarked(request):
+
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
     page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
 
+    # Get the bookmarked posts list from the request user.
     bookmarked_posts = request.user.bookmarked.all().order_by('-timestamp')
 
+    # Paginate the list.
     paginated_bookmarked_posts, hasMore = paginate(bookmarked_posts, 10, page_index)
 
     return JsonResponse({
@@ -391,6 +391,7 @@ def get_bookmarked(request):
 @api_view(['GET'])
 def get_user(request, username):
 
+    # Get an user provided it's username.
     users = User.objects.filter(username__icontains=username)
 
     return JsonResponse([user.serialize() for user in users.all()], safe=False)
@@ -399,13 +400,15 @@ def get_user(request, username):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def delete_post(request, post_id):
+
+    # Get the post
     post = Post.objects.get(id=post_id)
 
+    # If post does not exist return an error
     if not post:
         return JsonResponse({'ERROR' : f'Post with id={post_id} does not exist'})
-    
-    print(post)
-    post.delete()
+
+    post.delete() # Delete post
 
     return JsonResponse({'Success' : f'Post with id={post_id} was succesfully deleted'})
 
@@ -413,25 +416,19 @@ def delete_post(request, post_id):
 @api_view(['GET'])
 def get_liked_posts(request, username):
 
-    user = User.objects.get(username=username)
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
 
-    return JsonResponse(
-        {
-        'account' : {
-            'user_id' : user.pk,
-            'username' : user.username,
-            'followed' : request.user in user.followers.all(),
-            'isBlocked' : user in request.user.blocklist.all(),
-            'verified' : user.verified,
-            'profilename' : user.profilename,
-            'bio' : user.bio,
-            'date_joined' : user.date_joined,
-            'pfp' : user.pfp if user.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
-            'number_of_posts' : len(user.posts.all()),
-            'followers' : [user.serialize() for user in user.followers.all()],
-            'following' : [user.serialize() for user in user.following.all()]
-        },
-        'posts' : [post.serialize() for post in user.liked.all().order_by('-timestamp')]
+    # Get the user and its like posts.
+    user = User.objects.get(username=username)
+    liked_posts = user.liked.all().order_by('-timestamp')
+
+    # Paginate liked posts.
+    paginated_liked_posts, hasMore = paginate(liked_posts, 10, page_index)
+
+    return JsonResponse({
+        'hasMore' : hasMore,
+       'posts' : [post.serialize(request.user) for post in paginated_liked_posts]
         }, safe=False)
 
 
@@ -439,15 +436,21 @@ def get_liked_posts(request, username):
 @permission_classes([IsAuthenticated])
 def create_reply(request, post_id):
 
+    # Get the origin post.
     origin = Post.objects.get(id=post_id)
+
+    # Get the reply's content.
     content = json.loads(request.body).get('content', '')
     
+    # Create a reply.
     reply = Post(reply=True, user=request.user, content=content)
     reply.save()
 
+    # Fix the reply's origin post.
     origin.replies.add(reply)
     origin.save()
 
+    # Add a notification if the reply's author is not the origin post's author.
     if request.user != origin.user:
         notification = Notification(type='reply', post=origin, target=origin.user, origin=request.user)
         notification.save()
@@ -457,69 +460,68 @@ def create_reply(request, post_id):
 
 @api_view(['GET'])
 def get_replies(request, username):
+
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+
+    # Get user, raise an exeception if user does not exist.
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404('User does not exist')
     
+    # Get all the replies
     replies = Post.objects.filter(user=user, reply=True).order_by('-timestamp')
-    
+
+    # Paginate the replies
+    paginated_replies, hasMore = paginate(replies, 10, page_index)
+
     return JsonResponse(
-        {
-        'account' : {
-            'user_id' : user.pk,
-            'username' : user.username,
-            'profilename' : user.profilename,
-            'verified' : user.verified,
-            'followed' : request.user in user.followers.all(),
-            'isBlocked' : user in request.user.blocklist.all(),
-            'bio' : user.bio,
-            'date_joined' : user.date_joined,
-            'pfp' : user.pfp if user.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
-            'number_of_posts' : len(user.posts.all()),
-            'followers' : [user.serialize() for user in user.followers.all()],
-            'following' : [user.serialize() for user in user.following.all()]
-        },
-        'posts' : [reply.serialize() for reply in replies]
+        { 
+            'hasMore' : hasMore,
+            'post' : [reply.serialize() for reply in paginated_replies]
         }, safe=False)
 
 
 @api_view(['GET'])
 def get_transmissions(request, username):
+
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+
+    # Get user, raise an exception if it does not exist.
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404('User does not exist')
     
-    return JsonResponse({
-        'account' : {
-            'user_id' : user.pk,
-            'username' : user.username,
-            'profilename' : user.profilename,
-            'verified' : user.verified,
-            'followed' : request.user in user.followers.all(),
-            'isBlocked' : user in request.user.blocklist.all(),
-            'bio' : user.bio,
-            'date_joined' : user.date_joined,
-            'pfp' : user.pfp if user.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
-            'number_of_posts' : len(user.posts.all()),
-            'followers' : [user.serialize() for user in user.followers.all()],
-            'following' : [user.serialize() for user in user.following.all()]
-        },
-        'posts' : [transmission.serialize() for transmission in user.transmitted.all().order_by('-timestamp')]
+    # Get transmissions
+    transmissions = user.transmitted.all().order_by('-timestamp')
+
+    # Paginate transmissions
+    paginated_transmissions, hasMore = paginate(transmissions, 10, page_index)
+
+    return JsonResponse({ 
+        'hasMore' : hasMore,
+        'posts' : [transmission.serialize() for transmission in paginated_transmissions]
     }, safe=False)
 
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def block_user(request, username):
+
+    # Get user, raise an exception if it does not exist
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404('User does not exsit')
     
+
+    # Get requester
     requester = request.user
 
+    # If requester has not blocked the user, add it to the blocklist. Remove it otherwise.
     requester.blocklist.remove(user) if user in requester.blocklist.all() else requester.blocklist.add(user)
     requester.following.remove(user) if user in requester.blocklist.all() else None
 
@@ -531,20 +533,34 @@ def block_user(request, username):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_notifications(request):
-   
-    return JsonResponse([notification.serialize() for notification in request.user.notifications.all().order_by('-timestamp')], safe=False)
+    
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+
+    # Get notifications
+    notifications = request.user.notifications.all().order_by('-timestamp')
+
+    # Paginate notifications
+    paginated_notifications, hasMore = paginate(notifications, 10, page_index)
+
+    return JsonResponse({
+        'hasMore' : hasMore,
+        'notifications' :[notification.serialize() for notification in paginated_notifications]
+        }, safe=False)
 
 
 @api_view(['GET'])
 def username_exists(request, username):
     
+    # Check if username is available
     exists = False if username== '' else User.objects.filter(username=username).exists()
     
     return JsonResponse({'exists' : exists})
 
 @api_view(['GET'])
 def email_exists(request, email):
-
+    
+    # Check if an email is available
     exists = False if email == '' else User.objects.filter(email=email).exists()
 
     return JsonResponse({'exists' : exists})
@@ -552,43 +568,66 @@ def email_exists(request, email):
 @api_view(['GET'])
 def get_followers(request, username):
 
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+
+    # Get user, raise an exception if it does not exist
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404('User does not exist')
-    
-    verified = request.GET.get('Verified', None)
+        
+    verified = request.GET.get('Verified', None) # Check if querying for verified followers only
+
+    # Get followers.
     followers = user.followers.all().filter(verified=True) if verified else user.followers.all()
     
+    # Paginate followers (20 per page).
+    paginated_followers, hasMore = paginate(followers, 20, page_index)
+
     return JsonResponse({
+        'hasMore' : hasMore,
         'username' : user.username,
         'profilename' : user.profilename,
-        'profiles' : [profile.fserialize(request.user) for profile in followers]}, safe=False)
+        'profiles' : [profile.fserialize(request.user) for profile in paginated_followers]}, safe=False)
 
 
 @api_view(['GET'])
 def get_following(request, username):
 
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+
+    # Get user, raise an exception if it does not exist.
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         raise Http404('User does not exist')
     
+    # Get all the profiles that the requester is following.
+    following = request.user.following.all()
+
+    # Paginate profiles (20 per page).
+    paginated_following, hasMore = paginate(following, 20, page_index)
+
     return JsonResponse({
+        'hasMore' : hasMore,
         'username' : user.username,
         'profilename' : user.profilename,
-        'profiles' : [profile.fserialize(request.user) for profile in user.following.all()]}, safe=False )
+        'profiles' : [profile.fserialize(request.user) for profile in paginated_following]}, safe=False )
 
 
 @api_view(['PUT'])
 def pin_post(request, post_id):
     
+    # Get post by id, raise an exception if it does not exist
     try:
         post = Post.objects.get(id=post_id)
     except Post.DoesNotExist:
         raise Http404('Post does not exist')
     
-    if request.user == post.user:
+    # Pin if not already pinned, unpin otherwise
+    if request.user == post.user: # Check that requester is the same as post's author.
         post.pinned = False if post.pinned else True
         post.save()
 
@@ -599,23 +638,29 @@ def pin_post(request, post_id):
 
 @api_view(['POST'])
 def generate_code(request):
+    '''
+    This endpoint generates a one-time code for resetting an user's password from the login page.
+    '''
 
+    # Get email from request
     email = json.loads(request.body).get('email', '')
 
+    # Get user by email, raise an exceptio if it does not exist.
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
         raise Http404('User does not exist')
     
+    # If user already has a temporal code, delete it.
     if hasattr(user, 'code'):
         user.code.delete()
 
-    value = random.randint(100000, 999999)
+    # Generate a new code an assign it to requester.
+    value = random.randint(100000, 999999) # Make a 6 digit code.
     code = Code(user=user, code=value)
     code.save()
-    user.code = code
-    user.save()
 
+    # Send the code to the requester's email
     send_mail(
         'Your confirmation code',
         f'Your confirmation code is: {value}',
@@ -630,26 +675,28 @@ def generate_code(request):
 
 @api_view(['PUT'])
 def validate_code(request):
+
+    # Get the email and code from the request's body.
     email = json.loads(request.body).get('email', '')
     code = json.loads(request.body).get('code', '')
     validate = json.loads(request.body).get('validate', )
 
-    print(email, code, validate)
-
+    # Get user by email, raise an exception if it does not exist.
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
         Http404('User does not exist')
 
-    validated = False
     
+    validated = False # Keeps track of validation status.
+    
+    # If code also exists, validate it.
     try:
-        print('It exists------------')
         code = Code.objects.get(user = user, code = code)
-        code.delete() if validate else None
-        validated = True
+        code.delete() if validate else None # Delete the code after validation.
+        validated = True # Update the status of the operation.
 
-    except Code.DoesNotExist:
+    except Code.DoesNotExist: # Do nothing if code does not exist.
         pass
         
     return JsonResponse({
@@ -659,14 +706,19 @@ def validate_code(request):
 
 @api_view(['PUT'])
 def reset_password(request):
+
+    # Get email and new password from request's body
     email = json.loads(request.body).get('email', '')
     password = json.loads(request.body).get('password', '')
 
+    # Attempt to save the new password
     try:
         user = User.objects.get(email=email)
         user.set_password(password)
         user.save()
         return JsonResponse({ 'username' : user.username })
+    
+    # Return an error if user does not exist
     except User.DoesNotExist:
         return JsonResponse({'error' : 'User does not exist'}, status=404)
         

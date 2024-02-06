@@ -2,6 +2,7 @@ import { useContext, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 // Icon imports
 import { MdVerified } from "react-icons/md";
@@ -26,8 +27,9 @@ import GeneralContext from '../context/GeneralContext';
 const NewPost = ({ post, setPosts }) => {
 
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode, setPfpBig, handleImageModal } = useContext(GeneralContext);
+    const { darkMode, setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
 
+    const currentUrl = useLocation();
     const navigate = useNavigate();
 
     const formatDate = () => {
@@ -48,99 +50,7 @@ const NewPost = ({ post, setPosts }) => {
         return [...prev, curr, ' '];
     }, []);
 
-    const handleLike = () => {
-        let headers;
-        if (authTokens) {
-            headers = {
-                'Authorization' : 'Bearer ' + String(authTokens.access)
-            }
-        }
-
-        axios({
-            method : 'PUT',
-            url : `http://127.0.0.1:8000/like/${post.id}`,
-            headers : headers
-
-
-        })
-        .then(
-            setPosts( prevPosts => {
-                const postIndex = prevPosts.findIndex(publication => publication.id === post.id);
-                let updatedPosts = [...prevPosts];
-                let updatedPost = {...updatedPosts[postIndex]};
-                updatedPost.liked = !updatedPosts[postIndex].liked;
-                updatedPost.liked ? updatedPost.likes = updatedPost.likes + 1 : updatedPost.likes = updatedPost.likes - 1;
-    
-                updatedPosts[postIndex] = updatedPost;
-
-                console.log(prevPosts[postIndex], updatedPosts[postIndex]);
-                return updatedPosts;
-            })
-        )
-    }
-
-    const handleTransmit = () => {
-        let headers;
-        if (authTokens) {
-            headers = {
-                'Authorization' : 'Bearer ' + String(authTokens.access)
-            }
-        }
-
-        axios({
-            method : 'PUT',
-            url : `http://127.0.0.1:8000/transmit/${post.id}`,
-            headers : headers
-
-
-        })
-        .then(
-            setPosts( prevPosts => {
-                const postIndex = prevPosts.findIndex(publication => publication.id === post.id);
-                let updatedPosts = [...prevPosts];
-                let updatedPost = {...updatedPosts[postIndex]};
-                updatedPost.transmitted = !updatedPosts[postIndex].transmitted;
-                updatedPost.transmitted ? updatedPost.transmissions = updatedPost.transmissions + 1 : updatedPost.transmissions = updatedPost.transmissions - 1;
-    
-                updatedPosts[postIndex] = updatedPost;
-
-                console.log(prevPosts[postIndex], updatedPosts[postIndex]);
-                return updatedPosts;
-            })
-        )
-    }
-
-    const handleBookmark = () => {
-        let headers;
-        if (authTokens) {
-            headers = {
-                'Authorization' : 'Bearer ' + String(authTokens.access)
-            }
-        }
-
-        axios({
-            method : 'PUT',
-            url : `http://127.0.0.1:8000/bookmark/${post.id}`,
-            headers : headers
-
-
-        })
-        .then(
-            setPosts( prevPosts => {
-                const postIndex = prevPosts.findIndex(publication => publication.id === post.id);
-                let updatedPosts = [...prevPosts];
-                let updatedPost = {...updatedPosts[postIndex]};
-                updatedPost.bookmarked = !updatedPosts[postIndex].bookmarked;
-    
-                updatedPosts[postIndex] = updatedPost;
-
-                console.log(prevPosts[postIndex], updatedPosts[postIndex]);
-                return updatedPosts;
-            })
-        )
-    }
-
-    
+  
     return <div className={`border border-t-0 border-l-0 ${ darkMode ? 'border-gray-600' : 'border-gray-300'} w-full cursor-pointer`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
             <FaRetweet />
@@ -171,7 +81,7 @@ const NewPost = ({ post, setPosts }) => {
                     <p className='text-post-gray ml-1.5'>@{post.user.username}</p>
                     <p className='text-post-gray ml-1'>·</p>
                     <p className='text-post-gray ml-1'>{formatDate()}</p>
-                    <DropDownMenu followed={post.followed} author_id={post.user.user_id} post={post} handleAction={() => { /* TODO */}} />
+                    <DropDownMenu followed={post.followed} author_id={post.user.user_id} post={post} setPosts={setPosts} />
                 </div>
                 <p className='w-full mt-[3px] overflow-hidden pr-5 whitespace-normal'>
                     {contentWithSpaces}
@@ -188,23 +98,23 @@ const NewPost = ({ post, setPosts }) => {
                             </li>
                             <li className='group flex items-center space-x-1'>
                                 {post.liked ?
-                                    <FaHeart className={`text-red-600 group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[15px]`} onClick={handleLike} />
+                                    <FaHeart className={`text-red-600 group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[15px]`} onClick={() => {handleLike(post.id)}} />
                                     :
-                                    <CiHeart className='group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[18px]' onClick={handleLike}/>
+                                    <CiHeart className='group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[18px]' onClick={() => {handleLike(post.id)}}/>
                                 }
                                 
                                 <span className={`${post.likes ? 'text-red-600' : ''} w-2 group-hover:text-red-600 transition-colors cursor-default text-xs`}>{post.likes> 0 && post.likes}</span>
                             </li>
                             <li className='group flex items-center space-x-1'>
-                                <FaRetweet className={`${post.transmitted ? 'text-green-600' : 'text-icon-gray'} group-hover:bg-green-300 group-hover:text-green-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={handleTransmit} />
+                                <FaRetweet className={`${post.transmitted ? 'text-green-600' : 'text-icon-gray'} group-hover:bg-green-300 group-hover:text-green-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => {handleTransmit(post.id)}} />
                                 <span className='w-2 group-hover:text-green-600 transition-colors cursor-default text-xs'>{post.transmissions > 0 && post.transmissions}</span>
                             </li>
                         </div>
                         <div className='flex items-center space-x-3 mr-2.5 ml-auto'>
                             { post.bookmarked ?
-                            <FaBookmark className={`text-twitter-blue hover:bg-twitter-blue hover:bg-opacity-50 hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={handleBookmark} />
+                            <FaBookmark className={`text-twitter-blue hover:bg-twitter-blue hover:bg-opacity-50 hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => {handleBookmark(post.id)}} />
                             :
-                            <IoBookmarkOutline className='hover:bg-twitter-blue hover:bg-opacity-50 hover:text-twitter-blue hover:rounded-full peer duration-300 cursor-pointer text-[19px]' onClick={handleBookmark}/>
+                            <IoBookmarkOutline className='hover:bg-twitter-blue hover:bg-opacity-50 hover:text-twitter-blue hover:rounded-full peer duration-300 cursor-pointer text-[19px]' onClick={() => {handleBookmark(post.id)}}/>
                                 
                             }
                             <FiShare2 className='hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' />

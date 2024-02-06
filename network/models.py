@@ -19,18 +19,21 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.id}. {self.username} ({self.email})'
 
-    def serialize(self):
+    def serialize(self, user):
 
         return {
-        'user_id' : self.id,
-        'profilename' : self.profilename,
-        'username' : self.username,
-        'pfp' : self.pfp if self.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
-        'bio' : self.bio,
-        'verified' : self.verified,
-        'date_joined' : self.date_joined,
-        'following' : [{'user_id' : user.id, 'username' : user.username} for user in self.following.all()],
-        'followers' : [{'user_id' : user.id, 'username' : user.username} for user in self.followers.all()]
+         'user_id' : self.pk,
+            'username' : self.username,
+            'profilename' : self.profilename,
+            'verified' : self.verified,
+            'followed' : user in self.followers.all(),
+            'isBlocked' : user in self.user.blocklist.all(),
+            'date_joined' : self.date_joined,
+            'bio' : self.bio,
+            'pfp' : self.pfp if self.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
+            'number_of_posts' : len(self.posts.all()),
+            'followers' : [profile.serialize() for profile in self.followers.all()],
+            'following' : [profile.serialize() for profile in self.following.all()]
         }
     
     def fserialize(self, user):
@@ -44,6 +47,7 @@ class User(AbstractUser):
             'verified' : self.verified,
             'followed' : user in self.followers.all()
         }
+    
 
 class Post(models.Model):
 
@@ -67,6 +71,7 @@ class Post(models.Model):
             'reply' : self.reply,
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
             'user' : self.user.serialize(),
+            'followed' : user in self.user.followers.all(),
             'content' : self.content,
             'timestamp' : self.timestamp,
             'likes' : len(self.likes.all()),
@@ -83,6 +88,7 @@ class Post(models.Model):
             'reply' : self.reply,
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
             'user' : self.user.serialize(),
+            'followed' : user in self.user.followers.all(),
             'content' : self.content,
             'timestamp' : self.timestamp,
             'likes' : len(self.likes.all()),
@@ -104,12 +110,13 @@ class Transmission(models.Model):
             'transmitter' : self.user.username,
             'id' : self.post.id,
             'user' : self.post.user.serialize(),
+            'followed' : user in self.user.followers.all(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,
             'likes' : len(self.post.likes.all()),
             'liked' : user in self.post.likes.all(),
             'transmissions' : len(self.post.transmissions.all()),
-            'transmitted' : user in [transmission.user for transmission in self.transmissions.all()],
+            'transmitted' : user == self.user,
             'bookmarked' : self in user.bookmarked.all() if user else False,
         }
     
@@ -119,6 +126,7 @@ class Transmission(models.Model):
             'transmitter' : self.user.username,
             'id' : self.post.id,
             'user' : self.post.user.serialize(),
+            'followed' : user in self.user.followers.all(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,
             'likes' : len(self.post.likes.all()),

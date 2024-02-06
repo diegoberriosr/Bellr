@@ -22,7 +22,7 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
     const [ isFocused, setIsFocused ] = useState(false);
     const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode, handleImageModal } = useContext(GeneralContext);
+    const { darkMode, handleImageModal, handleNew } = useContext(GeneralContext);
 
 
 
@@ -42,7 +42,7 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
             return;
         }
 
-        handleAction(route, method, authTokens, {'content' :text.current.value, 'image' : values.image });
+        handleNew(values.content);
         text.current.value=placeholder;
         setIsFocused(false);
         values.content = "What's happening !?";
