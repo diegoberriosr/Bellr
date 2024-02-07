@@ -9,7 +9,8 @@ def get_expiration_date():
 
 class User(AbstractUser):
     profilename = models.CharField(max_length=50)
-    pfp = models.TextField(blank=True) # Profile picture (optional)
+    pfp = models.TextField(default='https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg') # Default is an anonymous user pic.
+    backgroundpic = models.TextField(default='https://t3.ftcdn.net/jpg/01/34/31/72/360_F_134317274_PTXPn7EjliaYrJrZmfs0x5jFv8dmXsYn.jpg') # Default is a light blue background.
     verified = models.BooleanField(default=False)
     following = models.ManyToManyField('self', blank=True, related_name='followers', symmetrical=False)
     bio = models.CharField(max_length=100, blank=True)
@@ -30,7 +31,8 @@ class User(AbstractUser):
             'isBlocked' : user in self.blocklist.all(),
             'date_joined' : self.date_joined,
             'bio' : self.bio,
-            'pfp' : self.pfp if self.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
+            'pfp' : self.pfp,
+            'background' : self.backgroundpic,
             'number_of_posts' : len(self.posts.all()),
             'followers' : len(self.followers.all()),
             'following' : len(self.following.all())
@@ -43,6 +45,7 @@ class User(AbstractUser):
             'profilename' : self.profilename,
             'username' : self.username,
             'pfp' : self.pfp,
+            'background' : self.backgroundpic,
             'bio' : self.bio,
             'verified' : self.verified,
             'followed' : user in self.followers.all()
@@ -52,7 +55,7 @@ class User(AbstractUser):
         return {
         'username' : self.username,
         'profilename' : self.profilename,
-        'pfp' : self.pfp if self.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg',
+        'pfp' : self.pfp,
         }
 
     
@@ -79,14 +82,14 @@ class Post(models.Model):
             'reply' : self.reply,
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
             'user' : self.user.pserialize(),
-            'followed' : user in self.user.followers.all(),
+            'followed' : False if user.is_anonymous else user in self.user.followers.all(),
             'content' : self.content,
             'timestamp' : self.timestamp,
             'likes' : len(self.likes.all()),
-            'liked' : user in self.likes.all(),
+            'liked' : False if user.is_anonymous else user in self.likes.all(),
             'transmissions' : len(self.transmissions.all()),
-            'transmitted' : user in self.transmissions.all(),
-            'bookmarked' : user in self.bookmarks.all(),
+            'transmitted' : False if user.is_anonymous else user in self.transmissions.all(),
+            'bookmarked' : False if user.is_anonymous else user in self.bookmarks.all(),
             'replies' : len(self.replies.all())
         }
     
@@ -103,7 +106,7 @@ class Post(models.Model):
             'liked' : user in self.likes.all(),
             'transmissions' : len(self.transmissions.all()),
             'transmitted' : user in [transmission.user for transmission in self.transmissions.all()],
-            'bookmarked' : self in user.bookmarked.all() if user else False,
+            'bookmarked' : False if user.is_anonymous else user in user.bookmarked.all(),
             'replies' : len(self.replies.all())     
         }
 
@@ -118,14 +121,14 @@ class Transmission(models.Model):
             'transmitter' : self.user.username,
             'id' : self.post.id,
             'user' : self.post.user.pserialize(),
-            'followed' : user in self.user.followers.all(),
+            'followed' : False if user.is_anonymous else user in self.user.followers.all(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,
             'likes' : len(self.post.likes.all()),
-            'liked' : user in self.post.likes.all(),
+            'liked' : False if user.is_anonymous else user in self.post.likes.all(),
             'transmissions' : len(self.post.transmissions.all()),
             'transmitted' : user == self.user,
-            'bookmarked' : self in user.bookmarked.all() if user else False,
+            'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all()
         }
     
     def fserialize(self, user):
@@ -134,14 +137,14 @@ class Transmission(models.Model):
             'transmitter' : self.user.username,
             'id' : self.post.id,
             'user' : self.post.user.pserialize(),
-            'followed' : user in self.user.followers.all(),
+            'followed' : False if user.is_anonymous else user in self.user.followers.all(),
             'content' : self.post.content,
             'timestamp' : self.timestamp,
             'likes' : len(self.post.likes.all()),
-            'liked' : user in self.post.likes.all(),
+            'liked' : False if user.is_anonymous else user in self.post.likes.all(),
             'transmissions' : len(self.post.transmissions.all()),
             'transmitted' : user == self.user,
-            'bookmarked' : self in user.bookmarked.all() if user else False,
+            'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all(),
         }
     
 class Notification(models.Model):

@@ -6,18 +6,20 @@ import { IoCloseSharp } from "react-icons/io5";
 
 // Component imports
 import NewSidebar from '../components/NewSidebar';
+import Bottombar from '../components/Bottombar';
 import Feed from '../components/Feed';
 import Profile from '../components/Profile';
 import SinglePostView from '../components/SinglePostView';
 import Notifications from '../components/Notifications';
 import Recomendations from '../components/Recomendations';
 import Modal from '../components/Modal';
-import ImageInput from '../components/Forms/ImageInput';
 import ModalForm from '../components/ModalForm';
 import Users from '../components/Users';
 import EditProfile from '../components/EditProfile';
+
 // Context imports
 import GeneralContext from '../context/GeneralContext';
+
 
 
 
@@ -49,6 +51,7 @@ const Update = () => {
   };
 
   return (
+      
         <div className={`flex md:px-20 lg:px-32 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} duration-300 transition-colors`}>
               <NewSidebar darkMode={darkMode}/>
                 <Routes>
@@ -69,7 +72,9 @@ const Update = () => {
                 <Modal isVisible={imageModal}>
                     <div className='relative flex h-screen justify-center items-center'>
                         <IoCloseSharp className='absolute top-0 left-0' onClick={() => { handleImageModal() ; setPfpBig(null)}}/>
-                        {pfpBig && <img src={pfpBig} alt='user profile pic' width='368' className='rounded-full'/>}
+                        <div className={`transition-transform ${imageModal ? 'scale-100' : 'scale-0'} w-[368px] h-[368px] overflow-hidden rounded-full duration-300 ease-in-out hover:scale-150`}>
+                          <img src={pfpBig} alt='user profile pic' className='rounded-full h-full w-full object-fill'/>
+                        </div>
                     </div>
                 </Modal>
           </div>

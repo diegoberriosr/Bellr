@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{html,js}", "./src/components/**/*.{js,jsx}"],
   theme: {
     extend: {
+      screens : {
+        'mobile' : '415px'
+      },
       colors: {
         'dark-purple': '#081A51',
         'light-white': 'rgba(255, 255, 255, 0.18)',

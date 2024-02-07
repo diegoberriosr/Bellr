@@ -15,49 +15,11 @@ import AuthContext from '../context/AuthContext';
 import GeneralContext from '../context/GeneralContext';
 
 const SinglePostView = () => {
-  const [posts, setPosts] = useState(undefined);
-  const { postId } = useParams();
   const { user } = useContext(AuthContext);
-  const { darkMode } = useContext(GeneralContext);
+  const { darkMode, posts, loading } = useContext(GeneralContext);
 
   const navigate = useNavigate();
 
-  const getPost = () => {
-    console.log(`http://127.0.0.1:8000/posts/${(postId)}`)
-    fetch(`http://127.0.0.1:8000/posts/${(postId)}`, {
-        method : 'GET',
-        headers : {
-            'Content-type' : 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(posts => {
-        setPosts(posts)
-    })
-  }
-
-    // Handles like, comment, retweet, delete, edit, and bookmark actions
-    const handleAction = (url, method, authTokens, body) => { 
-        console.log('Calling feed function')
-        fetch(`http://127.0.0.1:8000/${url}`, {
-          method: method,
-          headers : {
-            'Content-type' : 'application/json',
-            'Authorization' : 'Bearer ' + String(authTokens.access)
-          },
-          body : JSON.stringify(body)
-        })
-        .then(response => response.json())
-        .then( () => {
-            getPost();
-        })
-        .catch(error => {console.log(error)})
-      };
-  
-      
-  useEffect(() => {
-    getPost();
-  } , [postId])
 
   console.log(posts)
   return (
@@ -68,9 +30,9 @@ const SinglePostView = () => {
       </div>
       {posts && 
         <>
-          <OriginPost handleAction={handleAction} post={posts.origin}/>
-          {user && <Form route={`new/reply/${posts.origin.id}`} method='POST' borderStyle='border-t-0 border-l-0' textAreaStyle='bg-transparent' message={'Reply'} placeholder="Post your reply" handleAction={handleAction}/>}
-          {posts.replies.map(post => <NewPost key={post.id} post={post} handleAction={handleAction}/>)}
+          <OriginPost post={posts[0]}/>
+          {user && <Form borderStyle='border-t-0 border-l-0' textAreaStyle='bg-transparent' message={'Reply'} placeholder="Post your reply" />}
+          {posts.length > 1 && posts.slice(1).map(post => <NewPost key={post.id} post={post}/>)}
         </>
       }
     </div>

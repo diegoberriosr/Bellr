@@ -6,7 +6,9 @@ const GeneralContext = createContext();
 export default GeneralContext;
 
 export const GeneralProvider = ({ children }) => {
-    const {posts, setPosts, account, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, handleEdit, handleNew, handleBlock} = useSearch(1);
+  
+    const {posts, setPosts, setPage, account, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, 
+           handleEdit, handleNew, handleBlock} = useSearch();
     const [ darkMode, setDarkMode ] = useState(true);
     const [ modalOpen, setModalOpen] = useState(false);
     const [ isEditing, setIsEditing ] = useState(false);
@@ -39,6 +41,7 @@ export const GeneralProvider = ({ children }) => {
     const contextData = {
       posts:posts,
       setPosts:setPosts,
+      setPage:setPage,
       account:account,
       hasMore:hasMore,
       error:error,

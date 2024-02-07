@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useRef, useCallback} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 
@@ -21,23 +21,25 @@ const Profile = ({ me }) => {
   
 
   const { username } = useParams();
-  const { user, authToken } = useContext(AuthContext);
-  const { modalOpen, posts, account, error, loading, darkMode } = useContext(GeneralContext);
+  const { user } = useContext(AuthContext);
+  const { posts, account, error, loading, darkMode, hasMore, page, setPage} = useContext(GeneralContext);
 
   const profile = me ? user.username : username;
-  
-  const [ filterUrl, setFilterUrl ] = useState(me ? 'profile' : `username/${profile}`);
-
 
   const navigate = useNavigate();
-  
-  /*
-  if( user && username === posts.account.username) {
-    navigate('/me');
-  }
-  */
 
-  console.log(error === 404);
+  const observer = useRef();
+
+  const lastPostRef = useCallback( notification => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(entries => {
+          if (entries[0].isIntersecting) {
+              if (hasMore) setPage(page + 1);
+          }
+      })
+  }, [hasMore, page]) 
+
   return (
  
      <div className='relative w-[600px]'>
@@ -54,10 +56,13 @@ const Profile = ({ me }) => {
                 <p className='text-gray-600 text-sm'>{account.number_of_posts} posts </p>
             </div>
         </div>
-        <NewProfileHeader account={account} setFilterUrl={setFilterUrl}/>
+        <NewProfileHeader account={account}/>
         </>
         }
-        {(posts && posts.length > 0) && posts.map((post,index) => <NewPost key={index} post={post} />)}
+        {(posts && posts.length > 0) && posts.map((post,index) => {
+         if(post.length - 1 === index) return <NewPost ref={lastPostRef} key={index} post={post}/>;
+         return <NewPost key={index} post={post}/>;
+        })}
         {loading && <div className='w-full mt-[10%] flex items-center justify-center'>
           <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
        </div>}

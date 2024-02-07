@@ -22,6 +22,7 @@ urlpatterns = [
     path("user/<str:username>", views.get_posts_by_username, name='posts-username'),
     path("posts/profile", views.get_profile_posts, name='profile'),
     path("feed", views.get_feed, name='feed'),
+    path('post/<int:post_id>', views.get_post_by_id, name='post'),
     path("bookmarked", views.get_bookmarked, name="bookmarked"),
     path("new", views.create_post, name='new'),
     path("edit/<int:post_id>", views.edit_post, name='edit'),

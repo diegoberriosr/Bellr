@@ -17,7 +17,7 @@ const ProfileHeader = ({ account }) => {
     const [ filter, setFilter ] = useState('All');
 
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode, handleImageModal, setPfpBig, handleFollow, handleBlock, setPosts, setLoading} = useContext(GeneralContext);
+    const { darkMode, handleImageModal, setPfpBig, handleFollow, handleBlock, setPosts, setPage, setLoading} = useContext(GeneralContext);
 
     const navigate = useNavigate()
   
@@ -39,7 +39,8 @@ const ProfileHeader = ({ account }) => {
             headers: headers
         })
         .then( res => {
-            setPosts(res.data.posts)
+            setPosts(res.data.posts);
+            setPage(1);
             setFilter(updatedFilter);
             setLoading(false);
         })
@@ -48,14 +49,14 @@ const ProfileHeader = ({ account }) => {
 
     return (
         <header className={`border ${ darkMode ? 'border-gray-600' : 'border-gray-300' } border-l-0 w-full`}>
-        <figure className='relative h-64 w-full '>
+        <figure className='relative h-44 w-full '>
             <div className='absolute h-full w-full overflow-hidden'>
-                <img src='https://picsum.photos/100' alt="user's background pic" className='absolute top-0 w-full h-full object-fill' />
+                <img src={account.background} alt="user's background pic" className='absolute top-0 w-full h-full object-cover' />
             </div>
-            <div className={`absolute left-3 bottom-0 w-[130px] h-[130px] rounded-full overflow-hidden ${ darkMode ? 'border-black' : 'border-white' } border-[3.5px]`}>
+            <div className={`absolute left-3 -bottom-16 w-[130px] h-[130px] rounded-full overflow-hidden ${ darkMode ? 'border-black' : 'border-white' } border-[3.5px]`}>
                 <img src={account.pfp} alt="user's profile pic" width='130' className='object-cover w-full h-full cursor-pointer' onClick={() => {setPfpBig(account.pfp) ; handleImageModal()}} />
             </div>
-            <div className='absolute bottom-5 right-3 flex items-center space-x-2'>
+            <div className='absolute -bottom-10 right-3 flex items-center space-x-2'>
                     {
                         user && user.username === account.username ? 
                         <button className={` w-[100px] h-8 flex items-center justify-center ${ darkMode ? 'bg-white text-black' : 'bg-black text-white'} opacity-90 hover:opacity-100 rounded-full font-bold`}
@@ -73,7 +74,7 @@ const ProfileHeader = ({ account }) => {
                     }
                 </div>
         </figure>
-        <div className='px-4'>
+        <div className='px-4 pt-20'>
             <h3 className='text-2xl font-bold flex items-center'>{account.profilename} {account.verified && <MdVerified className='ml-0.5 text-twitter-blue'/>}</h3>
             <p className='text-base text-gray-600'>@{account.username}</p>
             <p className='mt-2.5 text-base'>{account.bio}</p>
@@ -82,8 +83,8 @@ const ProfileHeader = ({ account }) => {
                 <span className='ml-1'>Joined on {moment(account.date_joined).format('MMM DD YYYY')}</span>
             </p>
             <div className='flex text-sm space-x-5 mt-1.5'>
-                <p className='cursor-pointer text-gray-600' onClick={() => {navigate(`/following/${account.username}/`)}}><span className='text-white font-bold'>{account.following.length}</span> Following</p>
-                <p className='cursor-pointer text-gray-600' onClick={() => {navigate(`/followers/${account.username}/`)}}><span className='text-white font-bold'>{account.followers.length}</span> Followers</p>
+                <p className='cursor-pointer text-gray-600' onClick={() => {navigate(`/following/${account.username}/`)}}><span className='text-white font-bold'>{account.following}</span> Following</p>
+                <p className='cursor-pointer text-gray-600' onClick={() => {navigate(`/followers/${account.username}/`)}}><span className='text-white font-bold'>{account.followers}</span> Followers</p>
             </div>
         </div>
         <ul className='w-full h-12 flex mt-2.5'>

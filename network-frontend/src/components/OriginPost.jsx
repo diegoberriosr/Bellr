@@ -21,18 +21,9 @@ import GeneralContext from '../context/GeneralContext';
 const OriginPost = ({ post, handleAction, postView }) => {
 
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode } = useContext(GeneralContext);
+    const { darkMode, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
 
     const navigate = useNavigate();
-
-    // Controls UI according to the post's information
-    const status = {
-        'like': user ? post.likes.some(id => user.user_id === id) : undefined,
-        'transmit': user ? post.transmissions.some(id => id === user.user_id) : undefined,
-        'bookmark': user ? post.bookmarks.some(id => user.user_id === id) : undefined,
-        'follow': user ? post.user.followers.some(follower => user.user_id === follower.user_id) : undefined
-    }
-
 
     const formatDate = () => {
 
@@ -71,7 +62,7 @@ const OriginPost = ({ post, handleAction, postView }) => {
                     <div className='flex h-4 items-center'>
                     <p className='font-bold hover:underline' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
                     {post.user.verified && <MdVerified className='text-twitter-blue ml-0.5' />}
-                    <DropDownMenu followed={status.follow} author_id={post.user.user_id} post={post} handleAction={handleAction} />
+                    <DropDownMenu  author_id={post.user.user_id} post={post}/>
                     </div>
                     <p className='text-twitter-light-gray'>@{post.user.username}</p>
                 </div>
@@ -90,15 +81,15 @@ const OriginPost = ({ post, handleAction, postView }) => {
                             <span className='group-hover:text-blue-600 transition-colors cursor-default text-xs'>{post.replies > 0 && post.replies}</span>
                         </li>
                         <li className='group flex items-center space-x-1'>
-                            <FaHeart className={`${status.like ? 'text-red-600' : 'text-gray-600'} group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[15px]`} onClick={() => { handleAction(`like/${post.id}`, 'PUT', authTokens, undefined) }} />
-                            <span className={`${status.like ? 'text-red-600' : ''} w-2 group-hover:text-red-600 transition-colors cursor-default text-xs`}>{post.likes.length > 0 && post.likes.length}</span>
+                            <FaHeart className={`${post.liked? 'text-red-600' : 'text-gray-600'} group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[15px]`} onClick={() => { handleLike(post.id)}} />
+                            <span className={`${post.liked ? 'text-red-600' : ''} w-2 group-hover:text-red-600 transition-colors cursor-default text-xs`}>{post.likes> 0 && post.likes}</span>
                         </li>
                         <li className='group flex items-center space-x-1'>
-                            <FaRetweet className={`${status.transmit ? 'text-green-600' : 'text-gray-600'} group-hover:bg-green-300 group-hover:text-green-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => { handleAction(`transmit/${post.id}`, 'PUT', authTokens, undefined) }} />
-                            <span className='group-hover:text-green-600 transition-colors cursor-default text-xs'>{post.transmissions.length > 0 && post.transmissions.length}</span>
+                            <FaRetweet className={`${post.transmitted ? 'text-green-600' : 'text-gray-600'} group-hover:bg-green-300 group-hover:text-green-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => { handleTransmit(post.id) }} />
+                            <span className='group-hover:text-green-600 transition-colors cursor-default text-xs'>{post.transmissions> 0 && post.transmissions}</span>
                         </li>
                         <li>
-                            <IoBookmarkOutline className={`${status.bookmark ? 'text-purple-600' : 'text-gray-600'} hover:bg-purple-300 hover:text-purple-600 hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => { handleAction(`bookmark/${post.id}`, 'PUT', authTokens, undefined) }} />
+                            <IoBookmarkOutline className={`${post.bookmarked ? 'text-purple-600' : 'text-gray-600'} hover:bg-purple-300 hover:text-purple-600 hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => { handleTransmit(post.id) }} />
                         </li>
                         <li className='mr-2.5'>
                             <FiShare2 className='hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' onClick={() => navigator.clipboard.writeText(`http://localhost:3000/post/${post.id}`)}/>

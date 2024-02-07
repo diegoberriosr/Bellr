@@ -1,4 +1,4 @@
-import { useContext, memo } from 'react';
+import { useContext, memo, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
@@ -24,7 +24,7 @@ import AuthContext from '../context/AuthContext';
 import GeneralContext from '../context/GeneralContext';
 
 
-const NewPost = ({ post, setPosts }) => {
+const NewPost = forwardRef(({ post, setPosts }, ref) => {
 
     const { user, authTokens } = useContext(AuthContext);
     const { darkMode, setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
@@ -51,7 +51,7 @@ const NewPost = ({ post, setPosts }) => {
     }, []);
 
   
-    return <div className={`border border-t-0 border-l-0 ${ darkMode ? 'border-gray-600' : 'border-gray-300'} w-full cursor-pointer`}>
+    return <div ref={ref} className={`border border-t-0 border-l-0 ${ darkMode ? 'border-gray-600' : 'border-gray-300'} w-full cursor-pointer`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter} reposted</span>
@@ -124,7 +124,7 @@ const NewPost = ({ post, setPosts }) => {
             </main>
         </div>
     </div>
-}
+})
 
 
 export default memo(NewPost);

@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext} from 'react';
-import { useNavigate } from 'react-router-dom';
-import useSearch from '../useSearch';
+import { useContext, useCallback, useRef} from 'react';
+
 
 // Component imports
 import Form from './Form';
@@ -14,35 +13,24 @@ import GeneralContext from '../context/GeneralContext';
 
 const Feed = ({ form,  url, loginRequired}) => {
 
-  const [pageNumber, setPageNumber] = useState(1);
-  const { user, authTokens } = useContext(AuthContext);
-  const { darkMode, modalOpen, posts, loading } = useContext(GeneralContext);
+  const { user } = useContext(AuthContext);
+  const { darkMode, posts, hasMore, loading, setPage} = useContext(GeneralContext);
+  
+  const observer = useRef();
+  const lastPostRef = useCallback( post => {
+    if (loading) return;
 
-  const navigator = useNavigate();
-
- 
-
-
-  // Handles like, comment, retweet, delete, edit, and bookmark actions
-  const handleAction = (url, method, authTokens, body) => { 
-    fetch(`http://127.0.0.1:8000/${url}`, {
-      method: method,
-      headers : {
-        'Content-type' : 'application/json',
-        'Authorization' : 'Bearer ' + String(authTokens.access)
-      },
-      body : JSON.stringify(body)
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        if (hasMore) setPage( prevPage => {return prevPage + 1})
+      }
     })
-    .then(response => response.json())
-    .then( () => {
-        console.log('xd')
-    })
-    .catch(error => {console.log(error)})
-  };
 
-  console.log(loading);
+    if (post) observer.current.observe(post);
+  }, [loading, hasMore]);
 
-
+  console.log(posts);
   return (
     <div className='w-[600px] transition-all'>
        {(form && user !== null)  ? 
@@ -55,7 +43,10 @@ const Feed = ({ form,  url, loginRequired}) => {
             </div>
         </div>
        }
-       {(posts && posts.length > 0) && posts.map((post,index) => <NewPost key={index} post={post}/>)}
+       {(posts && posts.length > 0) && posts.map((post,index) => {
+    
+       if (posts.length - 1 === index) return <NewPost ref={lastPostRef} key={index} post={post}/>;
+       return <NewPost key={index} post={post}/>})}
        {(posts && posts.length === 0) && <ErrorMessage/>}
        {loading && <div className='w-full mt-[25%] flex items-center justify-center'>
           <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 

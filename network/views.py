@@ -109,7 +109,7 @@ def register(request):
 def get_posts_all(request):
     
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
     
 
     # Get posts and transmissions.
@@ -122,6 +122,8 @@ def get_posts_all(request):
     # Paginate posts and check if there are any values left to be rendered.
     paginated_posts, hasMore = paginate(sorted_posts, 10, page_index)
 
+    print(len(paginated_posts), page_index, hasMore)
+
     return JsonResponse({
         'posts' : [post.fserialize(request.user) for post in paginated_posts],
         'hasMore' : hasMore
@@ -132,7 +134,7 @@ def get_posts_all(request):
 def get_posts_by_username(request, username):
     
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get user by username, raise an exception otherwise.
     try:
@@ -209,7 +211,7 @@ def get_posts_by_user(request, user_id):
 def get_feed(request):
 
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get all the users that the requester is following.
     following = request.user.following.all()
@@ -225,6 +227,33 @@ def get_feed(request):
     return JsonResponse({
         'hasMore' : hasMore,
         'posts' : [post.fserialize(request.user) for post in sorted_feed]}, safe=False)
+
+
+@api_view(['GET'])
+def get_post_by_id(request, post_id):
+
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
+
+    # Get post by id, raise an error if it does not exist
+    try:
+        origin_post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        raise Http404('Post does not exist')
+    
+    # Get all replies associated with the post
+    replies = origin_post.replies.all().order_by('-timestamp')
+
+    # Merge origin post and its replies
+    posts = [origin_post] + list(replies)
+
+    # Paginate all posts
+    paginated_posts, hasMore = paginate(posts, 10, page_index)
+   
+    return JsonResponse({
+        'hasMore' : hasMore,
+        'posts' : [post.fserialize(request.user) for post in paginated_posts]
+    })
 
 
 @api_view(['POST'])
@@ -374,7 +403,7 @@ def bookmark(request, post_id):
 def get_bookmarked(request):
 
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get the bookmarked posts list from the request user.
     bookmarked_posts = request.user.bookmarked.all().order_by('-timestamp')
@@ -394,7 +423,7 @@ def get_user(request, username):
     # Get an user provided it's username.
     users = User.objects.filter(username__icontains=username)
 
-    return JsonResponse([user.serialize() for user in users.all()], safe=False)
+    return JsonResponse([user.serialize(request.user) for user in users.all()], safe=False)
 
 
 @api_view(['POST'])
@@ -417,7 +446,7 @@ def delete_post(request, post_id):
 def get_liked_posts(request, username):
 
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get the user and its like posts.
     user = User.objects.get(username=username)
@@ -462,7 +491,7 @@ def create_reply(request, post_id):
 def get_replies(request, username):
 
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get user, raise an exeception if user does not exist.
     try:
@@ -487,7 +516,7 @@ def get_replies(request, username):
 def get_transmissions(request, username):
 
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get user, raise an exception if it does not exist.
     try:
@@ -518,7 +547,7 @@ def block_user(request, username):
         raise Http404('User does not exsit')
     
 
-    # Get requester
+    # Get requester.
     requester = request.user
 
     # If requester has not blocked the user, add it to the blocklist. Remove it otherwise.
@@ -535,13 +564,20 @@ def block_user(request, username):
 def get_notifications(request):
     
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
+    
 
     # Get notifications
-    notifications = request.user.notifications.all().order_by('-timestamp')
+    notifications = request.user.notifications.all()
 
-    # Paginate notifications
-    paginated_notifications, hasMore = paginate(notifications, 10, page_index)
+    # Filter notifications (if needed).
+    filter = request.GET.get('filter', '') # Get filter from request's body.
+    if filter != '' : 
+        notifications = notifications.filter(type=filter)
+    
+    print(notifications, filter)
+    # Paginate notifications.
+    paginated_notifications, hasMore = paginate(notifications.order_by('-timestamp'), 10, page_index)
 
     return JsonResponse({
         'hasMore' : hasMore,
@@ -569,7 +605,7 @@ def email_exists(request, email):
 def get_followers(request, username):
 
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get user, raise an exception if it does not exist
     try:
@@ -577,7 +613,7 @@ def get_followers(request, username):
     except User.DoesNotExist:
         raise Http404('User does not exist')
         
-    verified = request.GET.get('Verified', None) # Check if querying for verified followers only
+    verified = request.GET.get('verified', None) # Check if querying for verified followers only
 
     # Get followers.
     followers = user.followers.all().filter(verified=True) if verified else user.followers.all()
@@ -587,8 +623,10 @@ def get_followers(request, username):
 
     return JsonResponse({
         'hasMore' : hasMore,
-        'username' : user.username,
-        'profilename' : user.profilename,
+        'data' : {
+            'username' : user.username,
+            'profilename' : user.profilename
+        },
         'profiles' : [profile.fserialize(request.user) for profile in paginated_followers]}, safe=False)
 
 
@@ -596,7 +634,7 @@ def get_followers(request, username):
 def get_following(request, username):
 
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
-    page_index = int(request.GET.get('p', '')) if request.GET.get('p', '') else 1
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
 
     # Get user, raise an exception if it does not exist.
     try:
@@ -605,15 +643,17 @@ def get_following(request, username):
         raise Http404('User does not exist')
     
     # Get all the profiles that the requester is following.
-    following = request.user.following.all()
+    following = user.following.all()
 
     # Paginate profiles (20 per page).
     paginated_following, hasMore = paginate(following, 20, page_index)
 
     return JsonResponse({
         'hasMore' : hasMore,
-        'username' : user.username,
-        'profilename' : user.profilename,
+        'data' : {
+            'username' : user.username,
+            'profilename' : user.profilename,
+        },
         'profiles' : [profile.fserialize(request.user) for profile in paginated_following]}, safe=False )
 
 
