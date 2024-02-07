@@ -76,7 +76,7 @@ const Notifications = () => {
     }, [filter])
 
 
-    return <div className='relative w-[600px]'>
+    return <div className='relative w-[600px] min-h-screen'>
         <div className={`flex items-center space-x-7 text-2xl border border-gray-800 border-l-0 border-t-0 border-b-0 ${darkMode ? 'bg-black' : 'bg-white'} bg-opacity-50 sticky top-0`}>
             <p className='pl-3.5 my-2.5 text-xl font-bold'> Notifications </p>
         </div>

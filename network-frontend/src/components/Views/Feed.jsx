@@ -32,10 +32,11 @@ const Feed = ({ form,  url, loginRequired}) => {
 
   console.log(posts);
   return (
-    <div className='w-[600px] transition-all'>
-       {(form && user !== null)  ? 
+    <div className='w-screen mobile:w-[600px] min-h-screen transition-all'>
+       {(form && user)  &&
        <Form route='new' method='POST'  borderStyle={`border-l-0 ${darkMode ? 'border-gray-800' : 'border-gray-300'}`} textAreaStyle='bg-transparent' message='Post' placeholder="What's happening !?"/> 
-       :
+      }
+      { !form && user &&
        <div className={`flex items-center space-x-7 text-xl border border-l-0 border-t-0 ${ darkMode ? 'bg-black border-gray-800' : 'bg-white border-gray-300'} bg-opacity-50 sticky top-0`}>
             <div className='mt-1 ml-4 mb-1'>
                 <h3 className='font-bold' >Bookmarks</h3>

@@ -19,13 +19,14 @@ import EditProfile from '../components/Views/EditProfile';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
+import PostButton from '../components/General/PostButton';
 
 
 
 
-const Update = () => {
+const MainPage = () => {
 
-  const { darkMode, modalOpen, isEditing, setEditedPost, pfpBig, setPfpBig, handleImageModal, imageModal, userFilter } = useContext(GeneralContext);
+  const { darkMode, modalOpen, isEditing, setEditedPost, pfpBig, setPfpBig, handleImageModal, imageModal, userFilter, handleModal } = useContext(GeneralContext);
 
   const navigate = useNavigate();
 
@@ -52,7 +53,7 @@ const Update = () => {
 
   return (
       
-        <div className={`flex md:px-20 lg:px-32 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} duration-300 transition-colors`}>
+        <div className={`relative flex md:px-20 lg:px-32 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} duration-300 transition-colors`}>
               <Sidebar darkMode={darkMode}/>
                 <Routes>
                     <Route key='home' element={<Feed form={true} url='posts' /> } path='/home'/>
@@ -66,6 +67,10 @@ const Update = () => {
                     <Route key='followers' element={<Users/>} path=':type/:username/:filter?'/>
                 </Routes>
                 <Recomendations/>
+                <Bottombar/>
+                <div className='block md:hidden fixed bottom-[10%] right-[5%]'> 
+                    <PostButton handleClick={handleModal}/>
+                </div>
                 <Modal isVisible={modalOpen} background='bg-black'>
                     <ModalForm borderStyle='border none' textAreaStyle='bg-transparent' message={isEditing ? 'Save' : 'Post'}/>
                 </Modal>
@@ -81,4 +86,4 @@ const Update = () => {
   )
 }
 
-export default Update
+export default MainPage

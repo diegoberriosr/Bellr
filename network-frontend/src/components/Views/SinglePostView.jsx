@@ -23,7 +23,7 @@ const SinglePostView = () => {
 
   console.log(posts)
   return (
-    <div className='w-5/12'> 
+    <div className='w-screen min-h-screen mobile:w-5/12'> 
       <div className={`sticky flex pt-6 pb-10 h-8 items-center space-x-7 text-2xl border ${ darkMode ? 'border-gray-600 bg-black' : 'border-gray-300 bg-white'} border-l-0 border-b-0 border-t-0 bg-opacity-50 sticky top-0`}>
             <BsArrowLeftShort className='ml-3.5 text-3xl opacity-100 hover:bg-gray-900 hover:rounded-full cursor-pointer' onClick={() => { navigate(-1) }} />
             <p className='text-xl font-bold'>Post</p>

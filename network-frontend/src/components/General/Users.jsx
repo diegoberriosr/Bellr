@@ -75,7 +75,7 @@ const Users = () => {
   }, [])
 
   return (
-    <div className='w-[600px]'>
+    <div className='w-[600px] min-h-screen'>
       {users && data  &&
         <>
           <div className={`flex items-center space-x-7 pl-3 text-xl border border-b-0 border-l-0 border-t-0 ${darkMode ? 'bg-black border-gray-800' : 'bg-white border-gray-300'} bg-opacity-50 sticky top-0`}>

@@ -1,12 +1,102 @@
-import { useContext } from 'react';
+import { useContext, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// Icon imports
+import { GoHome } from "react-icons/go";
+import { GoHomeFill } from "react-icons/go";
+import { BsPeople } from "react-icons/bs";
+import { BsPeopleFill } from "react-icons/bs";
+import { RiNotification2Line } from "react-icons/ri";
+import { RiNotification2Fill } from "react-icons/ri";
+import { IoMailOutline } from "react-icons/io5";
+import { IoMailSharp } from "react-icons/io5";
+import { CiBookmark } from "react-icons/ci";
+import { FaBookmark, FaFeather } from "react-icons/fa";
+import { IoPersonOutline } from "react-icons/io5";
+import { IoPersonSharp } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa";
+
+// Context imports
 import GeneralContext from '../../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+
+const ICONS = [
+  {
+      'name' : 'Home',
+      'image' : {
+          'nonselected' : GoHome, 
+          'selected' : GoHomeFill
+      },
+      'route' : 'home',
+      'loginRequired' : false
+  },
+  {
+      'name' : 'Following',
+      'image' : {
+          'nonselected' : BsPeople, 
+          'selected' :BsPeopleFill
+      },
+      'route' : 'feed',
+      'loginRequired' : true
+  },
+  {
+      'name' : 'Notifications',
+      'image' : {
+          'nonselected' : RiNotification2Line, 
+          'selected' : RiNotification2Fill
+      },
+      'route' : 'notifications',
+      'loginRequired' : true
+  },
+  {
+      'name' : 'Messages',
+      'image' : {
+          'nonselected' : IoMailOutline, 
+          'selected' : IoMailSharp
+      },
+      'route' : 'messages',
+      'loginRequired' : true
+  },
+  {
+      'name' : 'Bookmarked',
+      'image' : {
+          'nonselected' : CiBookmark, 
+          'selected' : FaBookmark
+      },
+      'route' : 'bookmarked',
+      'loginRequired' : true
+  },
+  {
+      'name' : 'Profile',
+      'image' : {
+          'nonselected' : IoPersonOutline, 
+          'selected' : IoPersonSharp
+      },
+      'route' : 'me',
+      'loginRequired' : true
+  }
+];
+
 
 const Bottombar = () => {
-  const { darkMode } = useContext(GeneralContext)
-  
+
+  const [active, setActive] = useState(0);
+  const { darkMode } = useContext(GeneralContext);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   return (
-    <div className={`w-full h-10 bg-transparent ${darkMode ? 'text-white' : 'text-black'} border border-gray-600 border-b-0 border-l-0 border-r-0`}>
-      LOLCOW
+    <div className={`block mobile:hidden fixed bottom-0 w-full h-20  ${darkMode ? 'text-white bg-black' : 'text-black bg-white'} border border-gray-600 border-b-0 border-l-0 border-r-0`}>
+      <ul className='flex items-center justify-center items-center  h-full w-full text-4xl'>
+      {ICONS.map((icon, index) => {
+                if (icon.loginRequired && user===null ){
+                    return undefined;
+                }
+                return <li key={index} className={`inline-flex items-center px-3.5 p-2.5 ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-light-gray-hover'} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
+                        {index === active ? <icon.image.selected /> : <icon.image.nonselected/>}
+                    </li>
+            })}
+      </ul>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import LoginPage from './pages/LoginPage';
-import Update from './pages/Update';
+import MainPage from './pages/MainPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { GeneralProvider } from './context/GeneralContext';
@@ -14,7 +14,7 @@ function App() {
           <GeneralProvider>
             <GoogleOAuthProvider clientId='1076473623293-2d9b46feraupikqta827c3hc9ej320f1.apps.googleusercontent.com'>
             <Routes>
-                <Route element={<Update />} path='/*' />
+                <Route element={<MainPage />} path='/*' />
                 <Route element={<LoginPage />} path='/login'/>
             </Routes>
             </GoogleOAuthProvider>

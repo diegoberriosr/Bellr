@@ -12,10 +12,10 @@ import { RiNotification2Fill } from "react-icons/ri";
 import { IoMailOutline } from "react-icons/io5";
 import { IoMailSharp } from "react-icons/io5";
 import { CiBookmark } from "react-icons/ci";
-import { FaBookmark, FaFeather } from "react-icons/fa";
+import { FaBookmark} from "react-icons/fa";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
+
 
 import { CiLogout } from "react-icons/ci";
 import { LuDog } from "react-icons/lu";
@@ -28,6 +28,7 @@ import GeneralContext from '../../context/GeneralContext';
 
 // Helper components imports
 import Toggler from './Toggler';
+import PostButton from './PostButton';
 
 
 const ICONS = [
@@ -104,7 +105,7 @@ const Sidebar = () => {
     
 
 
-    return <nav className={`sticky top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${darkMode ? 'border-gray-600' : 'border-gray-300'} border-t-0 border-l-0 border-b-0 text-3xl`}>
+    return <nav className={`sticky hidden mobile:block top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${darkMode ? 'border-gray-600' : 'border-gray-300'} border-t-0 border-l-0 border-b-0 text-3xl`}>
         <ul className='h-screen'>
             <li className='p-2.5 px-4'>
                 <LuDog/>
@@ -120,15 +121,8 @@ const Sidebar = () => {
             })}
             {user && 
                 <>
-                    <li className='w-full mt-1 p-2.5' onClick={handleModal}>
-                        <button className='relative flex items-center justify-center min-w-[55px] min-h-[55px] w-11/12 p-2.5 rounded-full sm:rounded-3xl bg-twitter-blue text-white text-lg font-bold'>
-                            <span className='absolute invisible xl:visible'>Post</span>
-                            <div className='absolute visible xl:invisible'>
-                                <FaFeather/>
-                                <FaPlus className='absolute -top-2 -left-2 text-xs'/>
-                            </div>
-
-                        </button>
+                    <li className='w-full mt-1 p-2.5'>
+                        <PostButton handleClick={handleModal}/>
                     </li>
                     <li className='relative bottom-0 inline-flex items-center mt-1 p-2.5 hover:bg-gray-800 hover:rounded-3xl cursor-pointer' onClick={handleLogoutUser}>
                         <CiLogout/>

@@ -97,7 +97,7 @@ const OriginPost = ({ post, handleAction, postView }) => {
                     </div>
                 </ul>
             </footer>
-            <p className='relative left-16 ml-2 bottom-1 text-sm text-gray-600'>Replying to <span className='text-twitter-blue'>@{post.user.username}</span></p>
+           {user && <p className='relative left-16 ml-2 bottom-1 text-sm text-gray-600'>Replying to <span className='text-twitter-blue'>@{post.user.username}</span></p>}
         </div>
 }
 

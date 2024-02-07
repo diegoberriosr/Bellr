@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       screens : {
-        'mobile' : '415px'
+        'mobile' : '431px'
       },
       colors: {
         'dark-purple': '#081A51',
