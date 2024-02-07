@@ -10,11 +10,11 @@ import { GoPaperclip } from "react-icons/go";
 import { LiaEraserSolid } from "react-icons/lia";
 
 // Component imports
-import CircleProgressBar from './CircleProgressBar';
+import CircleProgressBar from '../General/CircleProgressBar';
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
 
 const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message, handleAction, isEditing }) => {

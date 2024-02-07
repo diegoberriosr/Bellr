@@ -5,14 +5,14 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { BsArrowLeftShort } from 'react-icons/bs';
 
 // Component imports
-import NewPost from './NewPost';
-import OriginPost from './OriginPost';
-import Form from './Form';
+import NewPost from '../Posts/Post';
+import OriginPost from '../Posts/OriginPost';
+import Form from '../Forms/Form';
 
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
 const SinglePostView = () => {
   const { user } = useContext(AuthContext);

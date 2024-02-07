@@ -5,17 +5,17 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { IoCloseSharp } from "react-icons/io5";
 
 // Component imports
-import NewSidebar from '../components/NewSidebar';
-import Bottombar from '../components/Bottombar';
-import Feed from '../components/Feed';
-import Profile from '../components/Profile';
-import SinglePostView from '../components/SinglePostView';
-import Notifications from '../components/Notifications';
-import Recomendations from '../components/Recomendations';
-import Modal from '../components/Modal';
-import ModalForm from '../components/ModalForm';
-import Users from '../components/Users';
-import EditProfile from '../components/EditProfile';
+import Sidebar from '../components/General/Sidebar';
+import Bottombar from '../components/General/Bottombar';
+import Feed from '../components/Views/Feed';
+import Profile from '../components/Views/Profile';
+import SinglePostView from '../components/Views/SinglePostView';
+import Notifications from '../components/Notifications/Notifications';
+import Recomendations from '../components/General/Recomendations';
+import Modal from '../components/General/Modal';
+import ModalForm from '../components/Forms/ModalForm';
+import Users from '../components/General/Users';
+import EditProfile from '../components/Views/EditProfile';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
@@ -53,7 +53,7 @@ const Update = () => {
   return (
       
         <div className={`flex md:px-20 lg:px-32 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} duration-300 transition-colors`}>
-              <NewSidebar darkMode={darkMode}/>
+              <Sidebar darkMode={darkMode}/>
                 <Routes>
                     <Route key='home' element={<Feed form={true} url='posts' /> } path='/home'/>
                     <Route key='feed' element={<Feed form={true} url='posts/feed' loginRequired={true}/>} path='/feed'/>

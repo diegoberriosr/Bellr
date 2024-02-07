@@ -1,9 +1,9 @@
 
 import { PiDogBold } from "react-icons/pi";
-import Modal from '../components/Modal';
-import Login from '../components/Login';
-import Register from '../components/Register';
-import ResetPassword from "../components/ResetPassword";
+import Modal from '../components/General/Modal';
+import Login from '../components/Login/Login';
+import Register from '../components/Login/Register';
+import ResetPassword from "../components/Login/ResetPassword";
 import { GoogleLogin } from '@react-oauth/google';
 
 import { useState } from 'react';

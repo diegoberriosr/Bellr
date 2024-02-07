@@ -1,4 +1,4 @@
-import SleepingDog from '../sleepingdog.png';
+import SleepingDog from '../../sleepingdog.png';
 
 
 const ErrorMessage = () => {

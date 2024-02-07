@@ -7,15 +7,15 @@ import { MdVerified } from "react-icons/md";
 import { BsArrowLeftShort } from 'react-icons/bs';
 
 // Components imports
-import NewProfileHeader from './NewProfileHeader';
-import EmptyProfileHeader from './EmptyProfileHeader';
-import NewPost from './NewPost';
-import ErrorMessage from './ErrorMessage';
+import ProfileHeader from './Profileheader';
+import EmptyProfileHeader from '../Alerts/EmptyProfileHeader';
+import NewPost from '../Posts/Post';
+import ErrorMessage from '../Alerts/ErrorMessage';
 import ClipLoader from "react-spinners/ClipLoader";
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
 const Profile = ({ me }) => {
   
@@ -56,7 +56,7 @@ const Profile = ({ me }) => {
                 <p className='text-gray-600 text-sm'>{account.number_of_posts} posts </p>
             </div>
         </div>
-        <NewProfileHeader account={account}/>
+        <ProfileHeader account={account}/>
         </>
         }
         {(posts && posts.length > 0) && posts.map((post,index) => {

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
 import { MdVerified } from 'react-icons/md';
 // Context imports
-import GeneralContext from '../context/GeneralContext';
+import GeneralContext from '../../context/GeneralContext';
 
 const Searchbar = () => {
   

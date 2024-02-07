@@ -12,11 +12,11 @@ import { GoPaperclip } from "react-icons/go";
 import { LiaEraserSolid } from "react-icons/lia";
 
 // Component imports
-import CircleProgressBar from './CircleProgressBar';
+import CircleProgressBar from '../General/CircleProgressBar';
 
 // Context imports
-import GeneralContext from '../context/GeneralContext';
-import AuthContext from '../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
 
 const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
 
@@ -68,7 +68,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
                 {isAttatchingImage ?
                 <input value={values.image} name='image' className={`ml-4 bg-transparent w-[94%] ${ darkMode ? 'text-white' : 'text-black'} mb-20 focus:outline-none`} placeholder='Insert your image link here' onChange={handleChange}/>
                 :
-                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${ darkMode ? 'text-white' : 'text-black'} w-full` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 h-24 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} defaultValue={placeholder} onFocus={handleFocus} onChange={handleChange}/>
+                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${ darkMode ? 'text-white' : 'text-black'} w-[90%]` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 h-24 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} defaultValue={placeholder} onFocus={handleFocus} onChange={handleChange}/>
                 }
                 {values.image ?
                     <>

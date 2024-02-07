@@ -6,8 +6,8 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from "../context/GeneralContext";
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from "../../context/GeneralContext";
 
 import moment from "moment";
 import axios from 'axios';

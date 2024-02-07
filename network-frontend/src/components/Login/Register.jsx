@@ -6,10 +6,10 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
 
 // Context imports
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 // Schema imports
-import { RegisterSchema } from '../schemas';
+import { RegisterSchema } from '../../schemas';
 
 
 const Register = ({ handleCloseModal }) => {

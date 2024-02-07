@@ -7,8 +7,8 @@ import { MdVerified } from "react-icons/md";
 import { BsArrowLeftShort } from 'react-icons/bs';
 
 // Context imports
-import GeneralContext from '../context/GeneralContext';
-import AuthContext from '../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
 
 const Users = () => {
 

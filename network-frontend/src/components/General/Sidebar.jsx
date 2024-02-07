@@ -23,8 +23,8 @@ import { LuDog } from "react-icons/lu";
 
 // Authentication context imports
 import { useContext } from 'react';
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
 // Helper components imports
 import Toggler from './Toggler';

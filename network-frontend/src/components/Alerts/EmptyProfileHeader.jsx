@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { BsArrowLeftShort } from 'react-icons/bs';
 
 // Context imports
-import GeneralContext from '../context/GeneralContext';
+import GeneralContext from '../../context/GeneralContext';
 
 const EmptyProfileHeader = ({ username, message, submessage }) => {
     const navigate = useNavigate()

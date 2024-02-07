@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Searchbar from './Searchbar';
 
 // Context imports
-import GeneralContext from '../context/GeneralContext';
+import GeneralContext from '../../context/GeneralContext';
 
 
 const Recomendations = () => {

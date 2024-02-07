@@ -2,14 +2,14 @@ import { useContext, useCallback, useRef} from 'react';
 
 
 // Component imports
-import Form from './Form';
-import NewPost from './NewPost';
-import ErrorMessage from './ErrorMessage';
+import Form from '../Forms/Form';
+import NewPost from '../Posts/Post';
+import ErrorMessage from '../Alerts/ErrorMessage';
 import ClipLoader from "react-spinners/ClipLoader";
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
 const Feed = ({ form,  url, loginRequired}) => {
 

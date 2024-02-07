@@ -1,8 +1,6 @@
 import { useContext, memo, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 
 // Icon imports
 import { MdVerified } from "react-icons/md";
@@ -17,19 +15,16 @@ import { CiHeart } from "react-icons/ci";
 import { FaBookmark } from "react-icons/fa";
 
 // Component imports
-import DropDownMenu from './DropdownMenu';
+import DropDownMenu from '../General/DropdownMenu';
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import GeneralContext from '../../context/GeneralContext';
 
 
-const NewPost = forwardRef(({ post, setPosts }, ref) => {
+const Post = forwardRef(({ post, setPosts }, ref) => {
 
-    const { user, authTokens } = useContext(AuthContext);
     const { darkMode, setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
 
-    const currentUrl = useLocation();
     const navigate = useNavigate();
 
     const formatDate = () => {
@@ -127,4 +122,4 @@ const NewPost = forwardRef(({ post, setPosts }, ref) => {
 })
 
 
-export default memo(NewPost);
+export default memo(Post);

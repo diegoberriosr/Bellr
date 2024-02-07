@@ -11,11 +11,11 @@ import { FaRegComment } from "react-icons/fa6";
 import { FiShare2 } from "react-icons/fi";
 
 // Component imports
-import DropDownMenu from './DropdownMenu';
+import DropDownMenu from '../General/DropdownMenu';
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
 
 const OriginPost = ({ post, handleAction, postView }) => {

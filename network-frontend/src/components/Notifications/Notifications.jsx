@@ -9,8 +9,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Notification from './Notification';
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
 const Notifications = () => {
 

@@ -5,17 +5,17 @@ import { useFormik } from 'formik';
 import { MdModeEditOutline } from "react-icons/md";
 
 // Schema imports
-import { RegisterSchema } from '../schemas';
+import { RegisterSchema } from '../../schemas/index.js';
 
 // Component imports
-import Input from './Forms/Input.jsx';
-import Header from './General/Header.jsx';
-import Modal from './Modal.jsx';
-import EditImage from './Forms/EditImage.jsx';
+import Input from '../Forms/Input.jsx';
+import Header from '../General/Header.jsx';
+import Modal from '../General/Modal.jsx';
+import EditImage from '../Forms/EditImage.jsx';
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext.js';
+import GeneralContext from '../../context/GeneralContext.js';
 
 const EditProfile = () => {
 

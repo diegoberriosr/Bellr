@@ -4,9 +4,9 @@ import { PiDogBold } from "react-icons/pi";
 
 import { useFormik } from 'formik'
 
-import { ResetPasswordSchema } from '../schemas/resetPassword';
+import { ResetPasswordSchema } from '../../schemas/resetPassword';
 
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 
 const ResetPassword = ({ handleCloseModal }) => {

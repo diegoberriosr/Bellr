@@ -11,16 +11,16 @@ import { LuFileEdit } from "react-icons/lu";
 import { TbPinned } from "react-icons/tb";
 
 // Context imports
-import AuthContext from '../context/AuthContext';
-import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
+import GeneralContext from '../../context/GeneralContext';
 
-const DropdownMenu = ({ author_id, followed, post, setPosts}) => {
+const DropdownMenu = ({ author_id, followed, post }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { user, authTokens } = useContext(AuthContext);
   const { darkMode, setEditedPost, setIsEditing, handleModal, handleFollow, handleDelete} = useContext(GeneralContext);
-  const currentUrl = useLocation();
 
+  console.log(post);
   const handleClose = () => {
       if (isOpen) {
         setIsOpen(!isOpen);
@@ -36,7 +36,7 @@ const DropdownMenu = ({ author_id, followed, post, setPosts}) => {
   return (
     <div className='relative ml-auto mr-2.5' onMouseLeave={handleClose}>
         {isOpen ? <ul  tabIndex='0' className={`relative absolute top-7 -right-1 w-28 h-20 flex flex-col border shadow-custom pl-1 pr-1 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} rounded-lg shadow-gray-800 border border-dark-twitter-gray`} onKeyDown={handleClose}>
-          { user.user_id !== author_id && 
+          { user.username !== post.user.username && 
             <li className='hover:bg-opacity-50 cursor-pointer inline-flex items-center' onClick={() => {handleFollow(author_id)}}> 
               {followed ? <RiUserUnfollowLine/> : <SlUserFollow/>}
               <span className='ml-2'>{ post.followed ? 'Unfollow' : 'Follow' }</span>
@@ -46,13 +46,13 @@ const DropdownMenu = ({ author_id, followed, post, setPosts}) => {
               <TbPinned/> 
               <span className='ml-2'>{post.pinned ? 'Unpin' : 'Pin'}</span>
           </li> }
-          { user.user_id === author_id && 
+          { user.username === post.user.username && 
             <li className='hover:bg-opacity-50 cursor-pointer inline-flex items-center'> 
               <LuFileEdit onClick={handleEditing}/>
               <span className='ml-2' onClick={handleEditing}>Edit</span>
             </li> }
-          { user.user_id === author_id && 
-            <li className='hover:bg-opacity-50 cursor-pointer inline-flex items-center' onClick={() => {handleDelete(post.id)}}>
+          { user.username === post.user.username && 
+            <li className='hover:bg-opacity-50 cursor-pointer inline-flex items-center' onClick={() => {handleDelete(post.id); setIsOpen(false)}}>
               <MdDeleteOutline/> 
               <span className='ml-2'>Delete</span>
             </li> }
