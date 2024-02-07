@@ -3,6 +3,25 @@ module.exports = {
   content: ["./src/**/*.{html,js}", "./src/components/**/*.{js,jsx}"],
   theme: {
     extend: {
+      animation : {
+        'fade-out' : 'fade-out 5s forwards',
+        'grow' : 'grow 0.250s forwards',
+        'shrink' : 'shrink 0.250s forwards'
+      },
+      keyframes : {
+        'fade-out' : {
+          '0%' : { opacity : 1},
+          '100%' : {opacity : 0}
+        },
+        'grow' : {
+          '0%' : { transform : 'scale(0.95)', opacity : 0},
+          '100%' : { transform : 'scale(1)', opacity : 1}
+        },
+        'shrink' : {
+          '0%' : { transform : 'scale(1)', opacity: 1},
+          '100%' : { transform : 'scale(0.95)', opacity: 0}
+        }
+      },
       screens : {
         'mobile' : '431px'
       },

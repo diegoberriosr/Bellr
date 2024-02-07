@@ -21,7 +21,6 @@ const ProfileHeader = ({ account }) => {
 
     const navigate = useNavigate()
   
-    console.log(account);
 
     const handleFilter = (url, updatedFilter) => {
         setLoading(true);

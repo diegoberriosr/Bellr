@@ -89,7 +89,7 @@ const Login = ({ handleCloseModal, openForgottenPassword }) => {
                 {step === 0 && <p className='absolute bottom-20 text-icon-gray tex-base'>Don't have an account ? <span className='text-twitter-blue'>Register.</span></p>}
             </form>
         </div>
-        {errorMessage && <div className='absolute bottom-0 w-60 h-10 flex items-center justify-center text-white bg-twitter-blue font-bold text-xs rounded-full text-center transition-all'>{errorMessage}</div>}
+        {errorMessage && <div className='absolute bottom-0 w-60 h-10 flex items-center justify-center text-white bg-twitter-blue font-bold text-xs rounded-full text-center animate-fade-out'>{errorMessage}</div>}
     </div>
   )
 }

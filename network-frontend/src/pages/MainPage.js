@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { useContext, useState, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom'
 
 // Icon imports
 import { IoCloseSharp } from "react-icons/io5";
@@ -22,34 +22,35 @@ import GeneralContext from '../context/GeneralContext';
 import PostButton from '../components/General/PostButton';
 
 
-
-
 const MainPage = () => {
 
-  const { darkMode, modalOpen, isEditing, setEditedPost, pfpBig, setPfpBig, handleImageModal, imageModal, userFilter, handleModal } = useContext(GeneralContext);
+  const { darkMode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, imageModal, handleModal } = useContext(GeneralContext);
+  const [shrink, setShrink] = useState(false);
 
-  const navigate = useNavigate();
+  useEffect( () => {
+    if (imageModal && shrink) {
+      const timer = setTimeout( () => {
+        handleImageModal();
+        setShrink(false);
+        setPfpBig(null);
+      }, 150) 
 
-  const filterUrl = userFilter ? userFilter.filter : undefined;
-  const usernameFilter = userFilter ? userFilter.username : undefined;
+      return () => clearTimeout(timer)
+    }
 
-  const handleAction = (url, method, authTokens, body) => { 
-    console.log('Calling feed function')
-    fetch(`http://127.0.0.1:8000/${url}`, {
-      method: method,
-      headers : {
-        'Content-type' : 'application/json',
-        'Authorization' : 'Bearer ' + String(authTokens.access)
-      },
-      body : JSON.stringify(body)
-    })
-    .then(response => response.json())
-    .then( () => {
-      setEditedPost(null);
-      navigate('/home')      
-    })
-    .catch(error => {console.log(error)})
-  };
+    else if (modalOpen && shrink) {
+      const timer = setTimeout( () => {
+        handleModal();
+        setShrink(false);
+        setPfpBig(null);
+      }, 150) 
+
+      return () => clearTimeout(timer)
+    }
+
+  } , [shrink])
+
+  console.log(shrink);
 
   return (
       
@@ -72,13 +73,13 @@ const MainPage = () => {
                     <PostButton handleClick={handleModal} mobile={true}/>
                 </div>
                 <Modal isVisible={modalOpen} background='bg-black'>
-                    <ModalForm borderStyle='border none' textAreaStyle='bg-transparent' message={isEditing ? 'Save' : 'Post'}/>
+                    <ModalForm borderStyle='border none' textAreaStyle='bg-transparent' message={isEditing ? 'Save' : 'Post'} shrink={shrink} setShrink={setShrink}/>
                 </Modal>
                 <Modal isVisible={imageModal}>
                     <div className='relative flex h-screen justify-center items-center'>
-                        <IoCloseSharp className='absolute top-0 left-0' onClick={() => { handleImageModal() ; setPfpBig(null)}}/>
-                        <div className={`transition-transform ${imageModal ? 'scale-100' : 'scale-0'} w-[368px] h-[368px] overflow-hidden rounded-full duration-300 ease-in-out hover:scale-150`}>
-                          <img src={pfpBig} alt='user profile pic' className='rounded-full h-full w-full object-fill'/>
+                        <IoCloseSharp className='absolute top-0 left-0' onClick={() => { setShrink(true) }}/>
+                        <div className={`transition-transform w-[368px] h-[368px] overflow-hidden rounded-full ${ shrink ? 'animate-shrink' : 'animate-grow'}`}>
+                           <img src={pfpBig} alt='user profile pic' className={`rounded-full h-full w-full object-fill`} />
                         </div>
                     </div>
                 </Modal>

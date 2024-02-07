@@ -13,8 +13,7 @@ const useSearch = () => {
     const [posts, setPosts] = useState(null);
     const [hasMore, setHasMore] = useState(false);
 
-    console.log(page);
-    const {user, authTokens} = useContext(AuthContext);
+    const {authTokens} = useContext(AuthContext);
     const url = useLocation();
     const currentUrl = url.pathname;
 

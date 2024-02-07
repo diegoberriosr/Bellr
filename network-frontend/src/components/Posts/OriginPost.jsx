@@ -74,7 +74,7 @@ const OriginPost = ({ post, handleAction, postView }) => {
                 <p className='text-sm text-gray-600 mt-3'>{formatDate(post.timestamp)}</p>
             </main>
             <footer className='px-3.5'>
-                <ul className={`flex items-center mt-3 mb-1.5 text-twitter-light-gray border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} border-l-0 border-r-0 h-10`}>
+                <ul className={`flex items-center mt-3 mb-1.5 text-twitter-light-gray border ${ darkMode ? 'border-gray-600 hover:bg-gray-900' : 'border-gray-300 hover:bg-light-gray-hover'} border-l-0 border-r-0 h-10 transition-colors duration-500`}>
                     <div className='w-full flex items-center justify-between ml-2.5'>
                         <li className='group flex items-center space-x-1'>
                             <FaRegComment className='group-hover:bg-blue-300 group-hover:text-blue-600 group-hover:rounded-full duration-300 cursor-pointer text-[19px]' />

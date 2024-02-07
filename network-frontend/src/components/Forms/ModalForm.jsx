@@ -18,7 +18,7 @@ import CircleProgressBar from '../General/CircleProgressBar';
 import GeneralContext from '../../context/GeneralContext';
 import AuthContext from '../../context/AuthContext';
 
-const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
+const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) => {
 
     const { darkMode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
     const [ isFocused, setIsFocused ] = useState(isEditing);
@@ -56,8 +56,8 @@ const ModalForm = ({ placeholder, message, textAreaStyle, borderStyle}) => {
         setIsFocused(true);
     }
 
-    return <div className={`relative w-screen sm:w-[600px] h-[277px] ${ darkMode ? 'bg-black' : 'bg-white'} rounded-2xl mt-5`}>
-        <IoCloseSharp className={`absolute top-4 left-2 text-xl ${ darkMode ? 'text-white' : 'text-dark'} cursor-pointer`} onClick={() => {handleModal()}}/>
+    return <div className={`relative w-screen sm:w-[600px] h-[277px] ${ darkMode ? 'bg-black' : 'bg-white'} rounded-2xl mt-5 ${ shrink ? 'animate-shrink' : 'animate-grow'}`}>
+        <IoCloseSharp className={`absolute top-4 left-2 text-xl ${ darkMode ? 'text-white' : 'text-dark'} cursor-pointer`} onClick={() => {setShrink(true)}}/>
         <span className='absolute top-4 right-11 text-twitter-blue font-bold text-sm'>Drafts</span>
         <header className={`flex flex-col w-full h-full transition-all`}>
         <div className='absolute left-1 top-[4.5rem] flex w-full items-start'>

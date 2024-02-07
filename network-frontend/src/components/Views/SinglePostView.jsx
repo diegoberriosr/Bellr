@@ -16,12 +16,10 @@ import GeneralContext from '../../context/GeneralContext';
 
 const SinglePostView = () => {
   const { user } = useContext(AuthContext);
-  const { darkMode, posts, loading } = useContext(GeneralContext);
+  const { darkMode, posts } = useContext(GeneralContext);
 
   const navigate = useNavigate();
 
-
-  console.log(posts)
   return (
     <div className='w-screen min-h-screen mobile:w-5/12'> 
       <div className={`sticky flex pt-6 pb-10 h-8 items-center space-x-7 text-2xl border ${ darkMode ? 'border-gray-600 bg-black' : 'border-gray-300 bg-white'} border-l-0 border-b-0 border-t-0 bg-opacity-50 sticky top-0`}>
