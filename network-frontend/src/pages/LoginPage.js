@@ -41,25 +41,19 @@ const LoginPage = () => {
   console.log(isForgottenPassword);
 
   return (
-    <div className='flex h-screen bg-black text-white font-twitter'>
-      <div className='w-6/12 text-[350px] flex justify-center pt-48'>
+    <div className='h-screen flex bg-black text-white font-twitter '>
+      <div className='hidden xl:flex w-9/12 text-[350px] justify-center pt-48 pl-[5%]'>
         <PiDogBold />
       </div>
-      <div className='flex flex-col justify-between pt-24 h-screen'>
-        <div>
-          <h1 className='text-7xl font-bold'>Happening now</h1>
-          <h2 className='text-4xl font-bold mt-14'>Join today.</h2>
-          <div className='mt-8'>
-            <GoogleLogin
-              onSuccess={credentialResponse => {
-                console.log(jwtDecode(credentialResponse.credential));
-              }}
-              onError={() => {
-                console.log('Login Failed');
-              }}
-              style={{fontSize : '100px'}}
-              buttonText='fucking nigger forevermirin'
-            />
+      <div className='w-screen items-center h-screen flex flex-col pt-[10%] pt-[20%] xl:items-start md:pl-[11.5%] md:pt-[6%] h-screen'>
+        <div className='w-full flex flex-col justify-center items-center xl:items-start'>
+          <h1 className='text-4xl mobile:text-5xl sm:text-7xl font-bold'>Happening now</h1>
+          <h2 className='text-3xl mobile:text-4xl sm:text-5xl font-bold mt-[7.5%]'>Join today.</h2>
+          <div className='mt-[14%] sm:mt-[3.5%]'>
+          <div className='w-[300px] h-10 bg-white rounded-full flex items-center justify-center text-black mt-2'>
+              <img src='https://e7.pngegg.com/pngimages/255/774/png-clipart-apple-logo-apple-company-leaf.png' width='20' alt='google logo' />
+              <span className='ml-2.5 font-bold'>Sign up with Google</span>
+            </div>
             <div className='w-[300px] h-10 bg-white rounded-full flex items-center justify-center text-black mt-2'>
               <img src='https://e7.pngegg.com/pngimages/255/774/png-clipart-apple-logo-apple-company-leaf.png' width='20' alt='google logo' />
               <span className='ml-2.5 font-bold'>Sign up with Apple</span>
@@ -75,9 +69,9 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-        <div className='pb-3.5'>
-          <span className='text-base font-bold'>Already have an account?</span>
-          <button type='button' className='w-[300px] h-10 border border-2 border-gray-800 rounded-full flex items-center justify-center text-twitter-blue mt-5' onClick={openLogin}>Log in</button>
+      <div className='mt-auto mb-4 flex flex-col items-center lg:items-start'>
+          <span className='text-lg font-bold'>Already have an account?</span>
+          <button type='button' className='w-[300px] h-10 border border-2 border-gray-800 rounded-full flex items-center justify-center text-twitter-blue mt-4' onClick={openLogin}>Log in</button>
         </div>
       </div>
       <Modal isVisible={isOpen} background='bg-login-modal'>

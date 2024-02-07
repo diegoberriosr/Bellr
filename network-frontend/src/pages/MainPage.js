@@ -69,7 +69,7 @@ const MainPage = () => {
                 <Recomendations/>
                 <Bottombar/>
                 <div className='block md:hidden fixed bottom-[10%] right-[5%]'> 
-                    <PostButton handleClick={handleModal}/>
+                    <PostButton handleClick={handleModal} mobile={true}/>
                 </div>
                 <Modal isVisible={modalOpen} background='bg-black'>
                     <ModalForm borderStyle='border none' textAreaStyle='bg-transparent' message={isEditing ? 'Save' : 'Post'}/>
