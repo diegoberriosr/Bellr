@@ -112,9 +112,11 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                 <form className='w-full px-5 mt-20'>
                     <Input type='text' value={values.username} name='username' id='Username'  containerStyle='w-full h-5' 
                     inputStyle='w-full h-full bg-transparent' error={errors['username']} touched={touched['username']} 
+                    maxValue={15} displayMaxValue={true}
                     placeholder='Username' handleBlur={handleBlur} handleChange={handleChange}/>
                     <Input type='text' value={values.bio} name='bio' id='Bio'  containerStyle='mt-16 w-full h-5' 
                     inputStyle='w-full h-full bg-transparent' error={errors['Bio']} touched={touched['Bio']} 
+                    maxValue={160} displayMaxValue={true}
                     placeholder='Bio' handleBlur={handleBlur} handleChange={handleChange}/>
                     <Input type='text' value={values.location} name='location' id='Location'  containerStyle='mt-16 w-full h-5' 
                     inputStyle='w-full h-full bg-transparent' error={errors['location']} touched={touched['location']} 
