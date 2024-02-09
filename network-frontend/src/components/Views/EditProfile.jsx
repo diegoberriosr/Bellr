@@ -4,7 +4,6 @@ import axios from 'axios';
 
 // Icon imports
 import { MdClose } from 'react-icons/md';
-import { MdModeEditOutline } from "react-icons/md";
 import { CiCamera } from "react-icons/ci";
 import { TfiReload } from "react-icons/tfi";
 
@@ -26,7 +25,10 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
     const [deleting, setDeleting] = useState(false);
     const { setPfpBig, account, setAccount} = useContext(GeneralContext);
 
-    const { values, errors, touched, handleChange, handleBlur, resetForm } = useFormik({
+    const pfpData = new FormData();
+    const backgroundData = new FormData();
+
+    const { values, errors, touched, handleChange, handleBlur, resetForm, setFieldValue } = useFormik({
         initialValues: {
             email: account.email,
             username: account.username,
@@ -34,7 +36,8 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
             confirmation: '',
             profilename: account.profilename,
             bio: account.bio,
-            pfp: '',
+            pfp: account.pfp,
+            background: account.background
 
         },
         validationSchema: RegisterSchema,
@@ -80,9 +83,35 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
             confirmation: '',
             profilename: account.profilename,
             bio: account.bio,
-            pfp: '',
+            pfp: account.pfp,
+            background: account.background
+
         }
       })
+    }
+
+    const handleDeleteBackground = () => {
+        setFieldValue('background', '');
+    }
+
+    const handleLoadBackground = (event) => {
+        const file = event.target.files[0];
+        
+        if (file) {
+            backgroundData.append('image', file)
+            const localImageUrl = URL.createObjectURL(file);
+            setFieldValue('background', localImageUrl);
+        }    
+    }
+
+    const handleChangePfp = (event) => {
+        const file = event.target.files[0];
+        
+        if (file) {
+            pfpData.append('image', file)
+            const localImageUrl = URL.createObjectURL(file);
+            setFieldValue('pfp', localImageUrl);
+        }   
     }
 
     return (
@@ -118,23 +147,27 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                 :
                 <>
                 <figure className='relative w-full h-52'>
-                    <div className='absolute top-0 w-full h-full'>
-                        <img src='https://i.pinimg.com/originals/66/44/1e/66441ef3f203e8f2598c26f96495d642.gif' alt="user's profile background" className='w-full h-full object-fill'/>
+                    <div className={`absolute top-0 w-full h-full ${ values.background === '' ? 'bg-gray-900'  : ''}`}>
+                        {values.background !== '' && <img src={values.background} alt="user's profile background" className='w-full h-full object-fill'/> }
                     </div>
                     <div className='absolute top-0 w-full h-full flex items-center justify-center'>
-                        <div className='w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors hover:bg-opacity-70'>
+                        <label htmlFor='background-input' className='w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors hover:bg-opacity-70'>
+                                <input type='file' id='background-input' name='background' accept='images/*' className='hidden' onChange={handleLoadBackground}/>
                                 <CiCamera className='text-2xl'/>
-                        </div>
-                        <div className='w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors ml-5 hover:bg-opacity-70'>
+                        </label>
+                        { values.background !== '' && 
+                        <div className='w-8 h-8 rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors ml-5 hover:bg-opacity-70' onClick={handleDeleteBackground}>
                                 <MdClose className='text-2xl'/>
                         </div>
+                        }   
                     </div>
-                    <div className='absolute -bottom-[65px] left-5 w-[130px] h-[130px] rounded-full border border-black border-4'>
-                        <img src='https://cdn.dribbble.com/users/1396703/screenshots/3952983/pixel-goust-2.gif' alt='user pfp' className='w-full h-full object-fill rounded-full'/>
-                        <div className='absolute top-0 w-full h-full rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors hover:bg-opacity-70 '>
+                    <label className='absolute -bottom-[65px] left-5 w-[130px] h-[130px] rounded-full border border-black border-4'>
+                        <img src={values.pfp} alt='user pfp' className='w-full h-full object-fill rounded-full'/>
+                        <div htmlFor='pfp-input' className='absolute top-0 w-full h-full rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors hover:bg-opacity-70 '>
                                 <CiCamera className='text-2xl cursor-pointer'/>
+                                <input type='file' id='background-input' name='background' accept='images/*' className='hidden' onChange={handleChangePfp}/>
                         </div>
-                    </div>
+                    </label>
                 </figure>
                 <form className='w-full px-5 py-5 mt-20'>
                     <Input type='text' value={values.profilename} name='profilename' id='Profilename'  containerStyle='w-full h-5' 
