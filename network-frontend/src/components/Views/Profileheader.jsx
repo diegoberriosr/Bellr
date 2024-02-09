@@ -17,7 +17,7 @@ const ProfileHeader = ({ account }) => {
     const [ filter, setFilter ] = useState('All');
 
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode, handleImageModal, setPfpBig, handleFollow, handleBlock, setPosts, setPage, setLoading} = useContext(GeneralContext);
+    const { darkMode, handleImageModal, setPfpBig, handleFollow, handleBlock, setPosts, setPage, setLoading, handleProfileModal} = useContext(GeneralContext);
 
     const navigate = useNavigate()
   
@@ -59,7 +59,7 @@ const ProfileHeader = ({ account }) => {
                     {
                         user && user.username === account.username ? 
                         <button className={` w-[100px] h-8 flex items-center justify-center ${ darkMode ? 'bg-white text-black' : 'bg-black text-white'} opacity-90 hover:opacity-100 rounded-full font-bold`}
-                        onClick={() => {navigate('/me/edit')}}>Edit</button>
+                        onClick={() => { handleProfileModal() }}>Edit</button>
                         :
                         <button className={`border ${ account.isBlocked ? 'bg-red-900 border-red-900 bg-opacity-30 text-red-900 hover:bg-transparent hover:border-twitter-blue hover:text-twitter-blue' : `${ darkMode ? 'border-white text-white' : 'border-black text-black'} hover:border-red-900 hover:bg-red-900 hover:bg-opacity-30 hover:text-red-900`} w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold transition-colors `} onClick={() => {handleBlock(account.username)}}>
                         { account.isBlocked ? 'Unblock' : 'Block'}

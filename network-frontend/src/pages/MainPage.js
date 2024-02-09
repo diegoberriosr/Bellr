@@ -24,7 +24,7 @@ import PostButton from '../components/General/PostButton';
 
 const MainPage = () => {
 
-  const { darkMode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, imageModal, handleModal } = useContext(GeneralContext);
+  const { darkMode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, imageModal, handleModal, profileModal, handleProfileModal } = useContext(GeneralContext);
   const [shrink, setShrink] = useState(false);
 
   useEffect( () => {
@@ -38,6 +38,7 @@ const MainPage = () => {
       return () => clearTimeout(timer)
     }
 
+
     else if (modalOpen && shrink) {
       const timer = setTimeout( () => {
         handleModal();
@@ -48,9 +49,18 @@ const MainPage = () => {
       return () => clearTimeout(timer)
     }
 
+
+    else if (profileModal && shrink) {
+      const timer = setTimeout( () => {
+        handleProfileModal();
+        setShrink(false);
+      }, 150) 
+
+      return () => clearTimeout(timer)
+    }
+
   } , [shrink])
 
-  console.log(shrink);
 
   return (
       
@@ -82,6 +92,9 @@ const MainPage = () => {
                            <img src={pfpBig} alt='user profile pic' className={`rounded-full h-full w-full object-fill`} />
                         </div>
                     </div>
+                </Modal>
+                <Modal isVisible={profileModal}>
+                    <EditProfile shrink={shrink} setShrink={setShrink}/>
                 </Modal>
           </div>
   )

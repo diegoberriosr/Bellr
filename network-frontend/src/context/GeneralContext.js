@@ -15,9 +15,8 @@ export const GeneralProvider = ({ children }) => {
     const [ editedPost, setEditedPost] = useState(null);
     const [ imageModal, setImageModal] = useState(false);
     const [ pfpBig, setPfpBig ] = useState(null);
-    const [ usersModal, setUsersModal] = useState(false);
-    const [ userFilter, setUserFilter] = useState(undefined);
-  
+    const [ profileModal, setProfileModal] = useState(false);
+
     const handleModal = () => {
       setModalOpen(!modalOpen);
     };
@@ -29,15 +28,11 @@ export const GeneralProvider = ({ children }) => {
     const handleImageModal = () => {
         setImageModal(!imageModal); 
       };
-
-    const handleUsersModal = (filter, username) => {
-      setUserFilter({
-        'filter' : filter,
-        'username' : username
-      });
-      setUsersModal(!usersModal);
-    }
-
+    
+    const handleProfileModal = () => {
+      setProfileModal(!profileModal);
+    };
+  
     const contextData = {
       posts:posts,
       setPosts:setPosts,
@@ -67,6 +62,8 @@ export const GeneralProvider = ({ children }) => {
       setPfpBig:setPfpBig,
       imageModal:imageModal,
       handleImageModal: handleImageModal, 
+      profileModal:profileModal,
+      handleProfileModal:handleProfileModal
     };
 
     return (

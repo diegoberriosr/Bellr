@@ -16,8 +16,8 @@ export const AuthProvider = ({children}) => {
 
     const navigate = useNavigate();
 
-    const loginUser = async(values, setErrorMessage) => {
-     
+    const loginUser = async(values, setErrorMessage, setLoading) => {
+        setLoading(true);
         fetch('http://127.0.0.1:8000/token/', {
             method: 'POST',
             headers:{
@@ -31,7 +31,8 @@ export const AuthProvider = ({children}) => {
                 const data = await response.json();
                 setAuthTokens(data);
                 setUser(jwtDecode(data.access));
-                localStorage.setItem('authTokens', JSON.stringify(data))
+                localStorage.setItem('authTokens', JSON.stringify(data));
+                setLoading(false);
                 navigate('/home');
             }
             else {
@@ -45,7 +46,7 @@ export const AuthProvider = ({children}) => {
     }
     
 
-    const registerUser = (body) => {
+    const registerUser = (body, setErrorMessage, setLoading) => {
         console.log('BODY' , body);
         fetch('http://127.0.0.1:8000/register', {
             method: 'POST',

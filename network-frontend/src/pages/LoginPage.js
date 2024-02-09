@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [isForgottenPassword, setIsForgottenPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const openLogin = () => {
     setIsOpen(!isOpen);
@@ -40,7 +41,11 @@ const LoginPage = () => {
 
   console.log(isForgottenPassword);
 
-  return (
+  return (loading ?
+    <div className='w-screen h-screen flex items-center justify-center bg-black text-white'>
+        <PiDogBold className='text-[350px] animate-expand'/>
+    </div>
+    :
     <div className='h-screen flex bg-black text-white font-twitter '>
       <div className='hidden xl:flex w-9/12 text-[350px] justify-center pt-48 pl-[5%]'>
         <PiDogBold />
@@ -51,7 +56,7 @@ const LoginPage = () => {
           <h2 className='text-3xl mobile:text-4xl sm:text-5xl font-bold mt-[7.5%]'>Join today.</h2>
           <div className='mt-[14%] sm:mt-[3.5%]'>
           <div className='w-[300px] h-10 bg-white rounded-full flex items-center justify-center text-black mt-2'>
-              <img src='https://e7.pngegg.com/pngimages/255/774/png-clipart-apple-logo-apple-company-leaf.png' width='20' alt='google logo' />
+              <img src='https://image.similarpng.com/very-thumbnail/2020/06/Logo-google-icon-PNG.png' width='20' alt='google logo' />
               <span className='ml-2.5 font-bold'>Sign up with Google</span>
             </div>
             <div className='w-[300px] h-10 bg-white rounded-full flex items-center justify-center text-black mt-2'>
@@ -75,11 +80,12 @@ const LoginPage = () => {
         </div>
       </div>
       <Modal isVisible={isOpen} background='bg-login-modal'>
-        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} />}
-        {isRegister && <Register handleCloseModal={handleCloseModal} />}
-        {isForgottenPassword && <ResetPassword handleCloseModal={handleCloseModal} />}
+        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} setLoading={setLoading} />}
+        {isRegister && <Register handleCloseModal={handleCloseModal} setLoading={setLoading}/>}
+        {isForgottenPassword && <ResetPassword handleCloseModal={handleCloseModal} setLoading={setLoading} />}
       </Modal>
     </div>
+    
   )
 }
 

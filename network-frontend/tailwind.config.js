@@ -6,7 +6,8 @@ module.exports = {
       animation : {
         'fade-out' : 'fade-out 5s forwards',
         'grow' : 'grow 0.250s forwards',
-        'shrink' : 'shrink 0.250s forwards'
+        'shrink' : 'shrink 0.250s forwards',
+        'expand' : 'expand 1.5s infinite'
       },
       keyframes : {
         'fade-out' : {
@@ -20,6 +21,12 @@ module.exports = {
         'shrink' : {
           '0%' : { transform : 'scale(1)', opacity: 1},
           '100%' : { transform : 'scale(0.95)', opacity: 0}
+        },
+        'expand' : {
+          '0%' : {transform : 'scale(0.95)'},
+          '50%' : {transform : 'scale(1.05)'},
+          '100%' : {transform : 'scale(0.95)'}
+          
         }
       },
       screens : {
