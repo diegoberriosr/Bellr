@@ -49,11 +49,11 @@ const ProfileHeader = ({ account }) => {
     return (
         <header className={`border ${ darkMode ? 'border-gray-600' : 'border-gray-300' } border-l-0 w-full`}>
         <figure className='relative h-44 w-full '>
-            <div className='absolute h-full w-full overflow-hidden'>
+            <div className='absolute h-full w-full z-10'>
                 <img src={account.background} alt="user's background pic" className='absolute top-0 w-full h-full object-cover' />
             </div>
-            <div className={`absolute left-3 -bottom-16 w-[130px] h-[130px] rounded-full overflow-hidden ${ darkMode ? 'border-black' : 'border-white' } border-[3.5px]`}>
-                <img src={account.pfp} alt="user's profile pic" width='130' className='object-cover w-full h-full cursor-pointer' onClick={() => {setPfpBig(account.pfp) ; handleImageModal()}} />
+            <div className={`absolute left-3 -bottom-16 w-[130px] h-[130px] rounded-full ${ darkMode ? 'border-black' : 'border-white' } border-[3.5px] z-10`}>
+                <img src={account.pfp} alt="user's profile pic" width='130' className='object-cover w-full h-full rounded-full cursor-pointer' onClick={() => {setPfpBig(account.pfp) ; handleImageModal()}} />
             </div>
             <div className='absolute -bottom-10 right-3 flex items-center space-x-2'>
                     {
