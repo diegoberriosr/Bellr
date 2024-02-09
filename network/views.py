@@ -763,4 +763,52 @@ def reset_password(request):
         return JsonResponse({'error' : 'User does not exist'}, status=404)
         
     
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def edit_profile(request, username):
+
+    # Get user provided it's username. Raise an exception if user does not exist.
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404(f'User with username=${username} does not exist')
+    
+    if request.user.pk != user.pk:
+        return HttpResponseForbidden('Requester does not own the target account.')
+
+    # Get all the user information from the request.
+    profilename = json.loads(request.body).get('username', '')
+    bio  = json.loads(request.body).get('bio', '')
+    location = json.loads(request.body).get('location', '')
+    website = json.loads(request.body).get('website', '')
+
+    # Update user's information.
+    user.profilename = profilename
+    user.bio= bio 
+    user.save()
+
+    return JsonResponse({
+        'account' : user.serialize(request.user)
+    })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_profile(request, username):
+
+    # Get user provided it's username. Raise an exception if user does not exist.
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404(f'User with username=${username} does not exist')
+
+    if request.user.pk != user.pk:
+        return HttpResponseForbidden('Requester does not own the target account.')
+   
+    user.delete()
+
+    return JsonResponse({
+        'Success' : 'account was deleted.'
+    })
+
+
 

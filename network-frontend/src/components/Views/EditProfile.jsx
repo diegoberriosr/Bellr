@@ -23,17 +23,17 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
 
     const { darkMode, authTokens } = useContext(AuthContext); 
     const [loading, setLoading] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const { setPfpBig, account, setAccount} = useContext(GeneralContext);
 
-    const { setPfpBig } = useContext(GeneralContext);
-
-    const { values, errors, touched, handleChange, handleBlur } = useFormik({
+    const { values, errors, touched, handleChange, handleBlur, resetForm } = useFormik({
         initialValues: {
-            email: '',
-            username: '',
+            email: account.email,
+            username: account.username,
             password: '',
             confirmation: '',
-            profilename: '',
-            bio: '',
+            profilename: account.profilename,
+            bio: account.bio,
             pfp: '',
 
         },
@@ -54,14 +54,15 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
         }
 
         axios({
-            url : '--- TO DO ---',
+            url : `http://127.0.0.1:8000/user/edit/${account.username}`,
             method : 'PUT',
             headers : headers,
             data : {email : values.email, username : values.username, password: values.password, confirmation: values.confirmation, profilename : values.profilename,
                     bio : values.bio, pfp : values.pfp }
         })
-        .then( () => {
+        .then( ( res ) => {
             setLoading(false);
+            setAccount( res.data.account);
             setShrink(true);
         })
         .catch( error => {
@@ -70,16 +71,31 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
         })
     }
 
+    const reset = () => {
+      resetForm({
+        values : {
+            email: account.email,
+            username: account.username,
+            password: '',
+            confirmation: '',
+            profilename: account.profilename,
+            bio: account.bio,
+            pfp: '',
+        }
+      })
+    }
+
     return (
         <div className={`w-screen h-screen sm:w-[600px] sm:h-[600px] bg-black
          ${ shrink ? 'animate-shrink' : 'animate-grow'} rounded-xl ${loading ? 'brightness-50' : ''}`}>
             <header className='sticky top-0 h-12 p-5 flex justify-between items-center z-11 transform'>
                 <div className='flex items-center'>
                     <MdClose className='text-2xl text-white mt-1 cursor-pointer' onClick={() => {setShrink(true)}}/>
-                    <h3 className='text-xl ml-5 font-bold'> Edit Profile</h3>
+                    <h3 className='text-xl ml-5 font-bold'> { deleting ? 'Delete' : 'Edit' } Profile </h3>
                 </div>
+                {!deleting &&
                 <div className='flex items-center'>
-                    <TfiReload className='text-lg mr-2.5 cursor-pointer'/>
+                    <TfiReload className='text-lg mr-2.5 cursor-pointer' onClick={reset}/>
                     <button disabled={loading} className={`bg-white w-[100px] h-9 flex items-center justify-center rounded-full text-black font-bold ${ loading ? 'opacity-90' : 'opacity-90 hover:opacity-100'}`} onClick={handleUpdate}>
                         { loading ? 
                             <ClipLoader loading={loading} size={20} aria-label='Loading spinner' data-testid='loader'/>
@@ -88,8 +104,19 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                         }
                     </button>
                 </div>
+                }
             </header>
+            {}
             <main className='h-[552px] overflow-y-auto'>
+                { deleting ?
+                <div className='w-full h-6/12 flex flex-col items-center justify-center'>
+                    <h3 className='text-2xl font-bold'>Are you sure?</h3>
+                    <p>This action is irreversible. All your information will be lost.</p>
+                    <button className='w-6/12 mt-5 h-10 border bg-white text-black opacity-80 hover:opacity-100 rounded-full' onClick={() =>{setDeleting(false)}}>Cancel</button>
+                    <button className='w-6/12 mt-5 h-10 border border-red-900 bg-transparent text-white opacity-80 hover:bg-red-900 hover:opacity-100 rounded-full'>Delete account</button>
+                </div>
+                :
+                <>
                 <figure className='relative w-full h-52'>
                     <div className='absolute top-0 w-full h-full'>
                         <img src='https://i.pinimg.com/originals/66/44/1e/66441ef3f203e8f2598c26f96495d642.gif' alt="user's profile background" className='w-full h-full object-fill'/>
@@ -109,13 +136,13 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                         </div>
                     </div>
                 </figure>
-                <form className='w-full px-5 mt-20'>
-                    <Input type='text' value={values.username} name='username' id='Username'  containerStyle='w-full h-5' 
-                    inputStyle='w-full h-full bg-transparent' error={errors['username']} touched={touched['username']} 
+                <form className='w-full px-5 py-5 mt-20'>
+                    <Input type='text' value={values.profilename} name='profilename' id='Profilename'  containerStyle='w-full h-5' 
+                    inputStyle='w-full h-full bg-transparent' error={errors['profilename']} touched={touched['profilename']} 
                     maxValue={15} displayMaxValue={true}
-                    placeholder='Username' handleBlur={handleBlur} handleChange={handleChange}/>
+                    placeholder='Name' handleBlur={handleBlur} handleChange={handleChange}/>
                     <Input type='text' value={values.bio} name='bio' id='Bio'  containerStyle='mt-16 w-full h-5' 
-                    inputStyle='w-full h-full bg-transparent' error={errors['Bio']} touched={touched['Bio']} 
+                    inputStyle='w-full h-full bg-transparent' error={errors['bio']} touched={touched['bio']} 
                     maxValue={160} displayMaxValue={true}
                     placeholder='Bio' handleBlur={handleBlur} handleChange={handleChange}/>
                     <Input type='text' value={values.location} name='location' id='Location'  containerStyle='mt-16 w-full h-5' 
@@ -124,7 +151,10 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                     <Input type='text' value={values.website} name='website' id='Website'  containerStyle='mt-16 w-full h-5' 
                     inputStyle='w-full h-full bg-transparent' error={errors['website']} touched={touched['website']} 
                     placeholder='website' handleBlur={handleBlur} handleChange={handleChange}/>
+                    <button type='button' className='w-full mt-16 h-10 border border-red-900 bg-transparent text-white opacity-80 hover:bg-red-900 hover:opacity-100 rounded-full' onClick={() => setDeleting(true)}>Delete account</button>
                 </form>
+                </>
+                }
             </main>
         </div>
     )

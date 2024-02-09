@@ -11,7 +11,6 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path('test', views.test, name='test'),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("", TemplateView.as_view(template_name='index.html')),
@@ -39,11 +38,13 @@ urlpatterns = [
     path('new/reply/<int:post_id>', views.create_reply, name='reply'),
     path('notifications', views.get_notifications, name='notifications'),
     path('block/<str:username>', views.block_user, name='block'),
-    path('usernameExists/<str:username>', views.username_exists, name='check_username'),
+    path('usernameExists/<str:username>', views.username_exists, name='check username'),
     path('emailExists/<str:email>', views.email_exists, name='email_exists'),
     path('followers/<str:username>/', views.get_followers, name='followers'),
     path('following/<str:username>/', views.get_following, name='following'),
     path('code/generate', views.generate_code, name='code generation'),
     path('code/validate', views.validate_code, name='code validation'),
-    path('reset', views.reset_password, name='reset password')
+    path('reset', views.reset_password, name='reset password'),
+    path('user/edit/<str:username>', views.edit_profile, name='edit profile'),
+    path('user/delete/<str:username>', views.delete_profile, name='delete profile')
 ]

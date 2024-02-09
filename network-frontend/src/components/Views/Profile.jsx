@@ -41,7 +41,7 @@ const Profile = ({ me }) => {
   }, [hasMore, page]) 
 
   return (
- 
+    
      <div className='relative w-[600px]'>
         {error && <EmptyProfileHeader username={username} message={error === 404 ? 'This account does not exist' : "You're blocked"}  submessage={error===404 ?'Try searching for another' : `You cant follow or see @${username}'s posts.`} />}
         { account && 

@@ -333,7 +333,7 @@ const useSearch = () => {
         })
     }, [currentUrl])
     
-    return { loading, setLoading, error, posts, setPosts, setPage, account, hasMore, handleLike, handleBookmark, handleTransmit, handleDelete, handleFollow, handleEdit, handleNew, handleBlock};
+    return { loading, setLoading, error, posts, setPosts, setPage, account, setAccount, hasMore, handleLike, handleBookmark, handleTransmit, handleDelete, handleFollow, handleEdit, handleNew, handleBlock};
 };
 
 export default useSearch;
