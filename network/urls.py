@@ -41,10 +41,12 @@ urlpatterns = [
     path('usernameExists/<str:username>', views.username_exists, name='check username'),
     path('emailExists/<str:email>', views.email_exists, name='email_exists'),
     path('followers/<str:username>/', views.get_followers, name='followers'),
+    path('followers/<str:username>/verified', views.get_verified_followers, name='verified followers'),
     path('following/<str:username>/', views.get_following, name='following'),
     path('code/generate', views.generate_code, name='code generation'),
     path('code/validate', views.validate_code, name='code validation'),
     path('reset', views.reset_password, name='reset password'),
     path('user/edit/<str:username>', views.edit_profile, name='edit profile'),
-    path('user/delete/<str:username>', views.delete_profile, name='delete profile')
+    path('user/delete/<str:username>', views.delete_profile, name='delete profile'),
+    path('post/interactions/<int:post_id>', views.get_post_interactions, name='interactions')
 ]

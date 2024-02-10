@@ -15,7 +15,9 @@ export const GeneralProvider = ({ children }) => {
     const [ editedPost, setEditedPost] = useState(null);
     const [ imageModal, setImageModal] = useState(false);
     const [ pfpBig, setPfpBig ] = useState(null);
-    const [ profileModal, setProfileModal] = useState(false);
+    const [profileModal, setProfileModal] = useState(false);
+    const [ interactionsModal, setInteractionsModal] = useState(false);
+    const [ filter, setFilter ] = useState(null);
 
     const handleModal = () => {
       setModalOpen(!modalOpen);
@@ -29,9 +31,19 @@ export const GeneralProvider = ({ children }) => {
         setImageModal(!imageModal); 
       };
     
+    const handleInteractionsModal = () => {
+      setInteractionsModal(!interactionsModal);
+    };
+
+    const openInteractionsModal = (post, filter) => {
+      setEditedPost(post);
+      setFilter(filter);
+      handleInteractionsModal();
+    }
+
     const handleProfileModal = () => {
       setProfileModal(!profileModal);
-    };
+    }
   
     const contextData = {
       posts:posts,
@@ -64,7 +76,12 @@ export const GeneralProvider = ({ children }) => {
       imageModal:imageModal,
       handleImageModal: handleImageModal, 
       profileModal:profileModal,
-      handleProfileModal:handleProfileModal
+      handleProfileModal:handleProfileModal,
+      interactionsModal:interactionsModal,
+      handleInteractionsModal:handleInteractionsModal,
+      openInteractionsModal:openInteractionsModal,
+      setFilter:setFilter,
+      filter:filter
     };
 
     return (

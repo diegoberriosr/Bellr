@@ -613,10 +613,35 @@ def get_followers(request, username):
     except User.DoesNotExist:
         raise Http404('User does not exist')
         
-    verified = request.GET.get('verified', None) # Check if querying for verified followers only
-
     # Get followers.
-    followers = user.followers.all().filter(verified=True) if verified else user.followers.all()
+    followers = user.followers.all()
+    
+    # Paginate followers (20 per page).
+    paginated_followers, hasMore = paginate(followers, 20, page_index)
+
+    return JsonResponse({
+        'hasMore' : hasMore,
+        'data' : {
+            'username' : user.username,
+            'profilename' : user.profilename
+        },
+        'profiles' : [profile.fserialize(request.user) for profile in paginated_followers]}, safe=False)
+
+
+@api_view(['GET'])
+def get_verified_followers(request, username):
+
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
+
+    # Get user, raise an exception if it does not exist
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404('User does not exist')
+        
+    # Get followers.
+    followers = user.followers.all().filter(verified=True)
     
     # Paginate followers (20 per page).
     paginated_followers, hasMore = paginate(followers, 20, page_index)
@@ -809,6 +834,32 @@ def delete_profile(request, username):
     return JsonResponse({
         'Success' : 'account was deleted.'
     })
+
+
+@api_view(['GET'])
+def get_post_interactions(request, post_id):
+
+    # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
+    page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
+
+    # Get user provided it's uid. Raise an exception if it does not exist.
+    try:
+        post = Post.objects.get(pk=post_id)
+    except User.DoesNotExist:
+        raise Http404(f'Post with id=${post_id} does not exist')
+
+    # Get the interaction filter from the request's body.    
+    filter = request.GET.get('filter', '')
+
+    # Paginate all the users that have the requested interaction with the post (20 per page)
+    paginated_users, hasMore = paginate(getattr(post, filter).all(), 20, page_index)
+
+    return JsonResponse({
+        'hasMore' : hasMore,
+        'profiles' : [profile.fserialize(request.user) for profile in paginated_users]
+    }, safe=False)
+
+
 
 
 

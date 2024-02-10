@@ -16,6 +16,7 @@ import Modal from '../components/General/Modal';
 import ModalForm from '../components/Forms/ModalForm';
 import Users from '../components/General/Users';
 import EditProfile from '../components/Views/EditProfile';
+import PostInteractions from '../components/General/PostInteractions';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
@@ -24,7 +25,8 @@ import PostButton from '../components/General/PostButton';
 
 const MainPage = () => {
 
-  const { darkMode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, imageModal, handleModal, profileModal, handleProfileModal } = useContext(GeneralContext);
+  const { profileModal, filter, darkMode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
+          imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, handleProfileModal } = useContext(GeneralContext);
   const [shrink, setShrink] = useState(false);
 
   useEffect( () => {
@@ -49,11 +51,22 @@ const MainPage = () => {
       return () => clearTimeout(timer)
     }
 
-
     else if (profileModal && shrink) {
       const timer = setTimeout( () => {
         handleProfileModal();
         setShrink(false);
+        setPfpBig(null);
+      }, 150) 
+
+      return () => clearTimeout(timer)
+    }
+
+    else if (interactionsModal && shrink) {
+      const timer = setTimeout( () => {
+        handleInteractionsModal();
+        setShrink(false);
+        setFilter(null);
+        setEditedPost(null);
       }, 150) 
 
       return () => clearTimeout(timer)
@@ -61,6 +74,7 @@ const MainPage = () => {
 
   } , [shrink])
 
+  console.log(filter);
 
   return (
       
@@ -93,8 +107,11 @@ const MainPage = () => {
                         </div>
                     </div>
                 </Modal>
+                <Modal isVisible={interactionsModal}>
+                    <PostInteractions shrink={shrink} setShrink={setShrink}/> 
+                </Modal>
                 <Modal isVisible={profileModal}>
-                    <EditProfile shrink={shrink} setShrink={setShrink}/>
+                  <EditProfile shrink={shrink} setShrink={setShrink}/>
                 </Modal>
           </div>
   )

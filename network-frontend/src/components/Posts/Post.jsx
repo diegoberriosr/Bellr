@@ -23,7 +23,7 @@ import GeneralContext from '../../context/GeneralContext';
 
 const Post = forwardRef(({ post, setPosts }, ref) => {
 
-    const { darkMode, setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
+    const { darkMode, setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit, openInteractionsModal} = useContext(GeneralContext);
 
     const navigate = useNavigate();
 
@@ -46,7 +46,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
     }, []);
 
   
-    return <div ref={ref} className={`border border-t-0 border-l-0 ${ darkMode ? 'border-gray-600 hover:bg-gray-900' : 'border-gray-300 hover:bg-light-gray-hover'} w-full cursor-pointer transition-colors duration-500`}>
+    return <div ref={ref} className={`border border-t-0 border-l-0 ${ darkMode ? 'border-gray-600 hover:bg-gray-900' : 'border-gray-300 hover:bg-light-gray-hover'} w-full cursor-pointer transition-colors duration-500 animate-grow`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter} reposted</span>
@@ -98,7 +98,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                                     <CiHeart className='group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[18px]' onClick={() => {handleLike(post.id)}}/>
                                 }
                                 
-                                <span className={`${post.likes ? 'text-red-600' : ''} w-2 group-hover:text-red-600 transition-colors cursor-default text-xs`}>{post.likes> 0 && post.likes}</span>
+                                <span className={`${post.likes ? 'text-red-600' : ''} w-2 group-hover:text-red-600 transition-colors cursor-default text-xs`} onClick={() => {openInteractionsModal(post, 'likes')}}>{post.likes> 0 && post.likes}</span>
                             </li>
                             <li className='group flex items-center space-x-1'>
                                 <FaRetweet className={`${post.transmitted ? 'text-green-600' : 'text-icon-gray'} group-hover:bg-green-300 group-hover:text-green-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => {handleTransmit(post.id)}} />

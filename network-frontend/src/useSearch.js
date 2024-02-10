@@ -278,11 +278,11 @@ const useSearch = () => {
         })
         .then(res => {
             setPosts(prevPosts => {
-                if (!prevPosts) {console.log('posts are null'); return res.data.posts} // If page = 1, just set the data to the response's array
+                if (!prevPosts) return res.data.posts; // If page = 1, just set the data to the response's array
                 else return [...prevPosts, ...res.data.posts] // Otherwise, append the new posts at the end of the array.
             });
             
-            if (res.data.account) {console.log('setting account') ; setAccount(res.data.account)}; // If an account's information is being requested, save it.
+            if (res.data.account) setAccount(res.data.account); // If an account's information is being requested, save it.
 
             setHasMore(res.data.hasMore); // Check if there are any posts left to render in the future.
             setLoading(false);
