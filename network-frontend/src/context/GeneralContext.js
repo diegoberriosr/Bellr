@@ -10,6 +10,12 @@ export const GeneralProvider = ({ children }) => {
     const {posts, setPosts, setPage, account, setAccount, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, 
            handleEdit, handleNew, handleBlock} = useSearch();
     const [ darkMode, setDarkMode ] = useState(true);
+    const [mode, setMode] = useState({
+      'color' : 'bg-twitter-blue',
+      'background' : 'bg-white',
+      'text' : 'text-black',
+      'subBackground' : 'bg-light-gray'
+    });
     const [ modalOpen, setModalOpen] = useState(false);
     const [ isEditing, setIsEditing ] = useState(false);
     const [ editedPost, setEditedPost] = useState(null);
@@ -81,7 +87,9 @@ export const GeneralProvider = ({ children }) => {
       handleInteractionsModal:handleInteractionsModal,
       openInteractionsModal:openInteractionsModal,
       setFilter:setFilter,
-      filter:filter
+      filter:filter,
+      mode:mode,
+      setMode:setMode
     };
 
     return (

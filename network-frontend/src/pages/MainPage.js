@@ -115,6 +115,9 @@ const MainPage = () => {
                 <Modal isVisible={profileModal}>
                   <EditProfile shrink={shrink} setShrink={setShrink}/>
                 </Modal>
+                <Modal isVisible={true}>
+                  <ChangeMode/>
+                </Modal>
           </div>
   )
 }

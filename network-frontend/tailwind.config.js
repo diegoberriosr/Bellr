@@ -61,7 +61,9 @@ module.exports = {
         'twitter-purple' : '#7557FF',
         'twitter-orange' : '#FC7A00',
         'twitter-green' : '#00B978' ,
-        'dim' : '#14202B'
+        'dim' : '#14202B',
+        'subdim' : '#1E2732',
+        'separator-gray' : '#38444D'
         
       },
       boxShadow : {
