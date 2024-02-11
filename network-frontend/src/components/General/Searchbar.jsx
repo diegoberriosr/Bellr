@@ -12,7 +12,7 @@ const Searchbar = () => {
   const [ isSearching, setIsSearching ] = useState(false);
   const [ matches, setMatches] = useState([]);
 
-  const { darkMode } = useContext(GeneralContext);
+  const { mode } = useContext(GeneralContext);
   const text = useRef();
   const navigate = useNavigate();
   
@@ -33,11 +33,11 @@ const Searchbar = () => {
 
   return (
     <div className='w-full relative'>
-        <div className={`${isSearching ? 'border border-twitter-blue' : ''} flex items-center h-10 ${ darkMode ? 'bg-twitter-dark text-white' :  'bg-light-gray text-gray-600'} rounded-3xl p-2.5 mt-1 duration-300`}>
+        <div className={`${isSearching ? 'border border-twitter-blue' : ''} flex items-center h-10 ${mode.subBackground} text-gray-600 rounded-3xl p-2.5 mt-1 duration-300`}>
             <IoIosSearch className={`${isSearching ? 'text-twitter-blue' : ''} text-2xl ml-2`}/>
             <input ref={text} className='ml-4 bg-transparent text-sm w-full focus:outline-none' placeholder='Search' onFocus={() => { setIsSearching(true) }} onBlur={() => {setIsSearching(false)}} onChange={handleOnChange}/>
         </div>
-        {isSearching && <div className={`absolute top-10 max-h-72 overflow-y-auto flex flex-col w-full shadow-custom shadow-gray-800 rounded-xl ${ darkMode ? 'bg-black' : 'bg-white'}`}>
+        {isSearching && <div className={`absolute top-10 max-h-72 overflow-y-auto flex flex-col w-full shadow-custom shadow-gray-800 rounded-xl ${mode.background}`}>
             { matches.length > 0 ? matches.map(user => <div key={user.user_id} className='w-full flex items-center cursor-pointer hover:bg-gray-800 p-3 rounded-xl' onMouseDown={() => {
                navigate(`/user/${user.username}`)}}>
                 <div classNam='w-10 h-10 overflow-hidden rounded-full overflow-hidden'>

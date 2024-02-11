@@ -40,7 +40,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
 
     // Mention's functionality
     const regex = /@[a-zA-Z0-9_]+/; // Search for a mention inside a post
-    const parsedContent = post.content.split(' ').map(word => regex.test(word) ? <span key={word} className='text-twitter-blue hover:underline cursor-pointer' onClick={() => { navigate(`/${word.slice(1)}`) }}>{word}</span> : word); // Parse it's content
+    const parsedContent = post.content.split(' ').map(word => regex.test(word) ? <span key={word} className='text-twitter-blue hover:underline cursor-pointer' onClick={() => { navigate(`/user/${word.slice(1)}`) }}>{word}</span> : word); // Parse it's content
     const contentWithSpaces = parsedContent.reduce((prev, curr, i) => { // Transform it into an HTML element
         return [...prev, curr, ' '];
     }, []);

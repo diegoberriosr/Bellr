@@ -15,7 +15,7 @@ const Feed = ({ form,  url, loginRequired}) => {
 
   const { user } = useContext(AuthContext);
   const { darkMode, posts, hasMore, loading, setPage} = useContext(GeneralContext);
-  
+
   const observer = useRef();
   const lastPostRef = useCallback( post => {
     if (loading) return;
@@ -30,7 +30,6 @@ const Feed = ({ form,  url, loginRequired}) => {
     if (post) observer.current.observe(post);
   }, [loading, hasMore]);
 
-  console.log(posts);
   return (
     <div className='w-screen mobile:w-[600px] min-h-screen transition-all'>
        {(form && user)  &&

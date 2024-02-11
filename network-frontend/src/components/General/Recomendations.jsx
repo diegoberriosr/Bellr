@@ -10,13 +10,13 @@ import GeneralContext from '../../context/GeneralContext';
 
 const Recomendations = () => {
 
-    const { darkMode } = useContext(GeneralContext);
+    const {mode } = useContext(GeneralContext);
 
     return <section className='hidden lg:block sticky top-0 right-0 p-0.5 ml-7 w-[145px] md:w-[290px] xl:w-[350px] h-screen flex flex-col'>
        
         <Searchbar/>
  
-        <div className={`flex flex-col ${ darkMode ? 'bg-twitter-dark text-white' : 'bg-light-gray text-black'} w-full rounded-xl p-4 mt-4`}>
+        <div className={`flex flex-col ${mode.subBackground} ${mode.text} w-full rounded-xl p-4 mt-4`}>
             <h3 className='text-xl font-extrabold'>You might like</h3>
             <div>
                 <div className='w-full mt-3 mb-2'>

@@ -27,7 +27,6 @@ import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 
 // Helper components imports
-import Toggler from './Toggler';
 import PostButton from './PostButton';
 
 
@@ -89,11 +88,11 @@ const ICONS = [
 ];
 
 
-const Sidebar = () => {
+const Sidebar = ({ setModeModal }) => {
 
     const [ active, setActive ] = useState(0);
     const {user, logoutUser } = useContext(AuthContext); // Check if user is logged in
-    const { darkMode, handleSetDarkMode, handleModal } = useContext(GeneralContext);
+    const { darkMode, handleModal } = useContext(GeneralContext);
 
 
     const navigate = useNavigate();
@@ -131,8 +130,7 @@ const Sidebar = () => {
                 </>
             }
             { user &&
-                <div className='absolute bottom-0 w-full mt-1 p-2.5'>
-                    <li className='flex items-center'>
+                    <li className='absolute bottom-0 w-full mt-1 p-2.5 flex items-center' onClick={() => setModeModal(true)}>
                         <div className='min-w-10 w-10 h-10 overflow-hidden rounded-full overflow-hidden'>
                             <img src={user.pfp} alt='user profile pic' className='w-full h-full object-cover'/>
                         </div>
@@ -141,10 +139,6 @@ const Sidebar = () => {
                             <p className='invisible xl:visible text-gray-600 text-sm mt-0 pt-0'>@{user.username}</p>
                         </div>
                     </li>
-                    <li className='mt-5 w-10/12'>
-                        <Toggler darkMode={darkMode} handleSetDarkMode={handleSetDarkMode} />
-                    </li>
-                </div>
             }
         </ul>
     </nav>

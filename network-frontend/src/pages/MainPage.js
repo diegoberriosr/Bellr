@@ -26,10 +26,11 @@ import PostButton from '../components/General/PostButton';
 
 const MainPage = () => {
 
-  const { profileModal, filter, darkMode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
+  const { profileModal, filter, mode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
           imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, handleProfileModal } = useContext(GeneralContext);
   
   const [shrink, setShrink] = useState(false);
+  const [modeModal, setModeModal] = useState(false);
 
   useEffect( () => {
     if (imageModal && shrink) {
@@ -74,14 +75,23 @@ const MainPage = () => {
       return () => clearTimeout(timer)
     }
 
+    else if (modeModal && shrink) {
+      const timer = setTimeout( () => {
+        setModeModal(false);
+        setShrink(false);
+        
+      }, 150)
+
+      return () => clearTimeout(timer)
+    }
+
   } , [shrink])
 
-  console.log(filter);
 
   return (
       
-        <div className={`relative flex md:px-20 lg:px-32 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} duration-300 transition-colors`}>
-              <Sidebar darkMode={darkMode}/>
+        <div className={`relative flex md:px-20 lg:px-32  ${mode.background} ${mode.text} duration-300 transition-colors`}>
+              <Sidebar setModeModal={setModeModal}/>
                 <Routes>
                     <Route key='home' element={<Feed form={true} url='posts' /> } path='/home'/>
                     <Route key='feed' element={<Feed form={true} url='posts/feed' loginRequired={true}/>} path='/feed'/>
@@ -115,8 +125,8 @@ const MainPage = () => {
                 <Modal isVisible={profileModal}>
                   <EditProfile shrink={shrink} setShrink={setShrink}/>
                 </Modal>
-                <Modal isVisible={true}>
-                  <ChangeMode/>
+                <Modal isVisible={modeModal}>
+                  <ChangeMode shrink={shrink} setShrink={setShrink}/>
                 </Modal>
           </div>
   )

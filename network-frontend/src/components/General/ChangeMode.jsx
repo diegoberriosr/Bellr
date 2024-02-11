@@ -6,7 +6,7 @@ import { IoMdCheckmark } from "react-icons/io";
 // Context imports
 import GeneralContext from "../../context/GeneralContext";
 
-const ChangeMode = () => {
+const ChangeMode = ({ shrink, setShrink }) => {
 
   const { mode, setMode } = useContext(GeneralContext);
 
@@ -30,7 +30,7 @@ const ChangeMode = () => {
   };
 
   return (
-    <div className={`w-screen h-screen sm:w-[500px] sm:h-[550px] ${mode.background} ${mode.text} rounded-xl flex flex-col items-center justify-center p-10 animate-grow transition-colors`}>
+    <div className={`w-screen h-screen sm:w-[500px] sm:h-[550px] ${mode.background} ${mode.text} rounded-xl flex flex-col items-center justify-center p-10 ${shrink ? 'animate-shrink' : 'animate-grow'} transition-colors`}>
       <h3 className={`text-xl ${mode.text} font-bold`}>Customize your view</h3>
       <p className='mt-2.5 text-post-gray'>These settings affect all the accounts on this browser.</p>
       <div className='w-[90%] border border-separator-gray py-1 px-2 flex items-start justify-center rounded-xl space-x-2.5 mt-8'>
@@ -99,7 +99,7 @@ const ChangeMode = () => {
             </li>
         </ul>
       </div>
-      <button className={`mt-5 w-28 h-28 rounded-full ${mode.color} text-white font-bold text-center p-1 transition-colors duration-500`}>Done</button>
+      <button className={`mt-5 w-28 h-28 rounded-full ${mode.color} text-white font-bold text-center p-1 transition-colors duration-500`} onClick={() => {setShrink(true)}}>Done</button>
     </div>
   )
 }

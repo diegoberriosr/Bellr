@@ -22,7 +22,7 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
     const [ isFocused, setIsFocused ] = useState(false);
     const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode, handleImageModal, handleNew } = useContext(GeneralContext);
+    const { mode, handleImageModal, handleNew } = useContext(GeneralContext);
 
 
 
@@ -54,7 +54,7 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
         setIsFocused(true);
     }
 
-    return <header className={`relative flex flex-col w-full p-2 border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} ${borderStyle} pt-1 pr-2.5 pb-2.5 transition-all`}>
+    return <header className={`relative flex flex-col w-full p-2 border border-separator-gray ${borderStyle} pt-1 pr-2.5 pb-2.5 transition-all`}>
         { (values.image ) && 
               ( isAttatchingImage ? 
                 <span className='absolute top-0 right-4 cursor-pointer text-red-900 flex items-center text-sm' onClick={() => { setIsAttatchingImage(!isAttatchingImage); values.image = null}}>
@@ -74,12 +74,12 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
             </div>
             <div className={`w-full pr-2 ${!isFocused ? 'flex items-center' : ''}`}>
                 { isAttatchingImage ? 
-                <input value={values.image} name='image' className={`${ darkMode ? 'text-white' : 'text-black'} bg-transparent w-full text-lg text-bold ml-3 box-sizing:border-box p-1 resize-none focus:outline-twitter-blue`} placeholder='Paste your image link here' onChange={handleChange}/>
+                <input value={values.image} name='image' className={`${mode.text} bg-transparent w-full text-lg text-bold ml-3 box-sizing:border-box p-1 resize-none focus:outline-twitter-blue`} placeholder='Paste your image link here' onChange={handleChange}/>
                 :
-                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${ darkMode ? 'text-white' : 'text-black'} w-full` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} onFocus={handleFocus} onChange={handleChange} />
+                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${mode.text} w-full` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} onFocus={handleFocus} onChange={handleChange} />
                 }
                 { !isFocused && 
-                    <button disabled={true} className='opacity-50 ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center'>{message}</button>
+                    <button disabled={true} className={`opacity-50 ml-auto rounded-full ${mode.color} text-white p-5 h-5 text-md flex items-center`}>{message}</button>
                 }
             </div>
             </div>
@@ -117,7 +117,7 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
                         <span className='absolute top-1 left-2.5 text-red-900 text-xs'>0</span>  
                     }
                 </div>
-                <button onClick={handleNewPost} className='ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center'>{isAttatchingImage ? 'Continue' : 'Post'}</button>
+                <button onClick={handleNewPost} className={`ml-auto rounded-full ${mode.color} text-white p-5 h-5 text-md flex items-center`}>{isAttatchingImage ? 'Continue' : 'Post'}</button>
             </div>
         </footer>
         }

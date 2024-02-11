@@ -111,13 +111,22 @@ def get_posts_all(request):
     # Get the current page requested, if no page index is provided in parameters, set requested page to 1.   
     page_index = int(request.GET.get('page', '')) if request.GET.get('page', '') else 1
     
+    # Get the requester's blocklist (list is empty if the user is not logged in).
+    requester_blocklist = [] if request.user.is_anonymous else request.user.blocklist.all()
 
-    # Get posts and transmissions.
-    posts = list(Post.objects.all())
-    transmissions = list(Transmission.objects.all())
+
+
+    # Get posts/transmissions and filter those whose authors have been blocked by the requester.
+    posts = list(Post.objects.all().exclude(user__in=requester_blocklist))
+    transmissions = list(Transmission.objects.all().exclude(post__user__in=requester_blocklist))
+
+    # Filter posts/transmissions where the author has blocked the requester.
+    filtered_posts = [ post for post in posts if request.user not in post.user.blocklist.all()]
+    print(filtered_posts)
+    filtered_transmissions = [transmission for transmission in transmissions if request.user not in transmission.post.user.blocklist.all()]
 
     # Merge post and transmissions and sort them by inverse chronological order.
-    sorted_posts =  sorted(posts + transmissions, key=lambda x: x.timestamp, reverse=True)
+    sorted_posts =  sorted(filtered_posts + filtered_transmissions, key=lambda x: x.timestamp, reverse=True)
     
     # Paginate posts and check if there are any values left to be rendered.
     paginated_posts, hasMore = paginate(sorted_posts, 10, page_index)
@@ -150,6 +159,7 @@ def get_posts_by_username(request, username):
     pinned = list(Post.objects.filter(user=user, pinned=True).all()) # Get pinned posts.
     posts = list(Post.objects.filter(user=user, pinned=False).all()) # Get non-pinned posts.
     transmissions = list(user.transmitted.all()) # Get transmissions.
+
 
     posts =  sorted(posts + transmissions, key=lambda x: x.timestamp, reverse=True)  # Sort non-pinned posts and transmissions.
     posts = pinned + posts # Stack pinned posts on top of the list.

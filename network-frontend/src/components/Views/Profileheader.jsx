@@ -20,7 +20,8 @@ const ProfileHeader = ({ account }) => {
     const { darkMode, handleImageModal, setPfpBig, handleFollow, handleBlock, setPosts, setPage, setLoading, handleProfileModal} = useContext(GeneralContext);
 
     const navigate = useNavigate()
-  
+    
+    console.log(account);
 
     const handleFilter = (url, updatedFilter) => {
         setLoading(true);

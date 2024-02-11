@@ -1,4 +1,4 @@
-import { useContext, useRef, useCallback} from 'react';
+import { useState, useEffect, useContext, useRef, useCallback} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 
@@ -17,18 +17,18 @@ import ClipLoader from "react-spinners/ClipLoader";
 import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 
-const Profile = ({ me }) => {
+const Profile = () => {
   
 
   const { username } = useParams();
   const { user } = useContext(AuthContext);
-  const { posts, account, error, loading, darkMode, hasMore, page, setPage} = useContext(GeneralContext);
-
-  const profile = me ? user.username : username;
+  const { posts, account, error, loading, darkMode, mode, hasMore, page, setPage, setAccount} = useContext(GeneralContext);
+  const [ blocked, setBlocked] = useState(false);
 
   const navigate = useNavigate();
 
   const observer = useRef();
+
 
   const lastPostRef = useCallback( notification => {
       if (loading) return;
@@ -39,6 +39,12 @@ const Profile = ({ me }) => {
           }
       })
   }, [hasMore, page]) 
+
+  useEffect(() => {
+   if (account) setBlocked(account.isBlocked);
+  } , [account])
+
+  console.log(blocked);
 
   return (
     
@@ -57,15 +63,23 @@ const Profile = ({ me }) => {
             </div>
         </div>
         <ProfileHeader account={account}/>
-        </>
-        }
-        {(posts && posts.length > 0) && posts.map((post,index) => {
+        {(posts && posts.length > 0 && !blocked) && posts.map((post,index) => {
          if(post.length - 1 === index) return <NewPost ref={lastPostRef} key={index} post={post}/>;
          return <NewPost key={index} post={post}/>;
         })}
         {loading && <div className='w-full mt-[10%] flex items-center justify-center'>
           <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
        </div>}
+       {account && blocked && 
+        <div className='w-full flex flex-col items-center justify-center p-2.5'>
+            <h3 className={`${mode.text} text-2xl font-bold`}>You have blocked this account.</h3>
+            <button className={`w-28 p-2.5 flex justify-center items-center text-white font-bold ${mode.color} rounded-full`}
+            onClick={() => {setBlocked(!blocked)}}
+            >See posts</button>
+        </div>
+       }
+        </>
+        }
      </div>
     
   )
