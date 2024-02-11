@@ -17,6 +17,7 @@ import ModalForm from '../components/Forms/ModalForm';
 import Users from '../components/General/Users';
 import EditProfile from '../components/Views/EditProfile';
 import PostInteractions from '../components/General/PostInteractions';
+import ChangeMode from '../components/General/ChangeMode';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
@@ -27,6 +28,7 @@ const MainPage = () => {
 
   const { profileModal, filter, darkMode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
           imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, handleProfileModal } = useContext(GeneralContext);
+  
   const [shrink, setShrink] = useState(false);
 
   useEffect( () => {

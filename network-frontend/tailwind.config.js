@@ -55,7 +55,13 @@ module.exports = {
         'icon-gray' : '#536471',
         'post-gray' : '#677682',
         'info-gray' : '#536471',
-        'login-modal' : '#435461'
+        'login-modal' : '#435461',
+        'twitter-yellow' : '#FCD500',
+        'twitter-pink' : '#F6187F',
+        'twitter-purple' : '#7557FF',
+        'twitter-orange' : '#FC7A00',
+        'twitter-green' : '#00B978' ,
+        'dim' : '#14202B'
         
       },
       boxShadow : {
