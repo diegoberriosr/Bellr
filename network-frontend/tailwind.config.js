@@ -61,10 +61,20 @@ module.exports = {
         'twitter-purple' : '#7557FF',
         'twitter-orange' : '#FC7A00',
         'twitter-green' : '#00B978' ,
-        'dim' : '#14202B',
-        'subdim' : '#1E2732',
-        'separator-gray' : '#38444D'
+
+        'light-highlight' : '#F7F7F7',
+        'light-sidebar-highlight' : '#E7E7E8',
+        'light-separator' : '#EFF3F4',
         
+        'dim' : '#14202B',
+        'dim-post-highlight' : '#1C2732',
+        'dim-sidebar-highlight' : '#2C3640',
+        'dim-separator' : '#38444D',
+        'subdim' : '#1E2732',
+
+        'dark-highlight' : '#080808',
+        'dark-sidebar-highlight' : '#181818',
+        'dark-separator' : '#2F3235'  
       },
       boxShadow : {
         'custom' : '0px 0px 10px 4px rgba(255, 255, 255, 0.5)'

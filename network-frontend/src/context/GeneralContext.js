@@ -14,7 +14,10 @@ export const GeneralProvider = ({ children }) => {
       'color' : 'bg-twitter-blue',
       'background' : 'bg-white',
       'text' : 'text-black',
-      'subBackground' : 'bg-light-gray'
+      'subBackground' : 'bg-light-gray',
+      'highlight' : 'hover:bg-light-highlight',
+      'sidebarHighlight' : 'hover:bg-light-sidebar-highlight',
+      'separator' : 'border-light-separator'
     });
     const [ modalOpen, setModalOpen] = useState(false);
     const [ isEditing, setIsEditing ] = useState(false);

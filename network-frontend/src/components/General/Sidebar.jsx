@@ -92,7 +92,9 @@ const Sidebar = ({ setModeModal }) => {
 
     const [ active, setActive ] = useState(0);
     const {user, logoutUser } = useContext(AuthContext); // Check if user is logged in
-    const { darkMode, handleModal } = useContext(GeneralContext);
+    const { handleModal, mode } = useContext(GeneralContext);
+
+    const highlight = `hover:${mode.sidebarHighlight}`;
 
 
     const navigate = useNavigate();
@@ -104,7 +106,7 @@ const Sidebar = ({ setModeModal }) => {
     
 
 
-    return <nav className={`sticky hidden mobile:block top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${darkMode ? 'border-gray-600' : 'border-gray-300'} border-t-0 border-l-0 border-b-0 text-3xl`}>
+    return <nav className={`sticky hidden mobile:block top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${mode.separator} border-t-0 border-l-0 border-b-0 text-3xl`}>
         <ul className='h-screen'>
             <li className='p-2.5 px-4'>
                 <LuDog/>
@@ -113,7 +115,7 @@ const Sidebar = ({ setModeModal }) => {
                 if (icon.loginRequired && user===null ){
                     return undefined;
                 }
-                return <li key={index} className={`inline-flex items-center px-4 p-2.5 ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-light-gray-hover'} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
+                return <li key={index} className={`inline-flex items-center px-4 p-2.5 ${highlight} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
                         {index === active ? <icon.image.selected /> : <icon.image.nonselected/>}
                         <span className={`${index === active ? 'font-bold' : ''} ml-4 hidden xl:block text-xl`}>{icon.name}</span>
                     </li>
