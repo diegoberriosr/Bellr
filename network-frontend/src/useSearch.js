@@ -92,7 +92,8 @@ const useSearch = () => {
         })
         .then(
             setPosts( prevPosts => {
-                if (currentUrl.pathname === '/bookmarked') return prevPosts.filter(publication => publication.id !== postId) // If route is user's bookmarked page, remove the post from the array.
+                console.log(currentUrl)
+                if (currentUrl === '/bookmarked') { return prevPosts.filter(publication => publication.id !== postId)} // If route is user's bookmarked page, remove the post from the array.
 
                 const postIndex = prevPosts.findIndex(publication => publication.id === postId); // Get the post's index.
                 let updatedPosts = [...prevPosts]; // Destructure the state.
@@ -256,6 +257,37 @@ const useSearch = () => {
 
       }
 
+      const handleReply = (postId, content) => {
+        let headers;
+        if (authTokens) {
+          headers = {
+            'Authorization' : 'Bearer ' + String(authTokens.access)
+          }
+        }
+
+        axios({
+          url : `http://127.0.0.1:8000/reply/${postId}`,
+          method : 'POST',
+          headers:headers,
+          data : {content:content}
+        })
+        .then( res => {
+          setPosts(prevPosts => {
+            const origin = prevPosts[0]; // Get the orign from the list of posts.
+            let filteredReplies = prevPosts.filter( post => post.id === 0); // Remove the origin from the top of the list.
+            console.log(filteredReplies)
+            let updatedReplies = [res.data.reply, ...filteredReplies] // Append reply to the top of the filtered list.
+            console.log(updatedReplies)
+            // Return a list with the origin at the top.
+            return [origin, ...updatedReplies];
+
+          })
+        })
+        .catch( err => {
+          console.log(err);
+        })
+      }
+
     useEffect(() => {
 
         // If the pagination number changes, update the data accordingly.
@@ -336,7 +368,8 @@ const useSearch = () => {
         })
     }, [currentUrl])
     
-    return { loading, setLoading, error, posts, setPosts, setPage, account, setAccount, hasMore, handleLike, handleBookmark, handleTransmit, handleDelete, handleFollow, handleEdit, handleNew, handleBlock};
+    return { loading, setLoading, error, posts, setPosts, setPage, account, setAccount, hasMore, handleLike, handleBookmark, 
+      handleTransmit, handleDelete, handleFollow, handleEdit, handleNew, handleBlock, handleReply};
 };
 
 export default useSearch;

@@ -26,7 +26,7 @@ const PostInteractions = ({ shrink, setShrink}) => {
 
   const observer = useRef();
 
-  const handleLike = (userId) => {
+  const handleFollow = (userId) => {
     let headers;
 
     if (authTokens) {
@@ -45,8 +45,11 @@ const PostInteractions = ({ shrink, setShrink}) => {
         const index = prevUsers.findIndex(account => account.user_id === userId)
         let updatedUsers = [...prevUsers];
 
-        updatedUsers[index].followed = !updatedUsers[index].followed;
-        console.log(updatedUsers[index], prevUsers[index])
+        let updatedUser = {...updatedUsers[index]};
+        updatedUser.followed = !updatedUser.followed;
+
+        updatedUsers[index] = updatedUser;
+        console.log('--- comparison ---', updatedUsers[index], prevUsers[index])
         return updatedUsers;
       })
     })
@@ -75,23 +78,25 @@ const PostInteractions = ({ shrink, setShrink}) => {
 
   }, [page])
 
+  console.log(users);
+
   return (
-    <div className={`w-screen h-screen md:w-[500px] h-[500px] ${shrink ? 'animate-shrink' : 'animate-grow'} bg-black rounded-xl`}>
+    <div className={`w-screen h-screen sm:w-[500px] sm:h-[500px] ${shrink ? 'animate-shrink' : 'animate-grow'} bg-black rounded-xl`}>
         <header className='sticky top-0 h-12 p-5 z-10 transform'>
                     <MdClose className='text-2xl text-white mt-1 cursor-pointer' onClick={() => {setShrink(true)}}/>
                     <h3 className='absolute top-4 ml-[40%] text-2xl text-white font-bold'>{filter}</h3>
         </header>
         { users && users.length > 0 && 
             users.map((profile, index) =>
-            <div key={index} className='w-full flex items-start p-2.5 pt-4 animate-grow'>
+            <div key={index} className='w-full flex items-start p-2.5 pt-4 animate-grow text-white'>
               <div className='w-10 h-10 rounded-full overflow-hidden ml-2.5'>
-                 <img src={profile.pfp} alt='user pfp' className='object-cover w-full h-full' />
+                 <img src={profile.transmitter ? profile.transmitter.pfp : profile.pfp} alt='user pfp' className='object-cover w-full h-full' />
               </div>
               <div className='relative ml-2.5 w-full'>
-                { (user ? user.user_id : -1) !== profile.user_id && <button type='button' className={`${profile.followed ? 'hover:text-red-900 hover:bg-red-900 hover:border-red-900 hover:bg-opacity-30' : ''} absolute top-1.5 right-1 w-[99px] h-[30px] border border-white rounded-full font-bold`} onClick={() => { handleLike(profile.user_id)}}>{profile.followed ? 'Unfollow' : 'Follow'}</button>}
-                <p className='inline-flex items-center font-bold hover:underline' onClick={()=>{navigate(`/user/${profile.username}`)}}>{profile.profilename} {profile.verified && <MdVerified className='text-twitter-blue ml-0.5'/>}</p>
-                <p className='text-gray-600'>@{profile.username}</p>
-                <p className='w-full'>{profile.bio}</p>
+                { (user ? user.user_id : -1) !== (profile.transmitter ? profile.transmitter.user_id : profile.user_id) && <button type='button' className={`${profile.followed ? 'hover:text-red-900 hover:bg-red-900 hover:border-red-900 hover:bg-opacity-30' : ''} text-white absolute top-1.5 right-1 w-[99px] h-[30px] border border-white rounded-full font-bold`} onClick={() => { handleFollow(profile.transmitter ? profile.transmitter.user_id : profile.user_id)}}>{(profile.transmitter ? profile.transmitter.followed : profile.followed) ? 'Unfollow' : 'Follow'}</button>}
+                <p className='inline-flex items-center font-bold hover:underline' onClick={()=>{navigate(`/user/${profile.transmitter ? profile.transmitter.username : profile.username}`)}}>{ profile.transmitter ? profile.transmitter.profilename : profile.profilename} { (profile.transmitter ? profile.transmitter.verified : profile.verified) && <MdVerified className='text-twitter-blue ml-0.5'/>}</p>
+                <p className='text-gray-600'>@{profile.transmitter ? profile.transmitter.username : profile.username}</p>
+                <p className='w-full text-gray-600'>{profile.transmitter ? profile.transmitter.bio : profile.bio}</p>
               </div>
             </div>)
         }

@@ -12,9 +12,11 @@ import { IoArrowBack, IoCloseSharp } from "react-icons/io5";
 import AuthContext from '../../context/AuthContext';
 
 
-const Login = ({ handleCloseModal, openForgottenPassword, setLoading }) => {
+const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoadingScreen }) => {
 
   const [ errorMessage, setErrorMessage ] = useState(false);
+
+
   const [ step, setStep] = useState(0);
 
   const { loginUser } = useContext(AuthContext);
@@ -31,7 +33,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading }) => {
         setStep(step+1);
         return;
     }
-    loginUser(values, setErrorMessage, setLoading);
+    loginUser(values, setErrorMessage, setLoading, setLoadingScreen);
   }
 
   const STEPS = [

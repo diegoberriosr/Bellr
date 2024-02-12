@@ -49,7 +49,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
     return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator}  w-full cursor-pointer transition-colors duration-500 animate-grow`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
             <FaRetweet />
-            <span className='ml-2'>{post.transmitter} reposted</span>
+            <span className='ml-2'>{post.transmitter.username} reposted</span>
         </p>}
         {
             post.reply && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
@@ -102,7 +102,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                             </li>
                             <li className='group flex items-center space-x-1'>
                                 <FaRetweet className={`${post.transmitted ? 'text-green-600' : 'text-icon-gray'} group-hover:bg-green-300 group-hover:text-green-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => {handleTransmit(post.id)}} />
-                                <span className='w-2 group-hover:text-green-600 transition-colors cursor-default text-xs'>{post.transmissions > 0 && post.transmissions}</span>
+                                <span className='w-2 group-hover:text-green-600 transition-colors cursor-default text-xs' onClick={() => {openInteractionsModal(post, 'transmissions')}}>{post.transmissions > 0 && post.transmissions}</span>
                             </li>
                         </div>
                         <div className='flex items-center space-x-3 mr-2.5 ml-auto'>

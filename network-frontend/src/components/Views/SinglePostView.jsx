@@ -29,7 +29,7 @@ const SinglePostView = () => {
       {posts && 
         <>
           <OriginPost post={posts[0]}/>
-          {user && <Form borderStyle='border-t-0 border-l-0' textAreaStyle='bg-transparent' message={'Reply'} placeholder="Post your reply" />}
+          {user && <Form borderStyle='border-t-0 border-l-0' textAreaStyle='bg-transparent' message={'Reply'} placeholder="Post your reply" replyId={posts[0].id} />}
           {posts.length > 1 && posts.slice(1).map(post => <NewPost key={post.id} post={post}/>)}
         </>
       }

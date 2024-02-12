@@ -27,7 +27,7 @@ class User(AbstractUser):
             'username' : self.username,
             'profilename' : self.profilename,
             'verified' : self.verified,
-            'followed' : False if user.is_anonymous else user in self.followers.all(),
+            'followed' : user in self.followers.all(),
             'isBlocked' : False if user.is_anonymous else  user in self.blocked.all(),
             'date_joined' : self.date_joined,
             'bio' : self.bio,
@@ -53,6 +53,7 @@ class User(AbstractUser):
     
     def pserialize(self):
         return {
+        'user_id' : self.id,
         'username' : self.username,
         'profilename' : self.profilename,
         'pfp' : self.pfp,
@@ -89,7 +90,7 @@ class Post(models.Model):
             'liked' : False if user.is_anonymous else user in self.likes.all(),
             'transmissions' : len(self.transmissions.all()),
             'transmitted' : False if user.is_anonymous else user in self.transmissions.all(),
-            'bookmarked' : False if user.is_anonymous else user in self.bookmarks.all(),
+            'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all(),
             'replies' : len(self.replies.all())
         }
     
@@ -106,7 +107,7 @@ class Post(models.Model):
             'liked' : user in self.likes.all(),
             'transmissions' : len(self.transmissions.all()),
             'transmitted' : user in [transmission.user for transmission in self.transmissions.all()],
-            'bookmarked' : False if user.is_anonymous else user in user.bookmarked.all(),
+            'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all(),
             'replies' : len(self.replies.all())     
         }
 
@@ -118,7 +119,7 @@ class Transmission(models.Model):
     def serialize(self, user):
         return {
             'transmission' : True,
-            'transmitter' : self.user.username,
+            'transmitter' : self.user.serialize(user),
             'id' : self.post.id,
             'user' : self.post.user.pserialize(),
             'followed' : False if user.is_anonymous else user in self.user.followers.all(),
@@ -134,7 +135,7 @@ class Transmission(models.Model):
     def fserialize(self, user):
         return {
             'transmission' : True,
-            'transmitter' : self.user.username,
+            'transmitter' : self.user.serialize(user),
             'id' : self.post.id,
             'user' : self.post.user.pserialize(),
             'followed' : False if user.is_anonymous else user in self.user.followers.all(),

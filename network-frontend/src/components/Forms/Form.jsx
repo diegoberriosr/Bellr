@@ -17,12 +17,12 @@ import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 
 
-const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message, handleAction, isEditing }) => {
+const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message, replyId }) => {
 
     const [ isFocused, setIsFocused ] = useState(false);
     const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
     const { user, authTokens } = useContext(AuthContext);
-    const { mode, handleImageModal, handleNew } = useContext(GeneralContext);
+    const { mode, handleImageModal, handleNew, handleReply } = useContext(GeneralContext);
 
 
 
@@ -32,6 +32,8 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
             'image' : null
         }
     })
+
+    console.log('post id is',replyId);
     
     const text = useRef();
     const percentage = (values.content.length/280) * 100 
@@ -42,7 +44,7 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
             return;
         }
 
-        handleNew(values.content);
+        replyId ? handleReply(replyId, values.content) : handleNew(values.content) ; // If the Id of a post is passed in the parameters, it is a reply form.
         text.current.value=placeholder;
         setIsFocused(false);
         values.content = "What's happening !?";

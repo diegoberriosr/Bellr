@@ -8,7 +8,7 @@ export default GeneralContext;
 export const GeneralProvider = ({ children }) => {
   
     const {posts, setPosts, setPage, account, setAccount, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, 
-           handleEdit, handleNew, handleBlock} = useSearch();
+           handleEdit, handleNew, handleBlock, handleReply} = useSearch();
     const [ darkMode, setDarkMode ] = useState(true);
     const [mode, setMode] = useState({
       'color' : 'bg-twitter-blue',
@@ -92,7 +92,8 @@ export const GeneralProvider = ({ children }) => {
       setFilter:setFilter,
       filter:filter,
       mode:mode,
-      setMode:setMode
+      setMode:setMode,
+      handleReply:handleReply
     };
 
     return (

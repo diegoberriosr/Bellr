@@ -6,7 +6,7 @@ import Register from '../components/Login/Register';
 import ResetPassword from "../components/Login/ResetPassword";
 import { GoogleLogin } from '@react-oauth/google';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [isForgottenPassword, setIsForgottenPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [ loadingScreen, setLoadingScreen]  = useState(false);
 
   const openLogin = () => {
     setIsOpen(!isOpen);
@@ -39,9 +40,8 @@ const LoginPage = () => {
   }
 
 
-  console.log(isForgottenPassword);
 
-  return (loading ?
+  return (loadingScreen ?
     <div className='w-screen h-screen flex items-center justify-center bg-black text-white'>
         <PiDogBold className='text-[350px] animate-expand'/>
     </div>
@@ -80,7 +80,7 @@ const LoginPage = () => {
         </div>
       </div>
       <Modal isVisible={isOpen} background='bg-login-modal'>
-        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} setLoading={setLoading} />}
+        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} setLoading={setLoading} setLoadingScreen={setLoadingScreen} />}
         {isRegister && <Register handleCloseModal={handleCloseModal} setLoading={setLoading}/>}
         {isForgottenPassword && <ResetPassword handleCloseModal={handleCloseModal} setLoading={setLoading} />}
       </Modal>

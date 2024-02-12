@@ -494,7 +494,7 @@ def create_reply(request, post_id):
         notification = Notification(type='reply', post=origin, target=origin.user, origin=request.user)
         notification.save()
 
-    return JsonResponse({'Success' : 'A reply was created'})
+    return JsonResponse({'reply' : reply.serialize(request.user)})
 
 
 @api_view(['GET'])
