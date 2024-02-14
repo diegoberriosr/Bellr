@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
 
 // Icon imports
 import { IoCloseSharp } from "react-icons/io5";
@@ -18,6 +19,8 @@ import Users from '../components/General/Users';
 import EditProfile from '../components/Views/EditProfile';
 import PostInteractions from '../components/General/PostInteractions';
 import ChangeMode from '../components/General/ChangeMode';
+import Inbox from '../components/Messages/Inbox';
+import Conversation from '../components/Messages/Conversation';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
@@ -32,6 +35,8 @@ const MainPage = () => {
   const [shrink, setShrink] = useState(false);
   const [modeModal, setModeModal] = useState(false);
 
+  const currentUrl = useLocation();
+    
   useEffect( () => {
     if (imageModal && shrink) {
       const timer = setTimeout( () => {
@@ -87,10 +92,11 @@ const MainPage = () => {
 
   } , [shrink])
 
+  console.log(currentUrl.pathname);
 
   return (
       
-        <div className={`relative flex md:px-20 lg:px-32  ${mode.background} ${mode.text} duration-300 transition-colors`}>
+        <div className={`relative flex ${currentUrl.pathname === '/messages' ? 'md:pl-20 lg:pl-32' : 'md:px-20 lg:px-32'}   ${mode.background} ${mode.text} duration-300 transition-colors`}>
               <Sidebar setModeModal={setModeModal}/>
                 <Routes>
                     <Route key='home' element={<Feed form={true} url='posts' /> } path='/home'/>
@@ -102,8 +108,9 @@ const MainPage = () => {
                     <Route key='profile' element={<Profile me={true}/>} path={`/me`} />
                     <Route key='edit' element={<EditProfile/>} path='/me/edit'/>
                     <Route key='followers' element={<Users/>} path=':type/:username/:filter?'/>
+                    <Route key='messages' element={<Inbox/>} path='/messages'/>
                 </Routes>
-                <Recomendations/>
+                { currentUrl.pathname === '/messages' ? <Conversation/> : <Recomendations/> }
                 <Bottombar/>
                 <div className='block md:hidden fixed bottom-[10%] right-[5%]'> 
                     <PostButton handleClick={handleModal} mobile={true}/>
