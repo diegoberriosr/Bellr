@@ -428,10 +428,22 @@ def get_bookmarked(request):
 
 
 @api_view(['GET'])
-def get_user(request, username):
+def get_user(request):
+    '''
+        Gets an user's information provided a string (does not include posts). Used in searchbars
+        in the frontend.
 
-    # Get an user provided it's username.
-    users = User.objects.filter(username__icontains=username)
+        params:
+            :s: Text string containing an username/profilename.
+
+        returns:
+            :users: A list containing all the matches of the query.
+    '''
+
+    # Get an user provided a string.
+    s = request.GET.get('s', '')
+    print(s)
+    users = User.objects.filter(username__icontains=s)
 
     return JsonResponse([user.serialize(request.user) for user in users.all()], safe=False)
 

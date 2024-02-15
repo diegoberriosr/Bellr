@@ -21,11 +21,14 @@ import PostInteractions from '../components/General/PostInteractions';
 import ChangeMode from '../components/General/ChangeMode';
 import Inbox from '../components/Messages/Inbox';
 import Conversation from '../components/Messages/Conversation';
+import PostButton from '../components/General/PostButton';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
-import PostButton from '../components/General/PostButton';
+import MessageContext from '../context/MessageContext';
 
+// Provider imports
+import { MessageProvider } from '../context/MessageContext';
 
 const MainPage = () => {
 
@@ -95,7 +98,7 @@ const MainPage = () => {
   console.log(currentUrl.pathname);
 
   return (
-      
+        <MessageProvider>
         <div className={`relative flex ${currentUrl.pathname === '/messages' ? 'md:pl-20 lg:pl-32' : 'md:px-20 lg:px-32'}   ${mode.background} ${mode.text} duration-300 transition-colors`}>
               <Sidebar setModeModal={setModeModal}/>
                 <Routes>
@@ -136,6 +139,7 @@ const MainPage = () => {
                   <ChangeMode shrink={shrink} setShrink={setShrink}/>
                 </Modal>
           </div>
+        </MessageProvider>
   )
 }
 

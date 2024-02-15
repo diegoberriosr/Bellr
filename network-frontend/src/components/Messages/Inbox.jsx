@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,14 +13,71 @@ import ConversationMiniature from './ConversationMiniature';
 
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
-
-
+import MessageContext from '../../context/MessageContext';
+import AuthContext from '../../context/AuthContext';
+import Modal from '../General/Modal';
+import NewConversation from './NewConversation';
 
 const Inbox = () => {
-  const [isFocused, setIsFocused] = useState(false)
-  const [matches, setMatches] = useState([]);
 
+  const [isFocused, setIsFocused] = useState(false);
+  const [matches, setMatches] = useState([]);
+  const [newModal, setNewModal] = useState(false);
+  const [shrink, setShrink] = useState(false);
+
+  const { activeConversation } = useContext(MessageContext);
+  const { user } = useContext(AuthContext);
   const { mode } = useContext(GeneralContext);
+
+  const CONVERSATIONS = [{
+    'id' : 1,
+    'messages' : [
+        {
+            'id' : 1,
+            'receiver' : {
+                'verified' : true,
+                'username' : user.username,
+                'profilename' : user.profilename,
+                'pfp' : user.pfp
+            },
+            'content' : 'Just a little test',
+            'timestamp' : null,
+            'seen' : false,
+            'sender' : {
+                'verfied' : true,
+                'username' : 'testman',
+                'profilename' : 'testman',
+                'pfp' : 'https://mf.b37mrtl.ru/rbthmedia/images/2023.09/original/64f9e2f36008eb63f72ee054.jpg'
+            }
+        }
+        ]
+  },
+  {
+    'id' : 2,
+    'messages' : [
+        {
+            'id' : 1,
+            'receiver' : {
+                'verified' : true,
+                'username' : user.username,
+                'profilename' : user.profilename,
+                'pfp' : user.pfp
+            },
+            'content' : 'Just a little test',
+            'timestamp' : null,
+            'seen' : false,
+            'sender' : {
+                'verfied' : true,
+                'username' : 'testman',
+                'profilename' : 'testman',
+                'pfp' : 'https://mf.b37mrtl.ru/rbthmedia/images/2023.09/original/64f9e2f36008eb63f72ee054.jpg'
+            }
+        }
+        ]
+  }
+]
+
+  const [ conversations, setConversations] = useState(CONVERSATIONS);
   const navigate = useNavigate();
 
   const { values, handleChange, resetForm, touched } = useFormik(
@@ -53,26 +110,20 @@ const Inbox = () => {
           navigate(-1);
       }
     }
-    
-    // Just some test values
-    const USER = {
-    'verfied' : true,
-    'username' : 'testman',
-    'profilename' : 'testman',
-    'pfp' : 'https://mf.b37mrtl.ru/rbthmedia/images/2023.09/original/64f9e2f36008eb63f72ee054.jpg'
-  }
 
-  const MESSAGE = {
-    'id' : 1,
-    'sender' : 'testman',
-    'receiver' : 'testboy',
-    'content' : 'Just a little test',
-    'timestamp' : null,
-    'seen' : false,
-    'user' : USER
-  }
+    useEffect(() => {
+        if (shrink) {
+            const timer = setTimeout( () => {
+                setNewModal(!newModal);
+                setShrink(false);
+            }, 200)
+
+            return () => clearTimeout(timer);
+        }
+    }, [shrink])
 
   return (
+    <>
     <div className={`w-screen mobile:w-[450px] h-screen text-center text-xl border border-l-0 border-b-0 ${mode.separator} ${mode.text}`}>
         <header className='w-full h-[53px] pl-3.5 pr-2 py-2.5 font-bold flex justify-between items-center'>
             <h3 className='h-full'>Messages</h3>
@@ -81,7 +132,7 @@ const Inbox = () => {
                     <IoSettingsOutline/>
                 </i>
                 <i className='cursor-pointer rounded-full hover:bg-gray-900 p-2 transition-colors'>
-                     <LuMailPlus/>
+                     <LuMailPlus onClick={() => setNewModal(!newModal)}/>
                 </i>
             </div>
         </header>
@@ -97,7 +148,11 @@ const Inbox = () => {
             </div>
             <div className='mt-3'>
                 { isFocused && values.search.length === 0 && <p className='text-gray-600'>Try searching for people, groups, or messages.</p>}
-                { !isFocused && <ConversationMiniature mostRecentMessage={MESSAGE} active={true} unreadMessages={20}/> }
+                { !isFocused && conversations.map(conversation => <ConversationMiniature mostRecentMessage={conversation.messages[conversation.messages.length -1 ]} 
+                    active={conversation === activeConversation}
+                    unreadMessages={20}
+                    conversation={conversation}
+                    />)}
                 { isFocused && matches.length === 0 &&  values.search.length !== 0 && <div className={`pl-16 pt-5 w-full ${mode.text} flex flex-col items-start justify-start`}> 
                     <h3 className='text-3xl w-60 font-bold'>No results for "{values.search}"</h3>
                     <p className='text-gray-600 text-sm mt-1.5'>The term you entered did not bring up any results.</p>
@@ -105,6 +160,10 @@ const Inbox = () => {
             </div>
         </main>
     </div>
+    <Modal isVisible={newModal}>
+      <NewConversation shrink={shrink} setShrink={setShrink} />
+      </Modal>
+    </>
   )
 }
 
