@@ -15,14 +15,10 @@ const ProfileMiniature = ({text, textStyle, account}) => {
     setVisible(!visible)
   }
 
-  console.log('PROFILE MINIATURE ----- ', account)
-
- 
-
   return (
     <div className='relative flex flex-col items-center justify-center' onMouseLeave={handleVisbility}>
       <span className={textStyle} onMouseEnter={handleVisbility}>{text}</span>
-      <div className={`${visible ? 'block' : 'hidden'} absolute top-6 z-50 ${mode.background} border rounded-md border-gray-900 w-[250px] flex flex-col justify-center items-start p-2.5`}>
+      <div className={`${visible ? 'block' : 'hidden'} absolute top-6 z-50 ${mode.background} border rounded-md border-gray-900 w-[250px] flex flex-col justify-center items-start p-2.5 animate-grow`}>
         <div className='w-full flex justify-between items-start'>
             <figure className='w-[60px] h-[60px]'>
                 <img src={account.pfp} alt='user pfp' className='w-full h-full object-fit rounded-full'/>
