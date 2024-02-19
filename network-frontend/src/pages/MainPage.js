@@ -117,10 +117,10 @@ const MainPage = () => {
                 <div className='block md:hidden fixed bottom-[10%] right-[5%]'> 
                     <PostButton handleClick={handleModal} mobile={true}/>
                 </div>
-                <Modal isVisible={modalOpen} background='bg-black'>
+                <Modal isVisible={modalOpen} background='bg-login-modal'>
                     <ModalForm borderStyle='border none' textAreaStyle='bg-transparent' message={isEditing ? 'Save' : 'Post'} shrink={shrink} setShrink={setShrink}/>
                 </Modal>
-                <Modal isVisible={imageModal}>
+                <Modal isVisible={imageModal} background='bg-login-modal'>
                     <div className='relative flex h-screen justify-center items-center'>
                         <IoCloseSharp className='absolute top-0 left-0' onClick={() => { setShrink(true) }}/>
                         <div className={`transition-transform w-[368px] h-[368px] overflow-hidden rounded-full ${ shrink ? 'animate-shrink' : 'animate-grow'}`}>
@@ -128,10 +128,10 @@ const MainPage = () => {
                         </div>
                     </div>
                 </Modal>
-                <Modal isVisible={interactionsModal}>
+                <Modal isVisible={interactionsModal} background='bg-login-modal'>
                     <PostInteractions shrink={shrink} setShrink={setShrink}/> 
                 </Modal>
-                <Modal isVisible={profileModal}>
+                <Modal isVisible={profileModal} background='bg-login-modal'>
                   <EditProfile shrink={shrink} setShrink={setShrink}/>
                 </Modal>
                 <Modal isVisible={modeModal} background='bg-login-modal'>
