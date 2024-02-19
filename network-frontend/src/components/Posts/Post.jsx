@@ -16,7 +16,7 @@ import { FaBookmark } from "react-icons/fa";
 
 // Component imports
 import DropDownMenu from '../General/DropdownMenu';
-
+import ProfileMiniature from '../General/ProfileMiniature';
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
 
@@ -72,7 +72,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                 <div className='flex h-4 items-center'>
                     <p className='font-bold hover:underline' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
                     {post.user.verified && <MdVerified className='text-twitter-blue ml-0.5' />}
-                    <p className='text-post-gray ml-1.5'>@{post.user.username}</p>
+                    <ProfileMiniature text={`@${post.user.username}`} textStyle='text-post-gray ml-1.5' account={post.user}/>
                     <p className='text-post-gray ml-1'>·</p>
                     <p className='text-post-gray ml-1'>{formatDate(post)}</p>
                     <DropDownMenu followed={post.followed} author_id={post.user.user_id} post={post} setPosts={setPosts} />
