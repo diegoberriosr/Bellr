@@ -94,7 +94,7 @@ const Sidebar = ({ setModeModal }) => {
     const {user, logoutUser } = useContext(AuthContext); // Check if user is logged in
     const { handleModal, mode } = useContext(GeneralContext);
 
-    const highlight = `hover:${mode.sidebarHighlight}`;
+
 
 
     const navigate = useNavigate();
@@ -103,8 +103,15 @@ const Sidebar = ({ setModeModal }) => {
         logoutUser();
         navigate('/')
     };
-    
 
+    const hoverColors = {
+        'bg-light-sidebar-highlight': 'hover:bg-light-sidebar-highlight',
+        'bg-dim-sidebar-highlight' : 'hover:bg-dim-sidebar-highlight',
+        'bg-dark-sidebar-highlight' : 'hover:bg-dark-sidebar-highlight'
+    }
+    
+    
+    const hoverClass = hoverColors[mode.sidebarHighlight];
 
     return <nav className={`sticky hidden mobile:block top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${mode.separator} border-t-0 border-l-0 border-b-0 text-3xl`}>
         <ul className='h-screen'>
@@ -115,7 +122,7 @@ const Sidebar = ({ setModeModal }) => {
                 if (icon.loginRequired && user===null ){
                     return undefined;
                 }
-                return <li key={index} className={`inline-flex items-center px-4 p-2.5 ${highlight} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
+                return <li key={index} className={`inline-flex items-center px-4 p-2.5 ${hoverClass} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
                         {index === active ? <icon.image.selected /> : <icon.image.nonselected/>}
                         <span className={`${index === active ? 'font-bold' : ''} ml-4 hidden xl:block text-xl`}>{icon.name}</span>
                     </li>

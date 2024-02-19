@@ -290,6 +290,8 @@ const useSearch = () => {
 
     useEffect(() => {
 
+
+
         // If the pagination number changes, update the data accordingly.
 
         setLoading(true);
@@ -330,6 +332,9 @@ const useSearch = () => {
 
     useEffect( () => {
         
+        // Do nothing if requesting for messages
+        if (currentUrl === '/messages') return;
+
         // If the route change, set all states to default.
         setLoading(true);
         setPosts(null);

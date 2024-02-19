@@ -9,18 +9,18 @@ import GeneralContext from '../../context/GeneralContext';
 
 const EmptyProfileHeader = ({ username, message, submessage }) => {
     const navigate = useNavigate()
-    const { darkMode } = useContext(GeneralContext);
+    const { mode } = useContext(GeneralContext);
 
     return (
         <>
-            <header className={`border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} border-l-0 w-full`}>
-                <div className={`flex items-center space-x-7 text-2xl border ${ darkMode ? 'border-gray-600 bg-black' : 'border-gray-300 bg-white'} border-l-0 border-b-0 border-t-0 bg-opacity-50 sticky top-0`}>
+            <header className={`border ${mode.separator} border-l-0 w-full`}>
+                <div className={`flex items-center space-x-7 text-2xl border ${mode.background} ${mode.separator} border-l-0 border-b-0 border-t-0 bg-opacity-50 sticky top-0`}>
                     <BsArrowLeftShort className='ml-3.5 text-3xl opacity-100 hover:bg-gray-900 hover:rounded-full' onClick={() => { navigate(-1) }} />
                     <p className='my-1.5'> Not found </p>
                 </div>
                 <figure className='h-64 '>
                     <div className='w-full h-48 bg-gray-800' />
-                    <div className={`relative left-5 -top-16 rounded-full w-[130px] h-[130px] bg-twitter-dark ${ darkMode ? 'border-black' : 'border-white'} border-[3.5px]`} />
+                    <div className={`relative left-5 -top-16 rounded-full w-[130px] h-[130px] bg-twitter-dark ${mode.separator} border-[3.5px]`} />
                 </figure>
                 <div className='mt-3.5 mb-4 px-7'>
                     <h3 className='text-2xl font-bold'>@{username}</h3>

@@ -95,7 +95,6 @@ const MainPage = () => {
 
   } , [shrink])
 
-  console.log(currentUrl.pathname);
 
   return (
         <MessageProvider>
@@ -135,7 +134,7 @@ const MainPage = () => {
                 <Modal isVisible={profileModal}>
                   <EditProfile shrink={shrink} setShrink={setShrink}/>
                 </Modal>
-                <Modal isVisible={modeModal}>
+                <Modal isVisible={modeModal} background='bg-login-modal'>
                   <ChangeMode shrink={shrink} setShrink={setShrink}/>
                 </Modal>
           </div>

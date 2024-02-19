@@ -11,12 +11,12 @@ export const GeneralProvider = ({ children }) => {
            handleEdit, handleNew, handleBlock, handleReply} = useSearch();
     const [ darkMode, setDarkMode ] = useState(true);
     const [mode, setMode] = useState({
-      'color' : 'bg-twitter-blue',
+      'color' : 'twitter-blue',
       'background' : 'bg-white',
       'text' : 'text-black',
       'subBackground' : 'bg-light-gray',
-      'highlight' : 'hover:bg-light-highlight',
-      'sidebarHighlight' : 'hover:bg-light-sidebar-highlight',
+      'highlight' : 'bg-light-highlight',
+      'sidebarHighlight' : 'bg-light-sidebar-highlight',
       'separator' : 'border-light-separator'
     });
     const [ modalOpen, setModalOpen] = useState(false);

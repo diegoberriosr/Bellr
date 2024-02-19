@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { useNavigate } from "react-router-dom";
+import formatDate from '../../utils';
 
 // Context imports
 import AuthContext from "../../context/AuthContext";
@@ -9,6 +10,7 @@ import MessageContext from '../../context/MessageContext';
 // icon imports
 import { FaCircle } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
+import { PiArrowElbowDownRightLight } from "react-icons/pi";
 
 
 const ConversationMiniature = ({ mostRecentMessage, active, unreadMessages, conversation }) => {
@@ -17,26 +19,33 @@ const ConversationMiniature = ({ mostRecentMessage, active, unreadMessages, conv
   const { mode } = useContext(GeneralContext);
   const { setActiveConversation } = useContext(MessageContext);
 
-  const navigate = useNavigate;
+  const navigate = useNavigate();
+
+
   return (
-    <div className={`w-full h-[72px] bg-transparent flex pl-4 space-x-4 ${active ? `bg-dark-highlight border-r-2 border-twitter-blue` : 'bg-black'}`} onClick={() => setActiveConversation(conversation)}>
+    <div className={`w-full h-[72px] bg-transparent flex pl-4 space-x-4 hover:${mode.highlight} ${active ? `${mode.highlight} border-r-2 border-${mode.color}` : ''}`} onClick={() => setActiveConversation(conversation)}>
       <figure className='w-10 h-10 mt-auto mb-auto cursor-pointer'>
-        <img src={mostRecentMessage.sender.pfp} alt='user pfp' className='w-full h-full rounded-full object-fill' onClick={() => {navigate(`/user/${mostRecentMessage.user.username}`)}}/>
+        <img src={conversation.partners[0].pfp} alt='user pfp' className='w-full h-full rounded-full object-fill' onClick={() => { navigate(`/user/${conversation.partners[0].username}`)}}/>
       </figure>
       <aside>
-        <div className='flex text-base mt-3'>
-            <span className='font-bold flex items-center'>{mostRecentMessage.sender.profilename} {mostRecentMessage.sender.profilename && <MdVerified className='ml-0.5 text-twitter-blue'/>}</span>
-            <span className={`text-gray-600 ml-1`}>@{mostRecentMessage.sender.username}</span>
-            <span className={`text-gray-600 ml-1`}>~ {mostRecentMessage.timestamp}</span>
+        <div className='flex  items-center text-base mt-3 w-full'>
+            <span className='font-bold max-w-[200px] truncate'>{conversation.partners[0].profilename}</span>
+            {conversation.partners[0].verified && <MdVerified className='ml-0.5 text-twitter-blue'/>}
+            <span className={`text-gray-600 ml-1`}>@{conversation.partners[0].username}</span>
+            <span className={`text-gray-600 ml-1`}>~ { conversation.messages.length > 0 ? formatDate(conversation.messages[conversation.messages.length - 1]): ''}</span>
         </div>
-        <div className='flex items-center text-md'>
-            { ( mostRecentMessage.sender.username !== user.username &&  !mostRecentMessage.seen ) ? 
-            <i className='relative'>
+        <div className='flex items-center text-sm'>
+            { ( conversation.messages.length > 0 && conversation.messages[conversation.messages.length - 1].sender.username !== user.username && conversation.unseen > 0   ) ? 
+            <i className='relative mr-1.5'>
               <FaCircle className='text-twitter-blue mr-1'/> 
-              <span className='absolute top-0 left-0 pr-1 h-full w-full flex justify-center items-center text-xs font-bold'>{unreadMessages}</span>
+              <span className='absolute top-0 left-0 pr-1 h-full w-full flex justify-center items-center text-xs font-bold'>{conversation.unseen}</span>
             </i>
             : undefined}
-            <p>{mostRecentMessage.content}</p>
+            <span className='max-w-[300px] max-h-[100px] truncate flex items-center'>
+              { conversation.messages.length > 0 && conversation.messages[conversation.messages.length -1].sender.username === user.username  &&
+              <PiArrowElbowDownRightLight className={`${mode.text} 'text-md mr-2.5`}/>}
+              {conversation.messages.length > 0 ? conversation.messages[conversation.messages.length -1 ].content : ' '}
+              </span>
             </div>
       </aside>
     </div>

@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Icon imports
 import { IoSettingsOutline } from "react-icons/io5";
@@ -25,62 +26,12 @@ const Inbox = () => {
   const [newModal, setNewModal] = useState(false);
   const [shrink, setShrink] = useState(false);
 
-  const { activeConversation } = useContext(MessageContext);
-  const { user } = useContext(AuthContext);
+  const { activeConversation, conversations } = useContext(MessageContext);
   const { mode } = useContext(GeneralContext);
 
-  const CONVERSATIONS = [{
-    'id' : 1,
-    'messages' : [
-        {
-            'id' : 1,
-            'receiver' : {
-                'verified' : true,
-                'username' : user.username,
-                'profilename' : user.profilename,
-                'pfp' : user.pfp
-            },
-            'content' : 'Just a little test',
-            'timestamp' : null,
-            'seen' : false,
-            'sender' : {
-                'verfied' : true,
-                'username' : 'testman',
-                'profilename' : 'testman',
-                'pfp' : 'https://mf.b37mrtl.ru/rbthmedia/images/2023.09/original/64f9e2f36008eb63f72ee054.jpg'
-            }
-        }
-        ]
-  },
-  {
-    'id' : 2,
-    'messages' : [
-        {
-            'id' : 1,
-            'receiver' : {
-                'verified' : true,
-                'username' : user.username,
-                'profilename' : user.profilename,
-                'pfp' : user.pfp
-            },
-            'content' : 'Just a little test',
-            'timestamp' : null,
-            'seen' : false,
-            'sender' : {
-                'verfied' : true,
-                'username' : 'testman',
-                'profilename' : 'testman',
-                'pfp' : 'https://mf.b37mrtl.ru/rbthmedia/images/2023.09/original/64f9e2f36008eb63f72ee054.jpg'
-            }
-        }
-        ]
-  }
-]
-
-  const [ conversations, setConversations] = useState(CONVERSATIONS);
   const navigate = useNavigate();
-
-  const { values, handleChange, resetForm, touched } = useFormik(
+ 
+  const { values, handleChange, resetForm } = useFormik(
     {
         initialValues : {
             'search' : ''
@@ -91,8 +42,7 @@ const Inbox = () => {
   const handleFocus = () => {
     setIsFocused(!isFocused);
   }
-
-  
+ 
   const handleResetSearch = () => {
       resetForm({
           initialValues : {
@@ -128,10 +78,10 @@ const Inbox = () => {
         <header className='w-full h-[53px] pl-3.5 pr-2 py-2.5 font-bold flex justify-between items-center'>
             <h3 className='h-full'>Messages</h3>
             <div className='h-full flex items-center text-[19px]'>
-                <i className='cursor-pointer rounded-full hover:bg-gray-900 p-2 transition-colors'>
+                <i className={`cursor-pointer rounded-full hover:${mode.highlight} p-2 transition-colors`}>
                     <IoSettingsOutline/>
                 </i>
-                <i className='cursor-pointer rounded-full hover:bg-gray-900 p-2 transition-colors'>
+                <i className={`cursor-pointer rounded-full hover:${mode.highlight} p-2 transition-colors`}>
                      <LuMailPlus onClick={() => setNewModal(!newModal)}/>
                 </i>
             </div>
@@ -148,7 +98,7 @@ const Inbox = () => {
             </div>
             <div className='mt-3'>
                 { isFocused && values.search.length === 0 && <p className='text-gray-600'>Try searching for people, groups, or messages.</p>}
-                { !isFocused && conversations.map(conversation => <ConversationMiniature mostRecentMessage={conversation.messages[conversation.messages.length -1 ]} 
+                { !isFocused && conversations && conversations.map((conversation, index) => <ConversationMiniature key={index} mostRecentMessage={conversation.messages[conversation.messages.length -1 ]} 
                     active={conversation === activeConversation}
                     unreadMessages={20}
                     conversation={conversation}

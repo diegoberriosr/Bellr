@@ -18,7 +18,7 @@ const DropdownMenu = ({ author_id, followed, post }) => {
   const [shrink, setShrink] = useState(false);
 
   const { user, authTokens } = useContext(AuthContext);
-  const { darkMode, setEditedPost, setIsEditing, handleModal, handleFollow, handleDelete} = useContext(GeneralContext);
+  const { mode, setEditedPost, setIsEditing, handleModal, handleFollow, handleDelete} = useContext(GeneralContext);
 
   const handleClose = () => {
       if (isOpen) {
@@ -47,7 +47,7 @@ const DropdownMenu = ({ author_id, followed, post }) => {
   
   return (
     <div className='relative ml-auto mr-2.5 animate-grow' onMouseLeave={() => setShrink(true)}>
-        {isOpen ? <ul  tabIndex='0' className={`relative absolute top-7 -right-1 w-28 h-20 flex flex-col border shadow-custom pl-1 pr-1 ${ darkMode ? 'bg-black text-white' : 'bg-white text-black'} rounded-lg shadow-gray-800 border border-dark-twitter-gray ${ shrink ? 'animate-shrink' : 'animate-grow'}`} onKeyDown={() => setShrink(true)}>
+        {isOpen ? <ul  tabIndex='0' className={`relative absolute top-7 -right-1 w-28 h-20 flex flex-col border shadow-custom pl-1 pr-1 ${mode.background} ${mode.text} rounded-lg shadow-gray-800 border border-dark-twitter-gray ${ shrink ? 'animate-shrink' : 'animate-grow'}`} onKeyDown={() => setShrink(true)}>
           { user.username !== post.user.username && 
             <li className='hover:bg-opacity-50 cursor-pointer inline-flex items-center' onClick={() => {handleFollow(post.user.user_id)}}> 
               {followed ? <RiUserUnfollowLine/> : <SlUserFollow/>}

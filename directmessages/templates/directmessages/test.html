@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>XD</title>
+    </head>
+    <body>
+        <h1>Let's chat!</h1>
+        <form id="form">
+            <input type="text" name="message"/>
+            <input type="submit"/>
+        </form>
+        <script type="text/javascript">
+            let url = `ws://${window.location.host}/ws/1/`
+            const chatSocket = new WebSocket(url);
+
+            chatSocket.onmessage = function(e) {
+                let data = JSON.parse(e.data)
+                console.log('DATA: ', data)
+            }
+
+            chatSocket.onopen = (e) => {
+                console.log('Onopen - open connection')
+            }
+
+            let form = document.getElementById('form')
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let message = e.target.message.value;
+                chatSocket.send(JSON.stringify({
+                    'type' : 'new_message',
+                    'message' : message
+                }))
+
+            })
+       </script>
+    </body>
+</html>

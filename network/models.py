@@ -53,6 +53,7 @@ class User(AbstractUser):
     
     def pserialize(self):
         return {
+        'verified' : self.verified,
         'user_id' : self.id,
         'username' : self.username,
         'profilename' : self.profilename,

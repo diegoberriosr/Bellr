@@ -22,7 +22,7 @@ const Profile = () => {
 
   const { username } = useParams();
   const { user } = useContext(AuthContext);
-  const { posts, account, error, loading, darkMode, mode, hasMore, page, setPage, setAccount} = useContext(GeneralContext);
+  const { posts, account, error, loading, mode, hasMore, page, setPage, setAccount} = useContext(GeneralContext);
   const [ blocked, setBlocked] = useState(false);
 
   const navigate = useNavigate();
@@ -52,8 +52,8 @@ const Profile = () => {
         {error && <EmptyProfileHeader username={username} message={error === 404 ? 'This account does not exist' : "You're blocked"}  submessage={error===404 ?'Try searching for another' : `You cant follow or see @${username}'s posts.`} />}
         { account && 
         <>
-          <div className={`absolute flex items-center space-x-7 text-2xl border ${ darkMode ? 'border-gray-600 bg-black' : 'border-gray-300 bg-white'} border-l-0 border-b-0 border-t-0 backdrop-blur-sm sticky top-0 z-20`}>
-            <BsArrowLeftShort className='ml-3.5 text-3xl opacity-100 hover:bg-gray-900 hover:rounded-full' onClick={() => { navigate(-1) }} />
+          <div className={`absolute flex items-center space-x-7 text-2xl border ${mode.text} ${mode.background} ${mode.separator} border-l-0 border-b-0 border-t-0 backdrop-blur bg-opacity-30 sticky top-0 z-20`}>
+            <BsArrowLeftShort className={`ml-3.5 text-3xl opacity-100 hover:${mode.highlight} hover:rounded-full`} onClick={() => { navigate(-1) }} />
             <div className='mb-1'>
                 <p className='flex items-center'>
                     <span className='font-bold'>{account.username}</span>
@@ -67,6 +67,7 @@ const Profile = () => {
          if(post.length - 1 === index) return <NewPost ref={lastPostRef} key={index} post={post}/>;
          return <NewPost key={index} post={post}/>;
         })}
+        { posts && posts.length === 0  && <ErrorMessage text={`Nothing to show here`} subtext={`When @${account.username} posts something, it'll show here.`}/>}
         {loading && <div className='w-full mt-[10%] flex items-center justify-center'>
           <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
        </div>}

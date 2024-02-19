@@ -55,8 +55,9 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
         values.content = "";
         setIsFocused(true);
     }
+    console.log('COLOR', mode.color);
 
-    return <header className={`relative flex flex-col w-full p-2 border border-separator-gray ${borderStyle} pt-1 pr-2.5 pb-2.5 transition-all`}>
+    return <header className={`relative flex flex-col w-full p-2 border ${mode.separator} ${borderStyle} pt-1 pr-2.5 pb-2.5 transition-all`}>
         { (values.image ) && 
               ( isAttatchingImage ? 
                 <span className='absolute top-0 right-4 cursor-pointer text-red-900 flex items-center text-sm' onClick={() => { setIsAttatchingImage(!isAttatchingImage); values.image = null}}>
@@ -81,18 +82,18 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
                 <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${mode.text} w-full` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} onFocus={handleFocus} onChange={handleChange} />
                 }
                 { !isFocused && 
-                    <button disabled={true} className={`opacity-50 ml-auto rounded-full ${mode.color} text-white p-5 h-5 text-md flex items-center`}>{message}</button>
+                    <button disabled={true} className={`opacity-50 ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-md flex items-center`}>{message}</button>
                 }
             </div>
             </div>
         {isFocused && 
         <footer className='px-2.5 pb-2.5 flex justify-between items-center'>
-            <ul className='ml-14 w-3/12 flex items-center justify-between text-twitter-blue text-lg'>
+            <ul className={`ml-14 w-3/12 flex items-center justify-between text-lg text-${mode.color}`}>
                 <li>
                     <CiImageOn className='cursor-pointer' onClick={() => setIsAttatchingImage(!isAttatchingImage)}/>
                 </li>
                 <li>
-                    <HiOutlineGif className='cursor-pointer'onClick={handleImageModal}/>
+                    <HiOutlineGif className='cursor-pointer' onClick={handleImageModal}/>
                 </li>
                 <li>
                     <BsEmojiSmile className='cursor-pointer' />
@@ -119,7 +120,7 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
                         <span className='absolute top-1 left-2.5 text-red-900 text-xs'>0</span>  
                     }
                 </div>
-                <button onClick={handleNewPost} className={`ml-auto rounded-full ${mode.color} text-white p-5 h-5 text-md flex items-center`}>{isAttatchingImage ? 'Continue' : 'Post'}</button>
+                <button onClick={handleNewPost} className={`ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-md flex items-center`}>{isAttatchingImage ? 'Continue' : 'Post'}</button>
             </div>
         </footer>
         }

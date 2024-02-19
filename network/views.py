@@ -27,6 +27,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         # Add custom claims
+        token['user_id'] = user.pk
         token['username'] = user.username
         token['pfp'] = user.pfp if user.pfp else 'https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
         token['profilename'] = user.profilename
@@ -38,18 +39,8 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-def index(request):
-    return render(request, "network/index.html")
-
-
-@api_view(['GET'])
-def test(request):
-    return Response('This is a test')
-
-
 def login_view(request):
-    if request.method == "POST":
-
+  
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
@@ -60,11 +51,7 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse(""))
         else:
-            return render(request, "network/login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
-        return render(request, "network/login.html")
+            return Http404('Invalid credentials')
 
 
 def logout_view(request):
@@ -530,7 +517,7 @@ def get_replies(request, username):
     return JsonResponse(
         { 
             'hasMore' : hasMore,
-            'post' : [reply.serialize() for reply in paginated_replies]
+            'post' : [reply.serialize(request.user) for reply in paginated_replies]
         }, safe=False)
 
 
@@ -554,7 +541,7 @@ def get_transmissions(request, username):
 
     return JsonResponse({ 
         'hasMore' : hasMore,
-        'posts' : [transmission.serialize() for transmission in paginated_transmissions]
+        'posts' : [transmission.serialize(request.user) for transmission in paginated_transmissions]
     }, safe=False)
 
 

@@ -1,6 +1,6 @@
 import { useContext, memo, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
+import formatDate from '../../utils';
 
 // Icon imports
 import { MdVerified } from "react-icons/md";
@@ -23,30 +23,29 @@ import GeneralContext from '../../context/GeneralContext';
 
 const Post = forwardRef(({ post, setPosts }, ref) => {
 
-    const { darkMode, setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit, openInteractionsModal, mode } = useContext(GeneralContext);
+    const { setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit, openInteractionsModal, mode } = useContext(GeneralContext);
 
     const navigate = useNavigate();
 
-    const formatDate = () => {
-
-        const difference = moment().utc().diff(post.timestamp, 'days'); // Check the time distance between current time and the post's timestamp
-
-        if (difference < 7) { // Output result in 'X time ago') if difference is less than 7 days
-            return moment.utc(post.timestamp).fromNow();
-        }
-
-        return moment.utc(post.timestamp).format('YYYY-MM-DD'); // Otherwise output in standard calendar format
-    }
-
-    // Mention's functionality
+    // Mention functionality
     const regex = /@[a-zA-Z0-9_]+/; // Search for a mention inside a post
     const parsedContent = post.content.split(' ').map(word => regex.test(word) ? <span key={word} className='text-twitter-blue hover:underline cursor-pointer' onClick={() => { navigate(`/user/${word.slice(1)}`) }}>{word}</span> : word); // Parse it's content
     const contentWithSpaces = parsedContent.reduce((prev, curr, i) => { // Transform it into an HTML element
         return [...prev, curr, ' '];
     }, []);
+    
 
-  
-    return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator}  w-full cursor-pointer transition-colors duration-500 animate-grow`}>
+    // Added for solving a non-changing background color bug when the post is hovered 
+    const hoverColors = {
+        'bg-light-highlight': 'hover:bg-light-highlight',
+        'bg-dim-post-highlight' : 'hover:bg-dim-post-highlight',
+        'bg-dark-highlight' : 'hover:bg-dark-highlight'
+    }
+    
+    const hoverClass = hoverColors[mode.highlight];
+    //------------------------------------------------------------------------------------
+
+    return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 animate-grow`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter.username} reposted</span>
@@ -75,13 +74,13 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                     {post.user.verified && <MdVerified className='text-twitter-blue ml-0.5' />}
                     <p className='text-post-gray ml-1.5'>@{post.user.username}</p>
                     <p className='text-post-gray ml-1'>·</p>
-                    <p className='text-post-gray ml-1'>{formatDate()}</p>
+                    <p className='text-post-gray ml-1'>{formatDate(post)}</p>
                     <DropDownMenu followed={post.followed} author_id={post.user.user_id} post={post} setPosts={setPosts} />
                 </div>
                 <p className='w-full mt-[3px] overflow-hidden pr-5 whitespace-normal'>
                     {contentWithSpaces}
                 </p>
-                {post.image && <figure className={`mt-2 w-[98%] h-6/12 overflow-hidden border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} rounded-xl`}>
+                {post.image && <figure className={`mt-2 w-[98%] h-6/12 overflow-hidden border border-${mode.separator} rounded-xl`}>
                         <img src={post.image} alt='post pic' className='w-full h-full object-cover' onClick={() => {setPfpBig(post.image); handleImageModal() }}/>
                     </figure>}
                 <footer className='w-full'>

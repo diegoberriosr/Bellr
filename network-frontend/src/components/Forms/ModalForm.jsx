@@ -20,7 +20,7 @@ import AuthContext from '../../context/AuthContext';
 
 const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) => {
 
-    const { darkMode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
+    const { mode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
     const [ isFocused, setIsFocused ] = useState(isEditing);
     const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
 
@@ -56,9 +56,9 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
         setIsFocused(true);
     }
 
-    return <div className={`relative w-screen sm:w-[600px] h-[277px] ${ darkMode ? 'bg-black' : 'bg-white'} rounded-2xl mt-5 ${ shrink ? 'animate-shrink' : 'animate-grow'}`}>
-        <IoCloseSharp className={`absolute top-4 left-2 text-xl ${ darkMode ? 'text-white' : 'text-dark'} cursor-pointer`} onClick={() => {setShrink(true)}}/>
-        <span className='absolute top-4 right-11 text-twitter-blue font-bold text-sm'>Drafts</span>
+    return <div className={`relative w-screen sm:w-[600px] h-[277px] ${mode.background} rounded-2xl mt-5 ${ shrink ? 'animate-shrink' : 'animate-grow'}`}>
+        <IoCloseSharp className={`absolute top-4 left-2 text-xl ${mode.text} cursor-pointer`} onClick={() => {setShrink(true)}}/>
+        <span className={`absolute top-4 right-11 text-${mode.color} font-bold text-sm`}>Drafts</span>
         <header className={`flex flex-col w-full h-full transition-all`}>
         <div className='absolute left-1 top-[4.5rem] flex w-full items-start'>
             <div className='w-10 h-10 overflow-hidden rounded-full ml-2.5'>
@@ -66,9 +66,9 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
             </div>
             <div className={`w-full pr-2 ${!isFocused ? 'flex items-center' : ''}`}>
                 {isAttatchingImage ?
-                <input value={values.image} name='image' className={`ml-4 bg-transparent w-[94%] ${ darkMode ? 'text-white' : 'text-black'} mb-20 focus:outline-none`} placeholder='Insert your image link here' onChange={handleChange}/>
+                <input value={values.image} name='image' className={`ml-4 bg-transparent w-[94%] ${mode.text} mb-20 focus:outline-none`} placeholder='Insert your image link here' onChange={handleChange}/>
                 :
-                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${ darkMode ? 'text-white' : 'text-black'} w-[90%]` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 h-24 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} defaultValue={placeholder} onFocus={handleFocus} onChange={handleChange}/>
+                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${mode.text} w-[90%]` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 h-24 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} defaultValue={placeholder} onFocus={handleFocus} onChange={handleChange}/>
                 }
                 {values.image ?
                     <>
@@ -76,13 +76,13 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
                          <span className='absolute -bottom-10 right-6 flex items-center text-red-900 font bold cursor-pointer' onClick={() => { setIsAttatchingImage(false); values.image = null}}><LiaEraserSolid className='mr-1 text-lg'/> Delete attatchment</span>
                     </>
                     :
-                    <span className='absolute -bottom-9 left-2 flex items-center text-twitter-blue font-bold'> <TiWorld className='mr-1 text-lg'/> Everyone can reply </span>
+                    <span className={`absolute -bottom-9 left-2 flex items-center text-${mode.color} font-bold`}> <TiWorld className='mr-1 text-lg'/> Everyone can reply </span>
                 
                 }
             </div>
         </div>
-        <footer className={`w-[95%] ml-3 h-auto absolute bottom-3 flex justify-between items-center border ${ darkMode ? 'border-gray-600' : 'border-gray-300'} border-l-0 border-r-0 border-b-0`}>
-            <ul className='w-3/12 flex items-center justify-between text-twitter-blue text-lg mt-1.5'>
+        <footer className={`w-[95%] ml-3 h-auto absolute bottom-3 flex justify-between items-center border ${ mode.separator} border-l-0 border-r-0 border-b-0`}>
+            <ul className={`w-3/12 flex items-center justify-between text-twitter-blue text-lg mt-1.5 text-${mode.color}`}>
                 <li>
                     <CiImageOn className='cursor-pointer' onClick={() => {setIsAttatchingImage(!isAttatchingImage)}}/>
                 </li>
@@ -114,7 +114,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
                         <span className='absolute top-1 left-2.5 text-red-900 text-xs'>0</span>  
                     }
                 </div>
-                <button onClick={handleNewPost} disabled={(!isFocused || values.content.length === 0 )} className={`${ !isFocused || values.content.length === 0 ? 'opacity-50' : ''} ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center`}>{ isAttatchingImage ? 'Continue' : message}</button>
+                <button onClick={handleNewPost} disabled={(!isFocused || values.content.length === 0 )} className={`${ !isFocused || values.content.length === 0 ? 'opacity-50' : ''} ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center bg-${mode.color}`}>{ isAttatchingImage ? 'Continue' : message}</button>
             </li>
         </footer>
     </header>
