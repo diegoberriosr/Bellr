@@ -429,8 +429,12 @@ def get_user(request):
 
     # Get an user provided a string.
     s = request.GET.get('s', '')
-    print(s)
-    users = User.objects.filter(username__icontains=s)
+    
+    if s == '':
+        raise Http404('Search query cannot be empty/blank.')
+
+    # Search user by username or profilename
+    users = User.objects.filter(username__icontains=s) | User.objects.filter(profilename__icontains=s)
 
     return JsonResponse([user.serialize(request.user) for user in users.all()], safe=False)
 

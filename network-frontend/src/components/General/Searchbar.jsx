@@ -1,6 +1,6 @@
 import { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 // Icon imports
 import { IoIosSearch } from "react-icons/io";
 import { MdVerified } from 'react-icons/md';
@@ -10,7 +10,7 @@ import GeneralContext from '../../context/GeneralContext';
 const Searchbar = () => {
   
   const [ isSearching, setIsSearching ] = useState(false);
-  const [ matches, setMatches] = useState([]);
+  const [ matches, setMatches] = useState([]); // TODO : <---- FIX
 
   const { mode } = useContext(GeneralContext);
   const text = useRef();
@@ -19,16 +19,18 @@ const Searchbar = () => {
   const handleOnChange = (event) => {
     if (event.target.value !== '')
     {
-        fetch(`http://127.0.0.1:8000/users/${event.target.value}`, {
-            'method' : 'GET',
-            'headers' : {
-                'Content-Type' : 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {setMatches(data)})
+      axios({
+        url : `http://127.0.0.1:8000/search`,
+        method : 'GET',
+        params : { s : event.target.value}
+      })
+      .then ( res => {
+        setMatches(res.data)
+        return;
+      })
     }
-    setMatches([]);
+    setMatches([])
+ 
   }
 
   return (
@@ -38,7 +40,7 @@ const Searchbar = () => {
             <input ref={text} className='ml-4 bg-transparent text-sm w-full focus:outline-none' placeholder='Search' onFocus={() => { setIsSearching(true) }} onBlur={() => {setIsSearching(false)}} onChange={handleOnChange}/>
         </div>
         {isSearching && <div className={`absolute top-10 max-h-72 overflow-y-auto flex flex-col w-full shadow-custom shadow-gray-800 rounded-xl ${mode.background}`}>
-            { matches.length > 0 ? matches.map(user => <div key={user.user_id} className='w-full flex items-center cursor-pointer hover:bg-gray-800 p-3 rounded-xl' onMouseDown={() => {
+            { matches.length > 0 ? matches.map(user => <div key={user.user_id} className={`w-full flex items-center cursor-pointer hover:${mode.highlight} p-3 rounded-xl`} onMouseDown={() => {
                navigate(`/user/${user.username}`)}}>
                 <div classNam='w-10 h-10 overflow-hidden rounded-full overflow-hidden'>
                   <img src={user.pfp} alt='user profile pic' className='w-10 h-10 object-cover rounded-full'/>
