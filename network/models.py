@@ -8,6 +8,7 @@ def get_expiration_date():
     return timezone.now() + timedelta(minutes=10)
 
 class User(AbstractUser):
+
     profilename = models.CharField(max_length=50)
     pfp = models.TextField(default='https://as1.ftcdn.net/v2/jpg/05/16/27/58/1000_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg') # Default is an anonymous user pic.
     backgroundpic = models.TextField(default='https://t3.ftcdn.net/jpg/01/34/31/72/360_F_134317274_PTXPn7EjliaYrJrZmfs0x5jFv8dmXsYn.jpg') # Default is a light blue background.
@@ -17,8 +18,10 @@ class User(AbstractUser):
     date_joined = models.DateField(default=timezone.now)
     blocklist = models.ManyToManyField('self', blank=True, related_name='blocked', symmetrical=False)
 
+
     def __str__(self):
         return f'{self.id}. {self.username} ({self.email})'
+
 
     def serialize(self, user):
 
@@ -50,7 +53,8 @@ class User(AbstractUser):
             'verified' : self.verified,
             'followed' : user in self.followers.all()
         }
-    
+
+
     def pserialize(self):
         return {
         'verified' : self.verified,
@@ -76,7 +80,8 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.content} \n \tBy {self.user.username} on {self.timestamp}'
-    
+
+
     def serialize(self, user):
         return {
             'id' : self.id,
@@ -94,7 +99,8 @@ class Post(models.Model):
             'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all(),
             'replies' : len(self.replies.all())
         }
-    
+
+
     def fserialize(self, user):
           return {
             'id' : self.id,
@@ -112,10 +118,13 @@ class Post(models.Model):
             'replies' : len(self.replies.all())     
         }
 
+
 class Transmission(models.Model):
+
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='transmissions', default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transmitted')
     timestamp = models.DateTimeField(default=timezone.now)
+
 
     def serialize(self, user):
         return {
@@ -132,7 +141,8 @@ class Transmission(models.Model):
             'transmitted' : user == self.user,
             'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all()
         }
-    
+
+
     def fserialize(self, user):
         return {
             'transmission' : True,
@@ -148,8 +158,10 @@ class Transmission(models.Model):
             'transmitted' : user == self.user,
             'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all(),
         }
-    
+
+
 class Notification(models.Model):
+
     type = models.CharField(max_length=12, default='mention')
     origin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions', default=None)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='interactions', default=None)
@@ -180,12 +192,19 @@ class Notification(models.Model):
             'timestamp' : self.timestamp,
             'message' : self.get_message()
         }
-    
-class Code (models.Model):
+
+
+class Image (models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+
+
+# A table used for generating codes for resetting an user's password.
+class Code (models.Model): 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='code')
     code = models.IntegerField(default=-1)
     expiration_date = models.DateTimeField(default=get_expiration_date) 
 
     def validate(self):
         return timezone.now() < self.expiration_date
+
 
