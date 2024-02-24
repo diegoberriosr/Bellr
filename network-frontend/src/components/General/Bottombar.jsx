@@ -81,18 +81,18 @@ const ICONS = [
 const Bottombar = () => {
 
   const [active, setActive] = useState(0);
-  const { darkMode } = useContext(GeneralContext);
+  const { mode } = useContext(GeneralContext);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (
-    <div className={`block mobile:hidden fixed bottom-0 w-full h-20  ${darkMode ? 'text-white bg-black' : 'text-black bg-white'} border border-gray-600 border-b-0 border-l-0 border-r-0`}>
+    <div className={`block mobile:hidden fixed bottom-0 w-full h-20 bg-${mode.background} ${mode.text} border border-${mode.separator} border-b-0 border-l-0 border-r-0`}>
       <ul className='flex items-center justify-center items-center  h-full w-full text-4xl'>
       {ICONS.map((icon, index) => {
                 if (icon.loginRequired && user===null ){
                     return undefined;
                 }
-                return <li key={index} className={`inline-flex items-center px-3.5 p-2.5 ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-light-gray-hover'} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
+                return <li key={index} className={`inline-flex items-center px-3.5 p-2.5 hover:${mode.sidebarHighlight} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
                         {index === active ? <icon.image.selected /> : <icon.image.nonselected/>}
                     </li>
             })}

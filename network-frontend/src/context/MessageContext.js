@@ -12,7 +12,7 @@ export const MessageProvider = ({children}) => {
     const [activeConversation, setActiveConversation] = useState(null);
     const [chatSocket, setChatSocket] = useState(null);
     const { authTokens, user } = useContext(AuthContext);
-    console.log(conversations);
+  
     // Load conversations for the first time
     useEffect( () => {
 

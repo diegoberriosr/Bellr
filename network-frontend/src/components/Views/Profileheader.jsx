@@ -47,19 +47,20 @@ const ProfileHeader = ({ account }) => {
     }
 
 
+
     return (
         <header className={`border ${mode.separator} border-l-0 w-full`}>
         <figure className='relative h-44 w-full '>
             <div className='absolute h-full w-full z-10'>
                 <img src={account.background} alt="user's background pic" className='absolute top-0 w-full h-full object-cover' />
             </div>
-            <div className={`absolute left-3 -bottom-16 w-[130px] h-[130px] rounded-full border ${mode.background} border-[3.5px] z-10`}>
+            <div className={`absolute left-3 -bottom-16 w-[130px] h-[130px] rounded-full border ${mode.background} border-${mode.background} border-[3.5px] z-10`}>
                 <img src={account.pfp} alt="user's profile pic" width='130' className='object-cover w-full h-full rounded-full cursor-pointer' onClick={() => {setPfpBig(account.pfp) ; handleImageModal()}} />
             </div>
             <div className='absolute -bottom-10 right-3 flex items-center space-x-2'>
                     {
                         user && user.username === account.username ? 
-                        <button className={` w-[100px] h-8 flex items-center justify-center ${mode.text} opacity-90 hover:opacity-100 rounded-full font-bold`}
+                        <button className={` w-[100px] h-8 flex items-center justify-center text-${mode.background} bg-${mode.subColor} opacity-90 hover:opacity-100 rounded-full font-bold`}
                         onClick={() => { handleProfileModal() }}>Edit</button>
                         :
                         <button className={`border ${ account.isBlocked ? 'bg-red-900 border-red-900 bg-opacity-30 text-red-900 hover:bg-transparent hover:border-twitter-blue hover:text-twitter-blue' : `${mode.separator}  ${mode.text} hover:border-red-900 hover:bg-red-900 hover:bg-opacity-30 hover:text-red-900`} w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold transition-colors `} onClick={() => {handleBlock(account.username)}}>
@@ -67,9 +68,9 @@ const ProfileHeader = ({ account }) => {
                     </button>
                     }
                     { (user && user.username !== account.username && !account.isBlocked) &&
-                    <button className={`w-[100px] h-8 flex items-center justify-center text-black rounded-full p-2.5 font-bold 
+                    <button className={`w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold 
                     ${account.followed ? `bg-transparent border ${mode.text} ${mode.separator} hover:border-red-900 hover:text-red-900` 
-                    : `${mode.background} ${mode.text}`} transition-colors`}
+                    : `border border-${mode.subcolor} ${mode.text}`} transition-colors`}
                     onClick={() => { handleFollow(account.user_id)}}>{account.followed ? 'Unfollow' : 'Follow' }</button>
                     }
                 </div>
@@ -83,8 +84,8 @@ const ProfileHeader = ({ account }) => {
                 <span className='ml-1'>Joined on {moment(account.date_joined).format('MMM DD YYYY')}</span>
             </p>
             <div className='flex text-sm space-x-5 mt-1.5'>
-                <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/following/${account.username}/`)}}><span className='text-white font-bold'>{account.following}</span> Following</p>
-                <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/followers/${account.username}/`)}}><span className='text-white font-bold'>{account.followers}</span> Followers</p>
+                <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/following/${account.username}/`)}}><span className='font-bold'>{account.following}</span> Following</p>
+                <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/followers/${account.username}/`)}}><span className='font-bold'>{account.followers}</span> Followers</p>
             </div>
         </div>
         <ul className='w-full h-12 flex mt-2.5'>

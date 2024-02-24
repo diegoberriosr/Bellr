@@ -21,7 +21,7 @@ const PostInteractions = ({ shrink, setShrink}) => {
   const [loading, setLoading] = useState(false);
 
   const { user, authTokens } = useContext(AuthContext);
-  const { editedPost, filter } = useContext(GeneralContext);
+  const { editedPost, filter, mode} = useContext(GeneralContext);
   const navigate = useNavigate();
 
   const observer = useRef();
@@ -81,10 +81,10 @@ const PostInteractions = ({ shrink, setShrink}) => {
   console.log(users);
 
   return (
-    <div className={`w-screen h-screen sm:w-[500px] sm:h-[500px] ${shrink ? 'animate-shrink' : 'animate-grow'} bg-black rounded-xl`}>
+    <div className={`w-screen h-screen sm:w-[500px] sm:h-[500px] ${shrink ? 'animate-shrink' : 'animate-grow'} bg-${mode.background} ${mode.text} rounded-xl`}>
         <header className='sticky top-0 h-12 p-5 z-10 transform'>
                     <MdClose className='text-2xl text-white mt-1 cursor-pointer' onClick={() => {setShrink(true)}}/>
-                    <h3 className='absolute top-4 ml-[40%] text-2xl text-white font-bold'>{filter}</h3>
+                    <h3 className='absolute top-4 ml-[40%] text-2xl font-bold'>{filter}</h3>
         </header>
         { users && users.length > 0 && 
             users.map((profile, index) =>

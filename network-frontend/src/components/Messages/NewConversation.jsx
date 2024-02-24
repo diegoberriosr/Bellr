@@ -55,7 +55,7 @@ const NewConversation = ({ shrink, setShrink }) => {
   console.log(loading, search, search.length);
 
   return (
-    <div className={`w-[500px] h-[500px] flex flex-col ${mode.background} ${mode.text} ${ shrink ? 'animate-shrink' : 'animate-grow'} rounded-xl`} >
+    <div className={`w-[500px] h-[500px] flex flex-col bg-${mode.background} ${mode.text} ${ shrink ? 'animate-shrink' : 'animate-grow'} rounded-xl`} >
       <header className='w-full flex items-center justify-between p-2.5'>
         <div className='flex items-center space-x-10'>
           <MdClose className='text-2xl' onClick={handleClose}/>

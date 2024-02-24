@@ -20,10 +20,10 @@ import GeneralContext from '../../context/GeneralContext.js';
 
 const EditProfile = ({ profile, shrink, setShrink }) => {
 
-    const { darkMode, authTokens } = useContext(AuthContext); 
+    const { authTokens } = useContext(AuthContext); 
     const [loading, setLoading] = useState(false);
     const [deleting, setDeleting] = useState(false);
-    const { setPfpBig, account, setAccount} = useContext(GeneralContext);
+    const { mode,  account, setAccount} = useContext(GeneralContext);
 
     const pfpData = new FormData();
     const backgroundData = new FormData();
@@ -115,7 +115,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
     }
 
     return (
-        <div className={`w-screen h-screen sm:w-[600px] sm:h-[600px] bg-black
+        <div className={`w-screen h-screen sm:w-[600px] sm:h-[600px] bg-${mode.background} ${mode.text}
          ${ shrink ? 'animate-shrink' : 'animate-grow'} rounded-xl ${loading ? 'brightness-50' : ''}`}>
             <header className='sticky top-0 h-12 p-5 flex justify-between items-center z-11 transform'>
                 <div className='flex items-center'>
@@ -135,7 +135,6 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                 </div>
                 }
             </header>
-            {}
             <main className='h-[552px] overflow-y-auto'>
                 { deleting ?
                 <div className='w-full h-6/12 flex flex-col items-center justify-center'>
@@ -163,7 +162,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                     </div>
                     <label className='absolute -bottom-[65px] left-5 w-[130px] h-[130px] rounded-full border border-black border-4'>
                         <img src={values.pfp} alt='user pfp' className='w-full h-full object-fill rounded-full'/>
-                        <div htmlFor='pfp-input' className='absolute top-0 w-full h-full rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors hover:bg-opacity-70 '>
+                        <div htmlFor='background-input' className='absolute top-0 w-full h-full rounded-full bg-black bg-opacity-50 flex items-center justify-center hover:bg-gray-700 transition-colors hover:bg-opacity-70 '>
                                 <CiCamera className='text-2xl cursor-pointer'/>
                                 <input type='file' id='background-input' name='background' accept='images/*' className='hidden' onChange={handleChangePfp}/>
                         </div>

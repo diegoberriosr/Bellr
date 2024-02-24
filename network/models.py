@@ -88,9 +88,10 @@ class Post(models.Model):
             'pinned' : self.pinned,
             'reply' : self.reply,
             'origin' : {'username' :self.origin.user.username, 'id' : self.origin.id} if self.origin else None,
-            'user' : self.user.serialize(),
+            'user' : self.user.serialize(user),
             'followed' : False if user.is_anonymous else user in self.user.followers.all(),
             'content' : self.content,
+            'images' : [image.serialize() for image in self.images.all()],
             'timestamp' : self.timestamp,
             'likes' : len(self.likes.all()),
             'liked' : False if user.is_anonymous else user in self.likes.all(),
@@ -109,6 +110,7 @@ class Post(models.Model):
             'user' : self.user.serialize(user),
             'followed' : user in self.user.followers.all(),
             'content' : self.content,
+            'images' : [image.serialize() for image in self.images.all()],
             'timestamp' : self.timestamp,
             'likes' : len(self.likes.all()),
             'liked' : user in self.likes.all(),
@@ -131,9 +133,10 @@ class Transmission(models.Model):
             'transmission' : True,
             'transmitter' : self.user.serialize(user),
             'id' : self.post.id,
-            'user' : self.post.user.serialize(),
+            'user' : self.post.user.serialize(user),
             'followed' : False if user.is_anonymous else user in self.user.followers.all(),
             'content' : self.post.content,
+            'images' : [image.serialize() for image in self.post.images.all()],
             'timestamp' : self.timestamp,
             'likes' : len(self.post.likes.all()),
             'liked' : False if user.is_anonymous else user in self.post.likes.all(),
@@ -151,6 +154,7 @@ class Transmission(models.Model):
             'user' : self.post.user.serialize(user),
             'followed' : False if user.is_anonymous else user in self.user.followers.all(),
             'content' : self.post.content,
+            'images' : [image.serialize() for image in self.post.images.all()],
             'timestamp' : self.timestamp,
             'likes' : len(self.post.likes.all()),
             'liked' : False if user.is_anonymous else user in self.post.likes.all(),
@@ -158,6 +162,14 @@ class Transmission(models.Model):
             'transmitted' : user == self.user,
             'bookmarked' : False if user.is_anonymous else self in user.bookmarked.all(),
         }
+
+
+class Image(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+    url = models.TextField()
+
+    def serialize(self):
+        return self.url
 
 
 class Notification(models.Model):
@@ -192,11 +204,6 @@ class Notification(models.Model):
             'timestamp' : self.timestamp,
             'message' : self.get_message()
         }
-
-
-class Image (models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
-
 
 # A table used for generating codes for resetting an user's password.
 class Code (models.Model): 

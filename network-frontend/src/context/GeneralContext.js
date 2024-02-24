@@ -9,10 +9,12 @@ export const GeneralProvider = ({ children }) => {
   
     const {posts, setPosts, setPage, account, setAccount, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, 
            handleEdit, handleNew, handleBlock, handleReply} = useSearch();
-    const [ darkMode, setDarkMode ] = useState(true);
+
+
     const [mode, setMode] = useState({
       'color' : 'twitter-blue',
-      'background' : 'bg-white',
+      'subColor' : 'black',
+      'background' : 'white',
       'text' : 'text-black',
       'subBackground' : 'bg-light-gray',
       'highlight' : 'bg-light-highlight',
@@ -27,14 +29,14 @@ export const GeneralProvider = ({ children }) => {
     const [profileModal, setProfileModal] = useState(false);
     const [ interactionsModal, setInteractionsModal] = useState(false);
     const [ filter, setFilter ] = useState(null);
+    const [postImages, setPostImages] = useState(null);
+    const [activeImageIndex, setActiveImageIndex] = useState(null);
+    const [postImageModal, setPostImageModal] = useState(false);
 
     const handleModal = () => {
       setModalOpen(!modalOpen);
     };
     
-    const handleSetDarkMode = () => {
-      setDarkMode(!darkMode);
-    };
 
     const handleImageModal = () => {
         setImageModal(!imageModal); 
@@ -54,6 +56,20 @@ export const GeneralProvider = ({ children }) => {
       setProfileModal(!profileModal);
     }
   
+    const handleImageToggler = (sources, index) => {
+      setPostImageModal(!postImageModal);
+      
+      if (postImageModal) {
+        setActiveImageIndex(undefined);
+        setPostImages(undefined);
+        return;
+      }
+
+      setActiveImageIndex(index);
+      setPostImages(sources)
+    }
+
+
     const contextData = {
       posts:posts,
       setPosts:setPosts,
@@ -72,8 +88,6 @@ export const GeneralProvider = ({ children }) => {
       handleEdit:handleEdit, 
       handleNew:handleNew,
       handleBlock:handleBlock,
-      darkMode:darkMode,
-      handleSetDarkMode:handleSetDarkMode,
       modalOpen:modalOpen,
       handleModal:handleModal,
       isEditing:isEditing,
@@ -93,7 +107,14 @@ export const GeneralProvider = ({ children }) => {
       filter:filter,
       mode:mode,
       setMode:setMode,
-      handleReply:handleReply
+      handleReply:handleReply,
+      postImages:postImages,
+      setPostImages:setPostImages,
+      activeImageIndex:activeImageIndex,
+      setActiveImageIndex:setActiveImageIndex,
+      handleImageToggler:handleImageToggler,
+      postImageModal:postImageModal,
+      setPostImageModal:setPostImageModal
     };
 
     return (

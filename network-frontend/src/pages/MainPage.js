@@ -22,6 +22,7 @@ import ChangeMode from '../components/General/ChangeMode';
 import Inbox from '../components/Messages/Inbox';
 import Conversation from '../components/Messages/Conversation';
 import PostButton from '../components/General/PostButton';
+import ImageToggler from '../components/Posts/ImageToggler';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
@@ -33,7 +34,8 @@ import { MessageProvider } from '../context/MessageContext';
 const MainPage = () => {
 
   const { profileModal, filter, mode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
-          imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, handleProfileModal } = useContext(GeneralContext);
+          imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, 
+          handleProfileModal, postImageModal, setPostImageModal } = useContext(GeneralContext);
   
   const [shrink, setShrink] = useState(false);
   const [modeModal, setModeModal] = useState(false);
@@ -93,12 +95,21 @@ const MainPage = () => {
       return () => clearTimeout(timer)
     }
 
+    else {
+      const timer = setTimeout( () => {
+        setPostImageModal(false);
+        setShrink(false);
+      }, 150)
+
+      return () => clearTimeout(timer)
+    }
+
   } , [shrink])
 
 
   return (
         <MessageProvider>
-        <div className={`relative flex ${currentUrl.pathname === '/messages' ? 'md:pl-20 lg:pl-32' : 'md:px-20 lg:px-32'}   ${mode.background} ${mode.text} duration-300 transition-colors`}>
+        <div className={`relative flex ${currentUrl.pathname === '/messages' ? 'md:pl-20 lg:pl-32' : 'md:px-20 lg:px-32'} bg-${mode.background} ${mode.text} duration-300 transition-colors`}>
               <Sidebar setModeModal={setModeModal}/>
                 <Routes>
                     <Route key='home' element={<Feed form={true} url='posts' /> } path='/home'/>
@@ -136,6 +147,9 @@ const MainPage = () => {
                 </Modal>
                 <Modal isVisible={modeModal} background='bg-login-modal'>
                   <ChangeMode shrink={shrink} setShrink={setShrink}/>
+                </Modal>
+                <Modal isVisible={postImageModal} background='bg-login-modal'>
+                  <ImageToggler shrink={shrink} setShrink={setShrink}/>
                 </Modal>
           </div>
         </MessageProvider>

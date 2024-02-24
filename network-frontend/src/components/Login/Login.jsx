@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 
 // Component imports
 import Input from '../Forms/Input';
-
+import { GoogleLogin } from '@react-oauth/google';
 // Icon imports
 import { PiDogBold } from "react-icons/pi";
 import { IoArrowBack, IoCloseSharp } from "react-icons/io5";
@@ -63,7 +63,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoading
   }, [errorMessage])
 
   return (
-    <div className='relative w-screen h-screen sm:w-full sm:mt-6 bg-black text-white sm:h-[650px] flex flex-col items-center rounded-xl pt-2.5'>
+    <div className='relative w-[600px] h-[650px] bg-black text-white  flex flex-col items-center rounded-xl pt-2.5 mt-auto mb-auto'>
         {step === 0 ? <IoCloseSharp className='absolute top-3.5 left-3 text-xl cursor-pointer' onClick={handleCloseModal}/> : <IoArrowBack className='absolute top-3.5 left-3 text-xl cursor-pointer' onClick={ () => {setStep(step-1)}}/> }
         <PiDogBold className='text-4xl'/>
         <div className='w-9/12 mt-6'>
@@ -71,10 +71,17 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoading
             <form className='flex flex-col items-center jusitify-center w-full mt-9' onSubmit={(e) => {loginUser(e, setErrorMessage)}}>
                 {step === 0 &&
                 <>
-                <button className='w-[300px] h-10 bg-white rounded-full text-black bg-opacity-90 hover:bg-opacity-100 flex items-center justify-center'>
-                    <img src='https://image.similarpng.com/very-thumbnail/2020/06/Logo-google-icon-PNG.png' alt='google logo' width='20' className='mr-1'/>
-                    <span>Log in with Google</span>
-                </button>
+                     <GoogleLogin
+          logo_alignment='center'
+          shape='pill'
+          width='300'
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>
                 <button className='mt-5 w-[300px] h-10 bg-white rounded-full text-black bg-opacity-90 hover:bg-opacity-100 flex items-center justify-center'>
                     <img src='https://e7.pngegg.com/pngimages/255/774/png-clipart-apple-logo-apple-company-leaf.png' alt='apple logo' width='20' className='mr-1'/>
                     <span>Log in with Apple</span>

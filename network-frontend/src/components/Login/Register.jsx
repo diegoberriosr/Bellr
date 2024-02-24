@@ -88,7 +88,7 @@ const Register = ({ handleCloseModal }) => {
   console.log(isDisabled);
 
   return (
-    <div className='relative w-full bg-black text-white mt-8 h-[625px] flex flex-col items-center rounded-2xl'>
+    <div className='relative w-[600px] bg-black text-white mt-8 h-[650px] flex flex-col items-center rounded-2xl'>
       <span className='absolute top-2.5 left-3 cursor-pointer hover:rounded-full p-1 hover:bg-gray-600 duration-300'>
         {step > 0 ? <IoIosArrowRoundBack className='text-2xl' onClick={() => { if(step>0) {setStep(step-1)} }}/> : <IoCloseSharp className='text-2xl' onClick={handleCloseModal}/>}
       </span>

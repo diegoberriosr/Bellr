@@ -128,7 +128,7 @@ const ResetPassword = ({ handleCloseModal }) => {
         }
     }, [alert])
 
-    return <div className='relative w-full h-[650px] bg-black sm:mt-6 flex flex-col items-center text-white pt-2.5 rounded-xl'>
+    return <div className='relative w-[550px] h-[650px] bg-black sm:mt-6 flex flex-col items-center text-white pt-2.5 rounded-xl'>
          <IoCloseSharp className='absolute top-3.5 left-3 text-xl cursor-pointer' onClick={handleCloseModal}/>
          <PiDogBold className='text-4xl'/>
          <div className='w-9/12 mt-6'>

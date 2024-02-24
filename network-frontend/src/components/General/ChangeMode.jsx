@@ -18,9 +18,10 @@ const ChangeMode = ({ shrink, setShrink }) => {
     })
   }
 
-  const updateBackground = (backgroundColor, textColor, subBackgroundColor, highlight, sidebarHighlight, separator) => {
+  const updateBackground = (subColor, backgroundColor, textColor, subBackgroundColor, highlight, sidebarHighlight, separator) => {
     setMode(prevMode => {
         let newMode = {...prevMode};
+        newMode.subColor = subColor;
         newMode.background = backgroundColor;
         newMode.text = textColor;
         newMode.subBackground = subBackgroundColor;
@@ -35,7 +36,7 @@ const ChangeMode = ({ shrink, setShrink }) => {
   console.log(mode)
 
   return (
-    <div className={`w-screen h-screen sm:w-[500px] sm:h-[550px] ${mode.background} ${mode.text} rounded-xl flex flex-col items-center justify-center p-10 ${shrink ? 'animate-shrink' : 'animate-grow'} transition-colors`}>
+    <div className={`w-screen h-screen sm:w-[500px] sm:h-[550px] bg-${mode.background} ${mode.text} rounded-xl flex flex-col items-center justify-center p-10 ${shrink ? 'animate-shrink' : 'animate-grow'} transition-colors`}>
       <h3 className={`text-xl ${mode.text} font-bold`}>Customize your view</h3>
       <p className='mt-2.5 text-post-gray'>These settings affect all the accounts on this browser.</p>
       <div className={`w-[90%] border ${mode.separator} py-1 px-2 flex items-start justify-center rounded-xl space-x-2.5 mt-8`}>
@@ -82,21 +83,21 @@ const ChangeMode = ({ shrink, setShrink }) => {
         <span className='text-post-gray'>Background</span>
         <ul className={`mx-2 p-2 h-20 ${mode.subBackground} flex rounded-xl transition-all`}>
             <li className={`w-4/12 h-full bg-white flex items-center justify-center mx-1 rounded-md ${mode.background ==='bg-white' ? 'border border-2 border-twitter-blue' : ''}`}
-            onClick={() => { updateBackground('bg-white', 'text-black', 'bg-light-gray', 'bg-light-highlight', 'bg-light-sidebar-highlight', 'border-light-separator') }}>
+            onClick={() => { updateBackground('black', 'white', 'text-black', 'bg-light-gray', 'bg-light-highlight', 'bg-light-sidebar-highlight', 'border-light-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-gray-900 font-bold ${mode.background === 'bg-white' ? `border-0 bg-${mode.color} `  : ''} transition-colors duration-500`}>
                         { mode.background === 'bg-white' && <IoMdCheckmark className='text-xs text-white'/>}
                     </div>
                     <span className='ml-1 text-black font-bold'>Default</span>
             </li>
             <li className={`w-4/12 h-full bg-dim flex items-center justify-center mx-1 rounded-md ${mode.background ==='bg-dim' ? 'border border-2 border-twitter-blue' : ''}`}
-            onClick={() => { updateBackground('bg-dim', 'text-white', 'bg-subdim', 'bg-dim-post-highlight', 'bg-dim-sidebar-highlight', 'border-dim-separator') }}>
+            onClick={() => { updateBackground('white', 'dim', 'text-white', 'bg-subdim', 'bg-dim-post-highlight', 'bg-dim-sidebar-highlight', 'border-dim-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-separator-gray font-bold ${mode.background === 'bg-dim' ? `border-0 bg-${mode.color} ` : ''} transition-colors duration-500`}>
                         { mode.background === 'bg-dim' && <IoMdCheckmark className='text-xs text-white'/> }
                     </div>
                     <span className='ml-1 text-white font-bold'>Dim</span>
             </li>
             <li className={`w-4/12 h-full bg-black flex items-center justify-center mx-1 rounded-md ${mode.background ==='bg-black' ? 'border border-2 border-twitter-blue' : ''}`}
-            onClick={() => { updateBackground('bg-black', 'text-white', 'bg-twitter-dark', 'bg-dark-highlight', 'bg-dark-sidebar-highlight', 'border-dark-separator') }}>
+            onClick={() => { updateBackground('white', 'black', 'text-white', 'bg-twitter-dark', 'bg-dark-highlight', 'bg-dark-sidebar-highlight', 'border-dark-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-white font-bold ${mode.background === 'bg-black' ? `border-0 bg-${mode.color}`  : ''} transition-colors duration-500`}>
                         { mode.background === 'bg-black' && <IoMdCheckmark className='text-xs text-white'/> }
                     </div>

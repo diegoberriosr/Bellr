@@ -11,6 +11,11 @@ import { LiaEraserSolid } from "react-icons/lia";
 
 // Component imports
 import CircleProgressBar from '../General/CircleProgressBar';
+import PostImages1 from '../Posts/PostImages1';
+import PostImages2 from '../Posts/PostImages2';
+import PostImages3 from '../Posts/PostImages3';
+import PostImages4 from '../Posts/PostImages4';
+
 
 // Context imports
 import AuthContext from '../../context/AuthContext';
@@ -21,10 +26,14 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
 
     const [ isFocused, setIsFocused ] = useState(false);
     const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
+    const [images, setImages] = useState([]);
+
+    console.log(images);
+
     const { user, authTokens } = useContext(AuthContext);
     const { mode, handleImageModal, handleNew, handleReply } = useContext(GeneralContext);
 
-
+    const postImages = new FormData();
 
     const { values, handleChange } = useFormik({
         initialValues: {
@@ -33,7 +42,6 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
         }
     })
 
-    console.log('post id is',replyId);
     
     const text = useRef();
     const percentage = (values.content.length/280) * 100 
@@ -55,7 +63,28 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
         values.content = "";
         setIsFocused(true);
     }
-    console.log('COLOR', mode.color);
+
+    const handleLoadImage = (event) => {
+        const files = Array.from(event.target.files);
+
+        if (files) {
+            const localUrls = files.map( file => {
+                postImages.append('image', file)
+                const localImageUrl = URL.createObjectURL(file);
+                return localImageUrl;
+            })
+            setImages( prevUrls => {
+                if (prevUrls) return [ ...prevUrls, ...localUrls];
+                return [...localUrls];
+            });
+        }    
+    }
+
+    const handleDeleteImage = (url) => {
+        setImages(images.filter( image => image !== url));
+    };
+
+    console.log(images.length);
 
     return <header className={`relative flex flex-col w-full p-2 border ${mode.separator} ${borderStyle} pt-1 pr-2.5 pb-2.5 transition-all`}>
         { (values.image ) && 
@@ -85,12 +114,21 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
                     <button disabled={true} className={`opacity-50 ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-md flex items-center`}>{message}</button>
                 }
             </div>
-            </div>
+        </div>
+        <div className={`mb-2.5 ml-auto pr-3 w-[90%] h-6/12`}>
+                { images.length === 1 && <PostImages1 sources={images[0]} inForm={true} handleDeleteImage={handleDeleteImage}/> }
+                { images.length === 2 && <PostImages2 sources={images} inForm={true} handleDeleteImage={handleDeleteImage}/> }
+                { images.length === 3 && <PostImages3 sources={images} inForm={true} handleDeleteImage={handleDeleteImage}/> }
+                { images.length >= 4  && <PostImages4 sources={images} inForm={true} handleDeleteImage={handleDeleteImage}/> }
+        </div>
         {isFocused && 
         <footer className='px-2.5 pb-2.5 flex justify-between items-center'>
             <ul className={`ml-14 w-3/12 flex items-center justify-between text-lg text-${mode.color}`}>
                 <li>
-                    <CiImageOn className='cursor-pointer' onClick={() => setIsAttatchingImage(!isAttatchingImage)}/>
+                    <input type='file' id='add-image' name='attatchment' accept='images/*' className='hidden' onChange={handleLoadImage}/>
+                    <label htmlFor='add-image'>
+                        <CiImageOn className='cursor-pointer'/>
+                    </label>
                 </li>
                 <li>
                     <HiOutlineGif className='cursor-pointer' onClick={handleImageModal}/>

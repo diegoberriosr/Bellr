@@ -72,6 +72,20 @@ const Inbox = () => {
         }
     }, [shrink])
 
+
+    useEffect( () => {
+       if (conversations && values.search !== '' && isFocused){
+        
+           let getrifft = conversations.filter( conversation => conversation.partners[0].profilename.includes(values.search));
+           setMatches(getrifft)
+       }
+    }, [values.search, isFocused])
+
+    useEffect ( () => {
+        if (!isFocused) setMatches([]);
+    }, [isFocused])
+
+    console.log(matches);
   return (
     <>
     <div className={`w-screen mobile:w-[450px] h-screen text-center text-xl border border-l-0 border-b-0 ${mode.separator} ${mode.text}`}>
@@ -100,7 +114,10 @@ const Inbox = () => {
                 { isFocused && values.search.length === 0 && <p className='text-gray-600'>Try searching for people, groups, or messages.</p>}
                 { !isFocused && conversations && conversations.map((conversation, index) => <ConversationMiniature key={index} mostRecentMessage={conversation.messages[conversation.messages.length -1 ]} 
                     active={conversation === activeConversation}
-                    unreadMessages={20}
+                    conversation={conversation}
+                    />)}
+                { isFocused && matches.length > 0 && values.search.length !== 0 && matches.map((conversation, index) => <ConversationMiniature key={index} mostRecentMessage={conversation.messages[conversation.messages.length -1 ]} 
+                    active={conversation === activeConversation}
                     conversation={conversation}
                     />)}
                 { isFocused && matches.length === 0 &&  values.search.length !== 0 && <div className={`pl-16 pt-5 w-full ${mode.text} flex flex-col items-start justify-start`}> 
@@ -110,7 +127,7 @@ const Inbox = () => {
             </div>
         </main>
     </div>
-    <Modal isVisible={newModal}>
+    <Modal isVisible={newModal} background='bg-login-modal'>
       <NewConversation shrink={shrink} setShrink={setShrink} />
       </Modal>
     </>

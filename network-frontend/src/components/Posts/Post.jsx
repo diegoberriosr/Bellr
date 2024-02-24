@@ -17,13 +17,18 @@ import { FaBookmark } from "react-icons/fa";
 // Component imports
 import DropDownMenu from '../General/DropdownMenu';
 import ProfileMiniature from '../General/ProfileMiniature';
+import PostImages1 from './PostImages1';
+import PostImages2 from './PostImages2';
+import PostImages3 from './PostImages3';
+import PostImages4 from './PostImages4';
+
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
 
 
 const Post = forwardRef(({ post, setPosts }, ref) => {
 
-    const { setPfpBig, handleImageModal, handleLike, handleBookmark, handleTransmit, openInteractionsModal, mode } = useContext(GeneralContext);
+    const { handleLike, handleBookmark, handleTransmit, openInteractionsModal, mode } = useContext(GeneralContext);
 
     const navigate = useNavigate();
 
@@ -45,7 +50,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
     const hoverClass = hoverColors[mode.highlight];
     //------------------------------------------------------------------------------------
 
-    return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 animate-grow`}>
+    return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 animate-grow `}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter.username} reposted</span>
@@ -68,7 +73,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                     <img src={post.user.pfp} className='h-full w-full object-fit' alt='profile pic' />
                 </div>
             </aside>
-            <main className={`w-[90%] ${post.transmission || post.reply ? 'mt-0' : 'mt-2.5'} p-1 pl-3 text-base w-full`}>
+            <main className={`w-[90%] ${post.transmission || post.reply ? 'mt-0' : 'mt-2.5'} p-1 pl-3 text-base w-full z-50`}>
                 <div className='flex h-4 items-center'>
                     <p className='font-bold hover:underline' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
                     {post.user.verified && <MdVerified className='text-twitter-blue ml-0.5' />}
@@ -80,9 +85,14 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                 <p className='w-full mt-[3px] overflow-hidden pr-5 whitespace-normal'>
                     {contentWithSpaces}
                 </p>
-                {post.image && <figure className={`mt-2 w-[98%] h-6/12 overflow-hidden border border-${mode.separator} rounded-xl`}>
-                        <img src={post.image} alt='post pic' className='w-full h-full object-cover' onClick={() => {setPfpBig(post.image); handleImageModal() }}/>
-                    </figure>}
+                { post.images &&
+                <div className={`mt-2 flex flex-row w-[98%] h-6/12`}>
+                   { post.images.length === 1 && <PostImages1 sources={post.images[0]}/> }
+                   { post.images.length === 2 && <PostImages2 sources={post.images}/> }
+                   { post.images.length === 3 && <PostImages3 sources={post.images}/> }
+                   { post.images.length >= 4 &&  <PostImages4 sources={post.images}/> }
+                </div>
+                }
                 <footer className='w-full'>
                     <ul className='flex items-center my-3 text-twitter-light-gray'>
                         <div className='flex w-6/12 items-center justify-between'>

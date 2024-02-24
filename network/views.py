@@ -436,7 +436,7 @@ def get_user(request):
     # Search user by username or profilename
     users = User.objects.filter(username__icontains=s) | User.objects.filter(profilename__icontains=s)
 
-    return JsonResponse([user.pserialize(request.user) for user in users.all()], safe=False)
+    return JsonResponse([user.pserialize() for user in users.all()], safe=False)
 
 
 @api_view(['POST'])
