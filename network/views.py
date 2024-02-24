@@ -598,6 +598,44 @@ def get_notifications(request):
         }, safe=False)
 
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def see_notification(request):
+    '''
+    Updates notifications seen status (only if a notification was not seen).
+    '''
+
+    # Get the notification id
+    notification_id = json.loads(request).get('notification_id', '')
+
+    if not notification_id:
+        return HttpResponseForbidden('ERROR : Must provide a valid notification id.')
+    
+    try:
+        notification = Notification.objects.get(id=notification_id)
+        if not notification.seen:
+            notification.seen = True
+            notification.save()
+
+    except Notification.DoesNotExist:
+        raise Http404(f'ERROR : Notification with id={notification_id} does not exist.')
+    
+
+    return HttpResponse('Success.')
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def unseen_notifications(request):
+    '''
+    Checks if the requester has unseen notifications.
+    '''
+
+    return JsonResponse({
+       'unseen' : not any([notification.seen for notification in request.user.notifications.all()])
+    })
+
+
 @api_view(['GET'])
 def username_exists(request, username):
     

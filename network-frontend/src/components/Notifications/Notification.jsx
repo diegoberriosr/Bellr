@@ -1,6 +1,7 @@
-import { forwardRef, useContext} from 'react';
+import { forwardRef, useContext, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import formatDate from '../../utils';
+import axios from 'axios';
 
 // Icon imports
 import { GoMention } from "react-icons/go";
@@ -15,8 +16,20 @@ const Notification = forwardRef(({notification}, ref) => {
   const { mode} = useContext(GeneralContext);
 
   const navigate = useNavigate();
-
-  console.log(notification);
+/*
+  useEffect(() => {
+    if(!notification.seen) {
+      axios({
+        url: '',
+        method : 'PUT',
+        data : { notification_id : notification.id }
+      })
+      .then( () => {
+        console.log(`Notification with id=${notification.id} was successfully updated.`)
+      })
+    }
+  }, [])
+*/
   return (
     <div ref={ref} className={`w-full flex px-6 border ${mode.separator} hover:${mode.highlight}  border-l-0 border-t-0 p-2.5 cursor-pointer transform duration-500 animate-grow`} onClick={() => navigate(`/post/${notification.postId}`)}>
     {notification.type === 'mention' && <GoMention className='text-twitter-blue text-3xl' />}

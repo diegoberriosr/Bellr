@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import { useState, useEffect } from 'react';
+import { useNavigate} from 'react-router-dom';
+import axios from 'axios';
 
 // Sidebar-icon imports
 import { GoHome } from "react-icons/go";
@@ -91,11 +91,10 @@ const ICONS = [
 const Sidebar = ({ setModeModal }) => {
 
     const [ active, setActive ] = useState(0);
-    const {user, logoutUser } = useContext(AuthContext); // Check if user is logged in
+    const {user, logoutUser, authTokens } = useContext(AuthContext); // Check if user is logged in
     const { handleModal, mode } = useContext(GeneralContext);
-
-
-
+    const [ unseenNotifications, setUnseenNotifications ] = useState(null);
+    const [ unseenMessages, setUnseenMessages] = useState(true);
 
     const navigate = useNavigate();
 
@@ -113,6 +112,28 @@ const Sidebar = ({ setModeModal }) => {
     
     const hoverClass = hoverColors[mode.sidebarHighlight];
 
+    useEffect( () => {
+
+        let headers;
+
+        if (authTokens) {
+            headers = {
+                'Authorization' : 'Bearer ' + String(authTokens.access)
+            }
+        }
+
+        axios({
+            url : 'http://127.0.0.1:8000/notifications/unseen',
+            method : 'GET',
+            headers : headers
+        })
+        .then( res => {
+            console.log('Unseen notifications' , res.data)
+            setUnseenNotifications(res.data.unseen);
+        }
+        )
+    }, [active])
+
     return <nav className={`sticky hidden mobile:block top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${mode.separator} border-t-0 border-l-0 border-b-0 text-3xl`}>
         <ul className='h-screen'>
             <li className='p-2.5 px-4'>
@@ -122,9 +143,11 @@ const Sidebar = ({ setModeModal }) => {
                 if (icon.loginRequired && user===null ){
                     return undefined;
                 }
-                return <li key={index} className={`inline-flex items-center px-4 p-2.5 ${hoverClass} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
+                return <li key={index} className={`relative inline-flex items-center px-4 p-2.5 ${hoverClass} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
                         {index === active ? <icon.image.selected /> : <icon.image.nonselected/>}
                         <span className={`${index === active ? 'font-bold' : ''} ml-4 hidden xl:block text-xl`}>{icon.name}</span>
+                        { unseenNotifications && (icon.route === 'notifications' || icon.route === 'messages') && <span className={`absolute top-1 left-7 bg-${mode.color} w-5 h-5 rounded-full animate-image-grow`}/>}
+    
                     </li>
             })}
             {user && 

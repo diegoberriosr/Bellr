@@ -179,6 +179,7 @@ class Notification(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='interactions', default=None)
     target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', default=None)
     timestamp = models.DateTimeField(default=timezone.now)
+    seen = models.BooleanField(default=False)
 
     def get_message(self):
         if self.type == 'mention':
@@ -202,7 +203,8 @@ class Notification(models.Model):
             'postId' : self.post.id,
             'target' : self.target.username,
             'timestamp' : self.timestamp,
-            'message' : self.get_message()
+            'message' : self.get_message(),
+            'seen' : self.seen
         }
 
 # A table used for generating codes for resetting an user's password.
