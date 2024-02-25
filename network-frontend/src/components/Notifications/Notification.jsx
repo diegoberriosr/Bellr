@@ -16,7 +16,7 @@ const Notification = forwardRef(({notification}, ref) => {
   const { mode} = useContext(GeneralContext);
 
   const navigate = useNavigate();
-/*
+/* TODO
   useEffect(() => {
     if(!notification.seen) {
       axios({

@@ -10,7 +10,35 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
+@api_view(['POST'])
+def create_conversation(request):
+    
+    # Get the names of the partners.
+    partners = json.loads(request.body).get('partners', '')
+
+    # Get their respective user objects.
+    users = [User.objects.get(username=partner) for partner in partners]
+
+    if not partners or len(partners) < 2: # Participants of a conversation must be at least two.
+        return HttpResponseForbidden('ERROR: Partners number must be at least two.')
+    
+    conversations = Conversation.objects.filter(users__in=users) # Check if conversation already exists
+    conversation_exists = any( conversation.users.all() == users for conversation in conversations)
+
+    if conversation_exists:
+        return HttpResponseForbidden('ERROR : Conversation already exists.')
+      
+         
+    new_conversation = Conversation() # Otherwise, make a new conversation
+    new_conversation.save()
+    new_conversation.users.set(users)
+    new_conversation.active_users.add(users[0]) # Set the active user as the creator
+
+    return JsonResponse( new_conversation.serialize(request.user), safe=False)
+
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_conversations(request):
 
     # Get id of the requester
@@ -22,7 +50,69 @@ def get_conversations(request):
     except User.DoesNotExist:
         raise Http404('ERROR: User does not exist')
     
-    return JsonResponse([conversation.serialize(request.user) for conversation in user.conversations.all()], safe=False)
+    return JsonResponse([conversation.serialize(request.user) for conversation in user.active_conversations.all()], safe=False)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def clear_conversation(request):
+    
+    # Get conversation id from request's body.
+    conversation_id = json.loads(request.body).get('conversation_id', '')
+
+    if not conversation_id:
+        return HttpResponseForbidden('ERROR: a conversation key must be provided')
+    
+    # Get the conversation with the provided primary key, raise an exception if it does not exist.
+    try:
+        conversation = Conversation.objects.get(pk=conversation_id)
+    except Conversation.DoesNotExist:
+        raise Http404(f'ERROR : conversation with id={conversation_id} does not exist.')
+    
+    # Check that the requester is part of the conversation.
+    if request.user not in conversation.users.all():
+        return HttpResponseForbidden('ERROR : Cannot clear conversation because requester is not a participant.')
+    
+    for message in conversation.messages.all():
+        message.archived_by.add(request.user) if request.user not in message.archived_by.all() else None
+        message.save()
+
+
+    return HttpResponse('Success.')
+    
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def delete_conversation(request):
+
+    # Get conversation id from request's body.
+    conversation_id = json.loads(request.body).get('conversation_id', '')
+
+    # A primary key must be provided.
+    if not conversation_id:
+        return HttpResponseForbidden('ERROR : a conversation key must be provided.')
+
+    # Get the conversation with the provided primary key, raise an exception if it does not exist.
+    try:
+        conversation = Conversation.objects.get(pk=conversation_id)
+    except Conversation.DoesNotExist:
+        raise Http404(f'ERROR : conversation with id={conversation_id} does not exist.')
+    
+    # Check that the requester is part of the conversation.
+    if request.user not in conversation.users.all():
+        return HttpResponseForbidden('ERROR : Cannot clear conversation because requester is not a participant.')
+    
+    # Archive every unarchived message in the conversation.
+    for message in conversation.messages.all():
+        message.archived_by.add(request.user) if request.user not in message.archived_by.all() else None
+        message.save()
+
+    # Remove requester from the conversation's active users list.
+    if request.user in conversation.active_users.all():
+        conversation.active_users.remove(request.user)
+        conversation.save()
+
+    return HttpResponse('Success')
 
 
 @api_view(['POST'])
@@ -43,6 +133,8 @@ def new_message(request):
     new_message = Message(conversation=conversation, sender=request.user, content=content)
     new_message.save()
     conversation.messages.add(new_message)
+    conversation.active_users.set(conversation.users.all())
+
     conversation.save()
 
     return JsonResponse(

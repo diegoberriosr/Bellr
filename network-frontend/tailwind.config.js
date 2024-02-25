@@ -9,7 +9,7 @@ module.exports = {
         'shrink' : 'shrink 0.250s forwards',
         'expand' : 'expand 1.5s infinite',
         'image-grow' : 'image-grow 0.250s forwards',
-        'element-shrink' : 'element-shrink 0.250s forwards'
+        'element-shrink' : 'element-shrink 0.250s forwards',
       },
       keyframes : {
         'fade-out' : {
@@ -37,7 +37,7 @@ module.exports = {
         'element-shrink' :{
           '0%' : {transform : 'scale(1)', opacity : 0.95},
           '100%' : {transform : 'scale(0.75)', opacity: 0}
-        }
+        },
       },
       screens : {
         'mobile' : '431px'

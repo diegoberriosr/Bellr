@@ -28,8 +28,6 @@ const Form = ({ route, method, placeholder, borderStyle, textAreaStyle, message,
     const [ isAttatchingImage, setIsAttatchingImage] = useState(false);
     const [images, setImages] = useState([]);
 
-    console.log(images);
-
     const { user, authTokens } = useContext(AuthContext);
     const { mode, handleImageModal, handleNew, handleReply } = useContext(GeneralContext);
 

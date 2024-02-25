@@ -16,6 +16,7 @@ import ConversationMiniature from './ConversationMiniature';
 import GeneralContext from '../../context/GeneralContext';
 import MessageContext from '../../context/MessageContext';
 import AuthContext from '../../context/AuthContext';
+
 import Modal from '../General/Modal';
 import NewConversation from './NewConversation';
 
@@ -28,6 +29,7 @@ const Inbox = () => {
 
   const { activeConversation, conversations } = useContext(MessageContext);
   const { mode } = useContext(GeneralContext);
+  const { user } = useContext(AuthContext)
 
   const navigate = useNavigate();
  
@@ -75,9 +77,13 @@ const Inbox = () => {
 
     useEffect( () => {
        if (conversations && values.search !== '' && isFocused){
-        
-           let getrifft = conversations.filter( conversation => conversation.partners[0].profilename.includes(values.search));
-           setMatches(getrifft)
+
+            const matches = conversations.filter( conversation => conversation.partners.
+                filter( partner => partner.username !== user.username).
+                some( partner => partner.username.toUpperCase().includes(values.search.toUpperCase()) || partner.profilename.toUpperCase().includes(values.search.toUpperCase())))
+            
+            setMatches(matches);
+
        }
     }, [values.search, isFocused])
 
@@ -85,7 +91,7 @@ const Inbox = () => {
         if (!isFocused) setMatches([]);
     }, [isFocused])
 
-    console.log(matches);
+ 
   return (
     <>
     <div className={`w-screen mobile:w-[450px] h-screen text-center text-xl border border-l-0 border-b-0 ${mode.separator} ${mode.text}`}>

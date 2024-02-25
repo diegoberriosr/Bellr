@@ -1,16 +1,16 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useContext } from 'react';
 import useSearch from '../useSearch';
 
 const GeneralContext = createContext();
 
 export default GeneralContext;
 
+
+
 export const GeneralProvider = ({ children }) => {
   
     const {posts, setPosts, setPage, account, setAccount, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, 
            handleEdit, handleNew, handleBlock, handleReply} = useSearch();
-
-
     const [mode, setMode] = useState({
       'color' : 'twitter-blue',
       'subColor' : 'black',

@@ -68,15 +68,27 @@ export const MessageProvider = ({children}) => {
                     params : { message_id : data.message_id }
                 })
                 .then ( (res) => {
-                    console.log(conversations);
+                    setConversations( prevStatus => {
+                        const index = prevStatus.findIndex( conversation => conversation.id === Number(data.conversation_id))
+                        let updatedStatus = [...prevStatus];
+
+                        if (updatedStatus[index].messages) updatedStatus[index].messages = [...updatedStatus[index].messages, res.data]
+                        else updatedStatus[index].messages = [res.data]
+                        console.log(updatedStatus);
+                        updatedStatus.unseen++;
+                        return updatedStatus;
+                    })
                 })          
               }
 
               else if (data.type === 'delete_message') {
+                console.log(conversations);
                 setConversations( prevStatus => {
+                    console.log('PREV STATUS' , prevStatus);
+                    console.log('DATA' , data);
                     let updatedStatus = [...prevStatus];
-                    const index = updatedStatus.findIndex( conversation => conversation.id === data.conversation_id)
-
+                    const index = updatedStatus.findIndex( conversation => conversation.id === Number(data.conversation_id))
+                    console.log(index);
                     updatedStatus[index].messages = updatedStatus[index].messages.filter(message => message.id !== data.message_id)
                     return updatedStatus
                 })

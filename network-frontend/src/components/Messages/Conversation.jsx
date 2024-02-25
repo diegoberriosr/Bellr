@@ -36,7 +36,6 @@ const Conversation = () => {
   })
 
 
-
   const handleNewMessage = () => {
     
     let content = values.content;
@@ -97,10 +96,10 @@ const Conversation = () => {
             </div>
             <CiCircleInfo className='text-2xl text-white'/>
         </header>
-        <main className='w-0 mobile:w-[600px] z-20'>
+        <main className={`w-full h-[calc(100vh-103px)] overflow-y-auto overflow-x-hidden z-20`}>
            { activeConversation && activeConversation.messages.map( message => <Message key={message.id} message={message} setActiveConversation={setActiveConversation}/>)}
         </main>
-        <footer className='absolute bottom-0 w-full bg-transparent h-[50px] z-20 flex items-start pt-1 justify-evenly bg-opacity-50'>
+        <footer className={`absolute bottom-0 w-full bg-${mode.background} h-[50px] z-20 flex items-start pt-1 justify-evenly`}>
             <CiImageOn className={`text-2xl text-${mode.color} cursor-pointer`}/>
             <HiOutlineGif className={`text-2xl text-${mode.color} cursor-pointer`}/>
             <input value={values.content} name='content' type='text' className='focus:outline-none pl-8 bg-transparent w-[75%]' placeholder='Type your message here' onChange={handleChange}/>
@@ -109,7 +108,7 @@ const Conversation = () => {
         </footer>
     </div>
     :
-    <div className={`relative h-screen w-0 mobile:w-[600px] border border-l-0  border-b-0 ${mode.separator} flex flex-col items-center justify-center`}>
+    <div className={`relative h-screen w-full border border-l-0  border-b-0 ${mode.separator} flex flex-col items-center justify-center`}>
         <h3 className='text-4xl font-extrabold'>Select a message</h3>
         <p className='text-sm text-gray-600 mt-2.5'>Choose from your existing conversations, start a new one, or just keep swimming.</p>
         <button className={`w-[200px] h-[50px] p-2.5 flex justify-center items-center bg-${mode.color} mt-2.5 opacity-70 
