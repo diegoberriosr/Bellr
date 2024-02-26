@@ -81,8 +81,19 @@ const ConversationMiniature = ({ mostRecentMessage, active, unreadMessages, conv
 
   }
 
+  const borderColors = {
+    'twitter-blue' : 'border-twitter-blue',
+    'twitter-yellow' : 'border-twitter-yellow',
+    'twitter-pink' : 'border-twitter-pink',
+    'twitter-purple' : 'border-twitter-purple',
+    'twitter-orange' : 'border-twitter-orange',
+    'twitter-green' : 'border-twitter-green',
+  }
+
+  const borderColor = borderColors[mode.color];
+
   return (
-    <div className={`w-full h-[72px] flex pl-4 space-x-4 hover:${mode.highlight} ${active ? `${mode.highlight} border-r-2 border-${mode.color}` : ''}`} onClick={() => setActiveConversation(conversation)}>
+    <div className={`w-full h-[72px] flex pl-4 space-x-4 hover:${mode.highlight} ${active ? `${mode.highlight} border-r-2 ${borderColor}` : ''}`} onClick={() => setActiveConversation(conversation)}>
       <figure className='w-10 h-10 mt-auto mb-auto cursor-pointer'>
         <img src={conversation.partners[0].pfp} alt='user pfp' className='w-full h-full rounded-full object-fill' onClick={() => { navigate(`/user/${conversation.partners[0].username}`)}}/>
       </figure>

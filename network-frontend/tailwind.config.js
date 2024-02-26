@@ -77,7 +77,7 @@ module.exports = {
         'dark-separator' : '#2F3235'  
       },
       boxShadow : {
-        'custom' : '0px 0px 10px 4px rgba(255, 255, 255, 0.5)'
+        'custom' : '0px 0px 2px 1px rgba(255, 255, 255, 0.5)'
       },
       fontFamily : {
         'twitter' : 'TwitterChirpExtendedHeavy","Verdana",-apple-system'

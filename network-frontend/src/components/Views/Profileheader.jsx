@@ -63,14 +63,14 @@ const ProfileHeader = ({ account }) => {
                         <button className={` w-[100px] h-8 flex items-center justify-center text-${mode.background} bg-${mode.subColor} opacity-90 hover:opacity-100 rounded-full font-bold`}
                         onClick={() => { handleProfileModal() }}>Edit</button>
                         :
-                        <button className={`border ${ account.isBlocked ? 'bg-red-900 border-red-900 bg-opacity-30 text-red-900 hover:bg-transparent hover:border-twitter-blue hover:text-twitter-blue' : `${mode.separator}  ${mode.text} hover:border-red-900 hover:bg-red-900 hover:bg-opacity-30 hover:text-red-900`} w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold transition-colors `} onClick={() => {handleBlock(account.username)}}>
+                        <button className={`border ${ account.isBlocked ? 'bg-red-900 border-red-900 bg-opacity-30 text-red-900 hover:bg-transparent hover:border-twitter-blue hover:text-twitter-blue' : `border border-${mode.subColor}  ${mode.text} hover:border-red-900 hover:bg-red-900 hover:bg-opacity-30 hover:text-red-900`} w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold transition-colors `} onClick={() => {handleBlock(account.username)}}>
                         { account.isBlocked ? 'Unblock' : 'Block'}
                     </button>
                     }
                     { (user && user.username !== account.username && !account.isBlocked) &&
                     <button className={`w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold 
-                    ${account.followed ? `bg-transparent border ${mode.text} ${mode.separator} hover:border-red-900 hover:text-red-900` 
-                    : `border border-${mode.subcolor} ${mode.text}`} transition-colors`}
+                    ${account.followed ? `bg-transparent border ${mode.text} border-${mode.subColor} hover:border-red-900 hover:text-red-900` 
+                    : `border border-${mode.subColor} ${mode.text}`} transition-colors`}
                     onClick={() => { handleFollow(account.user_id)}}>{account.followed ? 'Unfollow' : 'Follow' }</button>
                     }
                 </div>

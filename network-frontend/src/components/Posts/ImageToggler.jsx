@@ -13,6 +13,7 @@ const ImageToggler = ({ shrink, setShrink }) => {
   const { activeImageIndex, postImages, setActiveImageIndex} = useContext(GeneralContext);
   const [toggling, setToggling] = useState(false);
 
+
   const closeImageToggler = () => {
     setShrink(true);
   }

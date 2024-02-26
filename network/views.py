@@ -588,7 +588,7 @@ def get_notifications(request):
     if filter != '' : 
         notifications = notifications.filter(type=filter)
     
-    print(notifications, filter)
+    print(filter)
     # Paginate notifications.
     paginated_notifications, hasMore = paginate(notifications.order_by('-timestamp'), 10, page_index)
 

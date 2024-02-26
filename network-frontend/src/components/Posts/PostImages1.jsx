@@ -20,7 +20,7 @@ const PostImages1 = ({sources, handleDeleteImage, inForm}) => {
     if(deleting){
       setTimeout(() => {
         setDeleting(false);
-        handleDeleteImage(sources);
+        handleDeleteImage(sources[0]);
       }, 250)
     }
   }, [deleting])
@@ -30,7 +30,7 @@ const PostImages1 = ({sources, handleDeleteImage, inForm}) => {
       { inForm && <div className={`absolute top-1 right-1 rounded-full bg-${mode.color} text-white opacity-90 hover:opacity-100 z-10`} onClick={(event) => handleDeleting(event)}>
             <IoMdClose className='text-4xl'/>
       </div>}
-      <img src={sources} alt='post pic' className='w-full h-full object-cover animate-image-grow rounded-xl'/>
+      <img src={sources[0]} alt='post pic' className='w-full h-full object-cover animate-image-grow rounded-xl'/>
     </figure>
   )
 }

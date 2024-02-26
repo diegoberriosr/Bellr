@@ -28,7 +28,7 @@ const Notifications = () => {
     const [hasMore, setHasMore] = useState(false);
     const [filter, setFilter] = useState(null)
     const [loading, setLoading] = useState(false);
-
+    console.log(filter);
     const observer = useRef();
 
     const lastNotificationRef = useCallback( notification => {
@@ -39,6 +39,7 @@ const Notifications = () => {
                 if (hasMore) setPage(page + 1);
             }
         })
+        if (notification) observer.current.observe(notification);
     }, [hasMore, page]) 
 
     const getNotifications = () => {
@@ -51,7 +52,7 @@ const Notifications = () => {
                 'Authorization': 'Bearer ' + String(authTokens.access)
             }
         }
-
+        console.log('about to get notifications : ', filter);
         axios({
             method: 'GET',
             url: 'http://127.0.0.1:8000/notifications',
@@ -59,26 +60,32 @@ const Notifications = () => {
             params: { filter: filter , page : page }
         })
         .then( response => {
-            console.log(response.data)
-            setNotifications(response.data.notifications);
+            setNotifications( prevNotifications => {
+                console.log(response.data)
+
+                if (prevNotifications) return [...prevNotifications, ...response.data.notifications];
+                return [...response.data.notifications];
+            });
             setHasMore(response.data.hasMore);
             setLoading(false);
         })
         .then( error => {
-            console.log(error);
             setLoading(false);
         })
     }
 
     useEffect(() => {
         setNotifications(null);
-        getNotifications();
         setPage(1);
     }, [filter])
 
+    useEffect( () => {
+        getNotifications()
+    }, [page])
 
+    console.log(notifications)
     return <div className='relative w-[600px]'>
-        <div className={`flex items-center space-x-7 text-2xl border ${mode.separator} border-l-0 border-t-0 border-b-0 ${mode.background} ${mode.text} bg-opacity-50 sticky top-0`}>
+        <div className={`flex items-center space-x-7 text-2xl border ${mode.separator} border-l-0 border-t-0 border-b-0 ${mode.background} ${mode.text} bg-opacity-50 backdrop-blur-sm sticky top-0 z-40`}>
             <p className='pl-3.5 my-2.5 text-xl font-bold'> Notifications </p>
         </div>
         <ul className={`w-full h-12 flex border ${mode.separator} border-t-0 border-l-0 ${mode.background}`}>

@@ -40,7 +40,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoading
     {
         elements : [
           
-            {value: values.username, type: 'text', name: 'username',  placeholder: 'Username', containerStyle: 'mt-10', inputStyle: 'w-[300px] h-[56px] bg-transparent text-white', handleChange : handleChange, handleBlur : handleBlur },
+            {value: values.username, type: 'text', name: 'username', id : 'Username',  placeholder: 'Username', containerStyle: 'mt-10', inputStyle: 'w-[300px] h-[56px] bg-transparent text-white', handleChange : handleChange, handleBlur : handleBlur },
 
             
         ]
@@ -90,7 +90,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoading
                 }
                 {STEPS[step].elements.map( (element, index) => 
                  
-                    <Input key={index} type={element.value} value={element.value} 
+                    <Input key={index} type={element.value} value={element.value} id={element.id}
                     name={element.name} containerStyle={element.containerStyle} inputStyle={element.inputStyle}
                     error={errors[element.name]} touched={touched[element.name]} placeholder={element.placeholder}
                     disabled={element.disabled} handleChange={handleChange} handleBlur={handleBlur}

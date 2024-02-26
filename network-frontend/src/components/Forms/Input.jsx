@@ -1,7 +1,7 @@
 const Input = ( { type, value, name, id, containerStyle, inputStyle, error, touched, placeholder, disabled, handleChange, handleBlur, maxValue, displayMaxValue, textArea}) => {
   return (
     <div className={`relative ${containerStyle}`}>
-      <input type={type} value={value} name={name} id={id} placeholder={placeholder} onChange={handleChange} onBlur={handleBlur} autoComplete={false} disabled={disabled}
+      <input type={type} value={value} name={name} id={id} placeholder={placeholder} onChange={handleChange} onBlur={handleBlur}  disabled={disabled}
       className={`${inputStyle} rounded-md pt-8 pb-4 px-2 border focus:border-2  border-gray-800 ${(error && touched) ? 'border-red-900' : 'focus:border-twitter-blue' } focus:outline-none 
                   placeholder-transparent transition-colors peer`}
       maxLength={maxValue}/>

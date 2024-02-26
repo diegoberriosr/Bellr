@@ -39,7 +39,7 @@ const Searchbar = () => {
             <IoIosSearch className={`${isSearching ? 'text-twitter-blue' : ''} text-2xl ml-2`}/>
             <input ref={text} className='ml-4 bg-transparent text-sm w-full focus:outline-none' placeholder='Search' onFocus={() => { setIsSearching(true) }} onBlur={() => {setIsSearching(false)}} onChange={handleOnChange}/>
         </div>
-        {isSearching && <div className={`absolute top-10 max-h-72 overflow-y-auto flex flex-col w-full shadow-custom shadow-gray-800 rounded-xl ${mode.background}`}>
+        {isSearching && <div className={`absolute top-10 max-h-72 overflow-y-auto flex flex-col w-full shadow-custom rounded-xl bg-${mode.background}`}>
             { matches.length > 0 ? matches.map(user => <div key={user.user_id} className={`w-full flex items-center cursor-pointer hover:${mode.highlight} p-3 rounded-xl`} onMouseDown={() => {
                navigate(`/user/${user.username}`)}}>
                 <div classNam='w-10 h-10 overflow-hidden rounded-full overflow-hidden'>

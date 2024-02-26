@@ -72,9 +72,10 @@ const Profile = () => {
           <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
        </div>}
        {account && blocked && 
-        <div className='w-full flex flex-col items-center justify-center p-2.5'>
-            <h3 className={`${mode.text} text-2xl font-bold`}>You have blocked this account.</h3>
-            <button className={`w-28 p-2.5 flex justify-center items-center text-white font-bold ${mode.color} rounded-full`}
+        <div className='w-full h-[200px] flex flex-col items-center justify-center p-2.5'>
+            <h3 className={`${mode.text} text-2xl font-extrabold`}>You have blocked this account.</h3>
+            <p className='text-base'>Checking an account's posts does not remove them from your blocklist.</p>
+            <button className={`w-28 mt-5 p-2.5 flex justify-center items-center text-white font-bold bg-${mode.color} rounded-full opacity-90 hover:opacity-100`}
             onClick={() => {setBlocked(!blocked)}}
             >See posts</button>
         </div>

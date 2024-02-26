@@ -28,7 +28,7 @@ import MessageContext from '../../context/MessageContext';
 
 // Helper components imports
 import PostButton from './PostButton';
-
+import SidebarDropdownMenu from './SidebarDropdownMenu';
 
 const ICONS = [
     {
@@ -100,11 +100,6 @@ const Sidebar = ({ setModeModal }) => {
 
     const navigate = useNavigate();
 
-    const handleLogoutUser = () => {
-        logoutUser();
-        navigate('/')
-    };
-
     const hoverColors = {
         'bg-light-sidebar-highlight': 'hover:bg-light-sidebar-highlight',
         'bg-dim-sidebar-highlight' : 'hover:bg-dim-sidebar-highlight',
@@ -168,14 +163,10 @@ const Sidebar = ({ setModeModal }) => {
                     <li className='w-full mt-1 p-2.5'>
                         <PostButton handleClick={handleModal}/>
                     </li>
-                    <li className='relative bottom-0 inline-flex items-center mt-1 p-2.5 hover:bg-gray-800 hover:rounded-3xl cursor-pointer' onClick={handleLogoutUser}>
-                        <CiLogout/>
-                        <span className='ml-4 hidden sm:block text-2xl'>Logout</span>
-                    </li>
                 </>
             }
             { user &&
-                    <li className='absolute bottom-0 w-full mt-1 p-2.5 flex items-center' onClick={() => setModeModal(true)}>
+                    <li className='absolute bottom-0 w-full mt-1 p-2.5 flex items-center'>
                         <div className='min-w-10 w-10 h-10 overflow-hidden rounded-full overflow-hidden'>
                             <img src={user.pfp} alt='user profile pic' className='w-full h-full object-cover'/>
                         </div>
@@ -183,6 +174,7 @@ const Sidebar = ({ setModeModal }) => {
                             <p className='invisible xl:visible max-w-full font-bold text-base'>{user.profilename}</p>
                             <p className='invisible xl:visible text-gray-600 text-sm mt-0 pt-0'>@{user.username}</p>
                         </div>
+                        <SidebarDropdownMenu setModeModal={setModeModal}/>
                     </li>
             }
         </ul>

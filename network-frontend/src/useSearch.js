@@ -274,7 +274,7 @@ const useSearch = () => {
         .then( res => {
           setPosts(prevPosts => {
             const origin = prevPosts[0]; // Get the orign from the list of posts.
-            let filteredReplies = prevPosts.filter( post => post.id === 0); // Remove the origin from the top of the list.
+            let filteredReplies = prevPosts.filter( post => Number(post.id) !== origin.id); // Remove the origin from the top of the list.
             console.log(filteredReplies)
             let updatedReplies = [res.data.reply, ...filteredReplies] // Append reply to the top of the filtered list.
             console.log(updatedReplies)
@@ -290,10 +290,8 @@ const useSearch = () => {
 
     useEffect(() => {
 
-
-
         // If the pagination number changes, update the data accordingly.
-
+        if (currentUrl === '/messages' || currentUrl=== '/login') return;
         setLoading(true);
         setError(false);
         let cancel;
@@ -305,7 +303,7 @@ const useSearch = () => {
 
         axios({
             method : 'GET',
-            url : `http://127.0.0.1:8000/${currentUrl}`,
+            url : `http://127.0.0.1:8000${currentUrl}`,
             params : {page : page},
             headers : headers,
             cancelToken : new axios.CancelToken( c => {cancel = c})
@@ -333,7 +331,7 @@ const useSearch = () => {
     useEffect( () => {
         
         // Do nothing if requesting for messages
-        if (currentUrl === '/messages') return;
+        if (currentUrl === '/messages' || currentUrl=== '/login') return;
 
         // If the route change, set all states to default.
         setLoading(true);

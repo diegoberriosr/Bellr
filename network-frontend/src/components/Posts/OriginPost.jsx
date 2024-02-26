@@ -12,6 +12,10 @@ import { FiShare2 } from "react-icons/fi";
 
 // Component imports
 import DropDownMenu from '../General/DropdownMenu';
+import PostImages1 from './PostImages1';
+import PostImages2 from './PostImages2';
+import PostImages3 from './PostImages3';
+import PostImages4 from './PostImages4';
 
 // Context imports
 import AuthContext from '../../context/AuthContext';
@@ -21,7 +25,7 @@ import GeneralContext from '../../context/GeneralContext';
 const OriginPost = ({ post, handleAction, postView }) => {
 
     const { user, authTokens } = useContext(AuthContext);
-    const { darkMode, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
+    const { mode, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
 
     const navigate = useNavigate();
 
@@ -43,7 +47,7 @@ const OriginPost = ({ post, handleAction, postView }) => {
         return [...prev, curr, ' '];
     }, []);
 
-    return <div className={`border border-t-0 border-l-0 border-b-0 ${ darkMode ? 'border-gray-600' : 'border-gray-300' } w-full cursor-pointer`}>
+    return <div className={`border border-t-0 border-l-0 border-b-0 ${mode.separator} w-full cursor-pointer`}>
         {post.transmission && <p className='flex items-center mt-3 ml-10 text-sm text-gray-700'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter} reposted</span>
@@ -73,8 +77,16 @@ const OriginPost = ({ post, handleAction, postView }) => {
                 </div>
                 <p className='text-sm text-gray-600 mt-3'>{formatDate(post.timestamp)}</p>
             </main>
+            { post.images &&
+                <div className={`mt-2 flex flex-row w-[98%] h-6/12 pl-`}>
+                   { post.images.length === 1 && <PostImages1 sources={post.images}/> }
+                   { post.images.length === 2 && <PostImages2 sources={post.images}/> }
+                   { post.images.length === 3 && <PostImages3 sources={post.images}/> }
+                   { post.images.length >= 4 &&  <PostImages4 sources={post.images}/> }
+                </div>
+                }
             <footer className='px-3.5'>
-                <ul className={`flex items-center mt-3 mb-1.5 text-twitter-light-gray border ${ darkMode ? 'border-gray-600 hover:bg-gray-900' : 'border-gray-300 hover:bg-light-gray-hover'} border-l-0 border-r-0 h-10 transition-colors duration-500`}>
+                <ul className={`flex items-center mt-3 mb-1.5 text-twitter-light-gray border ${mode.separator} border-l-0 border-r-0 h-10 transition-colors duration-500`}>
                     <div className='w-full flex items-center justify-between ml-2.5'>
                         <li className='group flex items-center space-x-1'>
                             <FaRegComment className='group-hover:bg-blue-300 group-hover:text-blue-600 group-hover:rounded-full duration-300 cursor-pointer text-[19px]' />
@@ -97,7 +109,6 @@ const OriginPost = ({ post, handleAction, postView }) => {
                     </div>
                 </ul>
             </footer>
-           {user && <p className='relative left-16 ml-2 bottom-1 text-sm text-gray-600'>Replying to <span className='text-twitter-blue'>@{post.user.username}</span></p>}
         </div>
 }
 
