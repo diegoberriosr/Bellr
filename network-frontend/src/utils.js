@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-const formatDate = (post) => {
+export const formatDate = (post) => {
 
     const difference = moment().utc().diff(post.timestamp, 'days'); // Check the time distance between current time and the post's timestamp
 
@@ -11,4 +11,15 @@ const formatDate = (post) => {
     return moment.utc(post.timestamp).format('YYYY-MM-DD'); // Otherwise output in standard calendar format
 }
 
-export default formatDate;
+
+
+
+export const createRange = (start, stop) => {
+    const range = []
+
+    for (let i=start; i <=stop; i++) {
+        range.push(i);
+    }
+
+    return range;
+}

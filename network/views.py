@@ -760,6 +760,19 @@ def generate_code(request):
 
     # Get email from request
     email = json.loads(request.body).get('email', '')
+    new_account = request.GET.get('new_account', '')
+
+    if new_account:
+        register_value = random.randint(100000, 999999)
+        send_mail(
+        'Your confirmation code',
+        f'Your confirmation code is: {register_value}',
+        'settings.EMAIL_HOST_USER',
+        ['rberriosdiego@gmail.com'],
+        fail_silently=False
+        )
+
+        return JsonResponse( register_value, safe=False )
 
     # Get user by email, raise an exceptio if it does not exist.
     try:
@@ -768,9 +781,8 @@ def generate_code(request):
         raise Http404('User does not exist')
     
     # If user already has a temporal code, delete it.
-    if hasattr(user, 'code'):
-        user.code.delete()
-
+    user.code.first().delete() if user.code.first() else None
+    
     # Generate a new code an assign it to requester.
     value = random.randint(100000, 999999) # Make a 6 digit code.
     code = Code(user=user, code=value)

@@ -17,6 +17,7 @@ export const AuthProvider = ({children}) => {
     const navigate = useNavigate();
 
     const loginUser = async(values, setErrorMessage, setLoading, setLoadingScreen) => {
+        console.log('about to log in');
         setLoading(true);
         fetch('http://127.0.0.1:8000/token/', {
             method: 'POST',
@@ -33,7 +34,6 @@ export const AuthProvider = ({children}) => {
                 setUser(jwtDecode(data.access));
                 localStorage.setItem('authTokens', JSON.stringify(data));
                 setLoading(false);
-                setLoadingScreen(true);
                 navigate('/home');
             }
             else {

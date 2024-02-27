@@ -209,7 +209,7 @@ class Notification(models.Model):
 
 # A table used for generating codes for resetting an user's password.
 class Code (models.Model): 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='code')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='code', blank=True)
     code = models.IntegerField(default=-1)
     expiration_date = models.DateTimeField(default=get_expiration_date) 
 

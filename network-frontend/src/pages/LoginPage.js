@@ -6,8 +6,7 @@ import Register from '../components/Login/Register';
 import ResetPassword from "../components/Login/ResetPassword";
 import { GoogleLogin } from '@react-oauth/google';
 
-import { useState, useEffect } from 'react';
-import { jwtDecode } from "jwt-decode";
+import { useState } from 'react';
 
 const LoginPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,8 +22,10 @@ const LoginPage = () => {
   }
 
   const openRegister = () => {
-    setIsOpen(!isOpen);
-    setIsRegister(!isRegister);
+    if (!isOpen) setIsOpen(!isOpen);
+    setIsLogin(false);
+    setIsRegister(true);
+    setIsForgottenPassword(false);
   }
 
   const handleCloseModal = () => {
@@ -66,28 +67,28 @@ const LoginPage = () => {
     console.log('Login Failed');
   }}
 />
-            <div className='w-[300px] h-10 bg-white rounded-full flex items-center justify-center text-black mt-2'>
+            <div className='w-[300px] h-10 bg-white rounded-full flex items-center justify-center text-black mt-2 hover:opacity-90 cursor-not-allowed'>
               <img src='https://e7.pngegg.com/pngimages/255/774/png-clipart-apple-logo-apple-company-leaf.png' width='20' alt='google logo' />
               <span className='ml-2.5 font-bold'>Sign up with Apple</span>
             </div>
             <div className='w-[300px] flex items-center justify-center mt-2'>
-              <span className='border border-gray-800 w-[130px]' />
+              <span className='border border-t-0 border-l-0 border-r-0 border-login-gray w-[130px]' />
               <span className='ml-2.5 mr-2.5'>or</span>
-              <span className='border border-gray-800 w-[130px]' />
+              <span className='border border-t-0 border-l-0 border-r-0 border-login-gray w-[130px]' />
             </div>
-            <button type='button' className='w-[300px] bg-twitter-blue rounded-full h-10 flex items-center justify-center mt-2 font-bold' onClick={openRegister}>Create account</button>
-            <p className='w-[300px] text-xs text-gray-500 mt-1.5'>By signing up, you agree to the <a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' className='text-twitter-blue hover:underline'>Terms of Service</a> and
+            <button type='button' className='w-[300px] bg-twitter-blue rounded-full h-10 flex items-center justify-center mt-2 font-bold opacity-100 hover:opacity-90' onClick={openRegister}>Create account</button>
+            <p className='w-[300px] text-xs text-login-gray mt-1.5'>By signing up, you agree to the <a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' className='text-twitter-blue hover:underline'>Terms of Service</a> and
               <a href='https://www.youtube.com/watch?v=OjNpRbNdR7E' className='text-twitter-blue hover:underline'> Privacy Policy</a>, including <a href='https://www.youtube.com/watch?v=QuxQnR4uTG4' className='text-twitter-blue hover:underline'>Cookie Use.</a>
             </p>
           </div>
         </div>
       <div className='mt-auto mb-4 flex flex-col items-center lg:items-start'>
           <span className='text-lg font-bold'>Already have an account?</span>
-          <button type='button' className='w-[300px] h-10 border border-2 border-gray-800 rounded-full flex items-center justify-center text-twitter-blue mt-4' onClick={openLogin}>Log in</button>
+          <button type='button' className='w-[300px] h-10 border border-login-dark-border rounded-full flex items-center justify-center text-twitter-blue mt-4 hover:bg-login-dark-highlight' onClick={openLogin}>Log in</button>
         </div>
       </div>
       <Modal isVisible={isOpen} background='bg-login-modal'>
-        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} setLoading={setLoading} setLoadingScreen={setLoadingScreen} />}
+        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} setLoading={setLoading} openRegister={openRegister} setLoadingScreen={setLoadingScreen} />}
         {isRegister && <Register handleCloseModal={handleCloseModal} setLoading={setLoading}/>}
         {isForgottenPassword && <ResetPassword handleCloseModal={handleCloseModal} setLoading={setLoading} />}
       </Modal>

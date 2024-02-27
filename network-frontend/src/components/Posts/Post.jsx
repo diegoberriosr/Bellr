@@ -1,6 +1,6 @@
 import { useContext, memo, forwardRef, useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import formatDate from '../../utils';
+import {formatDate} from '../../utils';
 
 // Icon imports
 import { MdVerified } from "react-icons/md";

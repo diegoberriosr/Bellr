@@ -14,6 +14,10 @@ export const RegisterSchema = yup.object().shape({
         const result = await response.json();
         return result.exists ? false : true;
     }),
+    month : yup.string().required(),
+    day : yup.string().required(),
+    year : yup.string().required(),
+    code : yup.string().required('This field is required.'),
     password : yup.string().min(8).matches(passwordRules, {'message' : "Please create a stronger password"}).required('This field is required'),
     confirmPassword : yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('This field is required'),
     profilename : yup.string().min(1, 'Must be at least 1 character long').max(50, 'Must be less or equal than 15 characters').required('This field is required'),
