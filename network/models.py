@@ -196,6 +196,7 @@ class Notification(models.Model):
 
     def serialize(self):
         return {
+            'id' : self.id,
             'type' : self.type,
             'origin' : self.origin.username,
             'pfp' : self.origin.pfp,

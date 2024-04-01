@@ -4,7 +4,6 @@ import moment from 'moment';
 
 // Context imports
 import AuthContext from "../../context/AuthContext"
-import GeneralContext from '../../context/GeneralContext';
 import MessageContext from '../../context/MessageContext';
 // Icon imports
 import { MdOutlineDelete } from "react-icons/md";
@@ -13,7 +12,6 @@ const Message = ({ message }) => {
   const [ clicked, setClicked ] = useState(false);
   const [ deleting, setDeleting ] = useState(false);
   const { user, authTokens } = useContext(AuthContext);
-  const { mode } = useContext(GeneralContext);
   const { chatSocket, activeConversation, setConversations } = useContext(MessageContext);
 
 
@@ -65,6 +63,7 @@ const Message = ({ message }) => {
         })
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect( () => {
@@ -90,6 +89,7 @@ const Message = ({ message }) => {
       
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleting])
 
   return (

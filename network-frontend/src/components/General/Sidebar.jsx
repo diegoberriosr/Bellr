@@ -16,8 +16,6 @@ import { FaBookmark} from "react-icons/fa";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
 
-
-import { CiLogout } from "react-icons/ci";
 import { LuDog } from "react-icons/lu";
 
 // Authentication context imports
@@ -91,7 +89,7 @@ const ICONS = [
 const Sidebar = ({ setModeModal }) => {
 
     const [ active, setActive ] = useState(0);
-    const {user, logoutUser, authTokens } = useContext(AuthContext); // Check if user is logged in
+    const {user, authTokens } = useContext(AuthContext); // Check if user is logged in
     const { conversations } = useContext(MessageContext);
 
     const { handleModal, mode } = useContext(GeneralContext);
@@ -128,7 +126,8 @@ const Sidebar = ({ setModeModal }) => {
             setUnseenNotifications(res.data.unseen);
         }
         )
-    }, [active])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [active]);
 
 
     useEffect( () => {
@@ -138,6 +137,7 @@ const Sidebar = ({ setModeModal }) => {
                 if (message && !message.seen && message.sender.user_id !== user.user_id) setUnseenMessages( prevUnseenMessages => prevUnseenMessages + 1);
             }));
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [conversations])
 
     return <nav className={`sticky hidden mobile:block top-0 w-[75px] xl:w-[275px] h-screen flex flex-col duration-300 relative border ${mode.separator} border-t-0 border-l-0 border-b-0 text-3xl`}>
@@ -152,10 +152,12 @@ const Sidebar = ({ setModeModal }) => {
                 return <li key={index} className={`relative inline-flex items-center px-4 p-2.5 ${hoverClass} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => { navigate(`/${icon.route}`) ; setActive(index) }}>
                         {index === active ? <icon.image.selected /> : <icon.image.nonselected/>}
                         <span className={`${index === active ? 'font-bold' : ''} ml-4 hidden xl:block text-xl`}>{icon.name}</span>
-                        { unseenMessages > 0  && icon.route === 'messages' && <span className={`absolute top-1 left-7 bg-${mode.color} w-5 h-5 rounded-full animate-image-grow text-white text-center text-sm`}> 
-                            {unseenMessages}
+                        { unseenMessages > 0  && icon.route === 'messages' && <span className={`font-bold text-sm text-[11px] absolute top-1 left-7 bg-${mode.color} w-6 h-6 rounded-full animate-image-grow text-white flex justify-center items-center text-sm`}> 
+                            {unseenMessages < 99 ? unseenMessages : '99+'}
                         </span>}
-    
+                        { unseenNotifications > 0 && icon.route === 'notifications' && <span className={`font-bold text-[11px] absolute top-1 left-7 bg-${mode.color} w-6 h-6 rounded-full animate-image-grow text-white flex justify-center items-center text-sm`}> 
+                            {unseenNotifications < 99 ? unseenNotifications : '99+'}
+                        </span>}
                     </li>
             })}
             {user && 

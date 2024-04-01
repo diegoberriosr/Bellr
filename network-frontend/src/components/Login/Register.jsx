@@ -156,6 +156,7 @@ const Register = ({ handleCloseModal }) => {
 
   useEffect(() => {
     if (ready) registerUser(values);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
   console.log(confirmation, values.code);
@@ -183,6 +184,7 @@ const Register = ({ handleCloseModal }) => {
       return;
     }
     setIsDisabled(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values, step, errors]);
 
   useEffect( () => {

@@ -1,5 +1,5 @@
-import {useState, useEffect, useContext} from 'react';
-import { useParams, useNavigate } from 'react-router-dom'
+import {useContext} from 'react';
+import { useNavigate } from 'react-router-dom'
 
 // Icon imports
 import { BsArrowLeftShort } from 'react-icons/bs';

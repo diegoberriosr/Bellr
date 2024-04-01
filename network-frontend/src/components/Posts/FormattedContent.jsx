@@ -19,6 +19,7 @@ const FormattedContent = ({content}) => {
         navigate(`/user/${mention.innerHTML.slice(1)}`);
       });
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
 
   return (

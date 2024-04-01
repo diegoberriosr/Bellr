@@ -28,6 +28,7 @@ const Feed = ({ form,  url, loginRequired}) => {
     })
 
     if (post) observer.current.observe(post);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, hasMore]);
 
   return (

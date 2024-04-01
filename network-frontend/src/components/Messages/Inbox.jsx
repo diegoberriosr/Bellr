@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 
 // Icon imports
 import { IoSettingsOutline } from "react-icons/io5";
@@ -72,19 +72,21 @@ const Inbox = () => {
 
             return () => clearTimeout(timer);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shrink])
 
 
     useEffect( () => {
        if (conversations && values.search !== '' && isFocused){
 
-            const matches = conversations.filter( conversation => conversation.partners.
-                filter( partner => partner.username !== user.username).
-                some( partner => partner.username.toUpperCase().includes(values.search.toUpperCase()) || partner.profilename.toUpperCase().includes(values.search.toUpperCase())))
+            const matches = conversations.filter( conversation => conversation.partners
+                .filter( partner => partner.username !== user.username)
+                .some( partner => partner.username.toUpperCase().includes(values.search.toUpperCase()) || partner.profilename.toUpperCase().includes(values.search.toUpperCase())))
             
             setMatches(matches);
 
        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.search, isFocused])
 
     useEffect ( () => {

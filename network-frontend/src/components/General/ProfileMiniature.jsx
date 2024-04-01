@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import axios from 'axios';
 
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
@@ -16,9 +15,9 @@ const ProfileMiniature = ({text, textStyle, account}) => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center z-50' onMouseLeave={handleVisbility}>
-      <span className={textStyle} onMouseEnter={handleVisbility}>{text}</span>
-      <div className={`${visible ? 'block' : 'hidden'} fixed top-6 bg-${mode.background} border rounded-md border-gray-900 w-[250px] flex flex-col justify-center items-start p-2.5 animate-grow`}>
+    <div className='fixed flex flex-col items-center justify-center z-[999]' onMouseLeave={handleVisbility}>
+      <span className={`${textStyle}`} onMouseEnter={handleVisbility}>{text}</span>
+      <div className={`${visible ? 'block' : 'hidden'} fixed -bottom-96 bg-${mode.background} border rounded-md border-gray-900 w-[250px] flex flex-col justify-center items-start p-2.5 animate-grow z-[9999]`}>
         <div className='w-full flex justify-between items-start'>
             <figure className='w-[60px] h-[60px]'>
                 <img src={account.pfp} alt='user pfp' className='w-full h-full object-fit rounded-full'/>

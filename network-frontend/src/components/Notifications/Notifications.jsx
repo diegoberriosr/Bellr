@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
  import { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -23,12 +24,11 @@ const Notifications = () => {
         navigate('/home');
     }
 
-    const [notifications, setNotifications] = useState(null);
+    const [notifications, setNotifications] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(false);
-    const [filter, setFilter] = useState(null)
+    const [filter, setFilter] = useState('');
     const [loading, setLoading] = useState(false);
-    console.log(filter);
     const observer = useRef();
 
     const lastNotificationRef = useCallback( notification => {
@@ -52,7 +52,7 @@ const Notifications = () => {
                 'Authorization': 'Bearer ' + String(authTokens.access)
             }
         }
-        console.log('about to get notifications : ', filter);
+
         axios({
             method: 'GET',
             url: 'http://127.0.0.1:8000/notifications',
@@ -60,11 +60,9 @@ const Notifications = () => {
             params: { filter: filter , page : page }
         })
         .then( response => {
-            setNotifications( prevNotifications => {
-                console.log(response.data)
-
-                if (prevNotifications) return [...prevNotifications, ...response.data.notifications];
-                return [...response.data.notifications];
+            setNotifications(prevNotifications => {
+                if (page > 1) return [...prevNotifications, ...response.data.notifications];
+                return response.data.notifications;
             });
             setHasMore(response.data.hasMore);
             setLoading(false);
@@ -74,50 +72,49 @@ const Notifications = () => {
         })
     }
 
-    useEffect(() => {
-        setNotifications(null);
+    const handleChangeFilter = (filter) => {
+        setFilter(filter);
         setPage(1);
-    }, [filter])
+    };
+
 
     useEffect( () => {
-        getNotifications()
-    }, [page])
+        getNotifications();
+    }, [filter, page]);
 
-    console.log(notifications)
+    
     return <div className='relative w-[600px]'>
         <div className={`flex items-center space-x-7 text-2xl border ${mode.separator} border-l-0 border-t-0 border-b-0 ${mode.background} ${mode.text} bg-opacity-50 backdrop-blur-sm sticky top-0 z-40`}>
             <p className='pl-3.5 my-2.5 text-xl font-bold'> Notifications </p>
         </div>
         <ul className={`w-full h-12 flex border ${mode.separator} border-t-0 border-l-0 ${mode.background}`}>
-            <li className={`relative w-4/12 flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { setFilter(null) }}>
+            <li className={`relative w-4/12 flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('') }}>
                 <span>All</span>
-                {!filter && <span className={`absolute top-11 left-14 w-3/12 h-1 bg-twitter-blue rounded-full`}></span>}
+                {filter === '' && <span className={`absolute top-11 left-14 w-3/12 h-1 bg-twitter-blue rounded-full`}></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { setFilter('mention') }}>
+            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('mention') }}>
                 <span>Mentions</span>
                 {filter === 'mention' && <span className='absolute top-11 left-9 w-6/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { setFilter('like')}}>
+            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('like')}}>
                 <span>Likes</span>
                 {filter === 'like' && <span className='absolute top-11 left-6 w-8/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { setFilter('transmission')}}>
+            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('transmission')}}>
                 <span>Transmissions</span>
                 {filter === 'transmission' && <span className='absolute top-11 left-12 w-4/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
         </ul>
-        {(notifications && notifications.length > 0) && notifications.map((notification, index) => {
+        {(notifications.length > 0) && notifications.map((notification, index) => {
             if (notifications.length -1 === index) return <Notification  key={index} ref={lastNotificationRef} notification={notification} />;
             return <Notification key={index} notification={notification}/>
             }
         )}
-        {(notifications && notifications.length === 0) && <div className='mt-16 w-full flex flex-col items-center justify-center'>
+        {(!loading && notifications.length === 0) && <div className='mt-16 w-full flex flex-col items-center justify-center'>
             <h3 className='text-3xl font-bold'>Nothing to see here - yet</h3>
             <p className='text-gray-600'>When someone mentions you, you'll find it here.</p>
         </div>}
-        <div className='w-full flex items-center justify-center'>
-            {loading && <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader' />}
-        </div>
+        {loading && <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader' />}
     </div>
 }
 

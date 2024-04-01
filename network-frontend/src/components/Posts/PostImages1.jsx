@@ -23,6 +23,7 @@ const PostImages1 = ({sources, handleDeleteImage, inForm}) => {
         handleDeleteImage(sources[0]);
       }, 250)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleting])
 
   return (

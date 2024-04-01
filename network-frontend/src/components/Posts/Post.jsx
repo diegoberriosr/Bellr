@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, memo, forwardRef, useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {formatDate} from '../../utils';
@@ -16,7 +17,6 @@ import { FaBookmark } from "react-icons/fa";
 
 // Component imports
 import DropDownMenu from '../General/DropdownMenu';
-import ProfileMiniature from '../General/ProfileMiniature';
 import FormattedContent from './FormattedContent';
 import PostImages1 from './PostImages1';
 import PostImages2 from './PostImages2';
@@ -55,7 +55,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
         };
     }, [deleting])
 
-    return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 ${ deleting ? 'animate-element-shrink' : 'animate-grow'} z-10`}>
+    return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 ${ deleting ? 'animate-element-shrink' : 'animate-grow'}`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter.username} reposted</span>
@@ -79,10 +79,10 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                 </div>
             </aside>
             <main className={`w-[90%] ${post.transmission || post.reply ? 'mt-0' : 'mt-2.5'} p-1 pl-3 text-base w-full`}>
-                <div className='flex h-4 items-center z-50'>
+                <div className='flex h-4 items-center'>
                     <p className='font-bold hover:underline' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
                     {post.user.verified && <MdVerified className='text-twitter-blue ml-0.5' />}
-                    <ProfileMiniature text={`@${post.user.username}`} textStyle='text-post-gray ml-1.5' account={post.user}/>
+                    <p className='text-post-gray ml-1'>@{post.user.username}</p>
                     <p className='text-post-gray ml-1'>·</p>
                     <p className='text-post-gray ml-1'>{formatDate(post)}</p>
                     <DropDownMenu followed={post.followed} author_id={post.user.user_id} post={post} setPosts={setPosts} setDeleting={setDeleting}/>

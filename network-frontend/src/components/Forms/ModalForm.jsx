@@ -27,7 +27,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
     const [images, setImages] = useState([]);
     const postImages = new FormData();
 
-    const { user, authTokens } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const { values, handleChange, setFieldValue } = useFormik({
         initialValues: {

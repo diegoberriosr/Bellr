@@ -14,7 +14,6 @@ const EmojiMenu = ({ content, setFieldValue }) => {
   const [ emojis, setEmojis ] = useState([]);
   const [ displayedEmojis, setDisplayedEmojis] = useState([]);
   const [ loading, setLoading ] = useState(false);
-  const [ category, setCategory ] = useState('all');
 
   const { mode } = useContext(GeneralContext);
   
@@ -39,6 +38,7 @@ const EmojiMenu = ({ content, setFieldValue }) => {
 
   useEffect( () => {
     setDisplayedEmojis(emojis.filter( emoji => emoji.unicodeName.toUpperCase().includes(values.search.toUpperCase())))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.search])
 
   const hoverColors = {
@@ -65,6 +65,7 @@ const EmojiMenu = ({ content, setFieldValue }) => {
         })
     }
     setLoading(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible])
 
   return (

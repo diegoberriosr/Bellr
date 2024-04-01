@@ -1,6 +1,4 @@
 import { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useFormik } from 'formik';
 import axios from 'axios';
 
 // Import icons
@@ -24,7 +22,6 @@ const NewConversation = ({ shrink, setShrink }) => {
   const [loading, setLoading] = useState(false);
   const [ selected, setSelected] = useState(null);
 
-  const navigate = useNavigate();
   const handleChange = (e) => {
     setSearch(e.target.value);
   }
@@ -98,6 +95,7 @@ const NewConversation = ({ shrink, setShrink }) => {
       setMatches([]);
       setLoading(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
   

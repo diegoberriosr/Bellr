@@ -25,6 +25,7 @@ const Users = () => {
   const navigate = useNavigate();
 
   const { authTokens, user } = useContext(AuthContext);
+  console.log(hasMore);
 
   const handleFollow = (userId) => {
     let headers = {
@@ -90,6 +91,7 @@ const Users = () => {
       setLoading(false);
       console.log(error);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, username])
 
   useEffect(() => {
@@ -122,6 +124,7 @@ const Users = () => {
       console.log(error);
     });
   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
   return (

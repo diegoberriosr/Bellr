@@ -14,15 +14,13 @@ import ErrorMessage from '../Alerts/ErrorMessage';
 import ClipLoader from "react-spinners/ClipLoader";
 
 // Context imports
-import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 
 const Profile = () => {
   
 
   const { username } = useParams();
-  const { user } = useContext(AuthContext);
-  const { posts, account, error, loading, mode, hasMore, page, setPage, setAccount} = useContext(GeneralContext);
+  const { posts, account, error, loading, mode, hasMore, page, setPage } = useContext(GeneralContext);
   const [ blocked, setBlocked] = useState(false);
 
   const navigate = useNavigate();
@@ -38,6 +36,7 @@ const Profile = () => {
               if (hasMore) setPage(page + 1);
           }
       })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasMore, page]) 
 
   useEffect(() => {

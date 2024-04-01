@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 
@@ -22,12 +22,10 @@ import MessageContext from '../../context/MessageContext';
 const Conversation = () => {
 
 
-  const { user, authTokens} = useContext(AuthContext);
+  const { authTokens} = useContext(AuthContext);
   const { activeConversation, setActiveConversation, setConversations, chatSocket} = useContext(MessageContext);
 
   const { mode } = useContext(GeneralContext);
-  
-  const [ loading, setLoading ] = useState(false);
 
   const {values, handleChange, setFieldValue} = useFormik({
     initialValues : {
@@ -83,6 +81,7 @@ const Conversation = () => {
 
   }
 
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, [activeConversation])
 
   return ( activeConversation ?

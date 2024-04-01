@@ -1,7 +1,5 @@
-import { useState } from 'react';
 
-const ImageInput = ({ setImages }) => {
-  const [ image, setImage ] = useState(null);
+const ImageInput = () => {
 
   return (
     <input type='file' accept='image/*'/>

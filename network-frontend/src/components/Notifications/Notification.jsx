@@ -11,17 +11,26 @@ import { FaReplyAll } from "react-icons/fa";
 
 
 import GeneralContext from '../../context/GeneralContext';
+import AuthContext from '../../context/AuthContext';
 
 const Notification = forwardRef(({notification}, ref) => {
-  const { mode} = useContext(GeneralContext);
-
+  const { mode } = useContext(GeneralContext);
+  const { authTokens } = useContext(AuthContext);
   const navigate = useNavigate();
-/* TODO
+
   useEffect(() => {
     if(!notification.seen) {
+      let headers;
+
+      if (authTokens) {
+        headers = {
+          'Authorization ' : 'Bearer ' + String(authTokens.access)
+        }
+      }
       axios({
-        url: '',
+        url: 'http://127.0.0.1:8000/notifications/watch',
         method : 'PUT',
+        headers: headers,
         data : { notification_id : notification.id }
       })
       .then( () => {
@@ -29,7 +38,7 @@ const Notification = forwardRef(({notification}, ref) => {
       })
     }
   }, [])
-*/
+
   return (
     <div ref={ref} className={`w-full flex px-6 border ${mode.separator} hover:${mode.highlight}  border-l-0 border-t-0 p-2.5 cursor-pointer transform duration-500 animate-grow`} onClick={() => navigate(`/post/${notification.postId}`)}>
     {notification.type === 'mention' && <GoMention className='text-twitter-blue text-3xl' />}

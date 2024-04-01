@@ -17,7 +17,7 @@ const DropdownMenu = ({ author_id, followed, post, setDeleting }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [shrink, setShrink] = useState(false);
 
-  const { user, authTokens } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const { mode, setEditedPost, setIsEditing, handleModal, handleFollow } = useContext(GeneralContext);
 
   const handleClose = () => {
@@ -41,6 +41,7 @@ const DropdownMenu = ({ author_id, followed, post, setDeleting }) => {
 
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shrink])
 
 

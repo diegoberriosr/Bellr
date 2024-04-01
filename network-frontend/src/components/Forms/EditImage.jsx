@@ -3,9 +3,6 @@ import {useContext} from 'react';
 // Icon imports
 import { IoCloseSharp } from "react-icons/io5";
 
-// Context imports
-import GeneralContext from '../../context/GeneralContext';
-
 const EditImage = ({handleCloseModal, value, name, handleOnChange, handleOnBlur}) => {
   const { darkMode } = useContext
   return (

@@ -555,7 +555,7 @@ def get_transmissions(request, username):
 @permission_classes([IsAuthenticated])
 def block_user(request, username):
 
-    # Get user, raise an exception if it does not exist
+    # Get user, raise san exception if it does not exist
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
@@ -589,9 +589,10 @@ def get_notifications(request):
     filter = request.GET.get('filter', '') # Get filter from request's body.
     if filter != '' : 
         notifications = notifications.filter(type=filter)
-    
+
     print(filter)
     # Paginate notifications.
+    print(notifications)
     paginated_notifications, hasMore = paginate(notifications.order_by('-timestamp'), 10, page_index)
 
     return JsonResponse({
@@ -608,8 +609,8 @@ def see_notification(request):
     '''
 
     # Get the notification id
-    notification_id = json.loads(request).get('notification_id', '')
-
+    notification_id = json.loads(request.body).get('notification_id', '')
+    print('notification id is: ', notification_id)
     if not notification_id:
         return HttpResponseForbidden('ERROR : Must provide a valid notification id.')
     
@@ -632,9 +633,16 @@ def unseen_notifications(request):
     '''
     Checks if the requester has unseen notifications.
     '''
+    unseen_notifications = 0
+
+    for notification in request.user.notifications.all():
+        if not notification.seen:
+            unseen_notifications += 1
+
+    print( 'unseen: ', unseen_notifications)
 
     return JsonResponse({
-       'unseen' : not any([notification.seen for notification in request.user.notifications.all()])
+       'unseen' : unseen_notifications
     })
 
 

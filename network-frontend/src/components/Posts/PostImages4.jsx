@@ -20,6 +20,7 @@ const PostImages4 = ( { sources, inForm, handleDeleteImage }) => {
 
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteIndex]);
 
 

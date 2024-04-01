@@ -11,10 +11,9 @@ import { RiNotification2Fill } from "react-icons/ri";
 import { IoMailOutline } from "react-icons/io5";
 import { IoMailSharp } from "react-icons/io5";
 import { CiBookmark } from "react-icons/ci";
-import { FaBookmark, FaFeather } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
 
 // Context imports
 import GeneralContext from '../../context/GeneralContext';

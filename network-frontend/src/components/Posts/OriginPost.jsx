@@ -18,14 +18,12 @@ import PostImages3 from './PostImages3';
 import PostImages4 from './PostImages4';
 
 // Context imports
-import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 
 
 const OriginPost = ({ post, handleAction, postView }) => {
 
-    const { user, authTokens } = useContext(AuthContext);
-    const { mode, handleLike, handleBookmark, handleTransmit } = useContext(GeneralContext);
+    const { mode, handleLike, handleTransmit } = useContext(GeneralContext);
 
     const navigate = useNavigate();
 
