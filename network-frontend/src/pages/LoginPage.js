@@ -13,8 +13,6 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [isForgottenPassword, setIsForgottenPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [ loadingScreen, setLoadingScreen]  = useState(false);
 
   const openLogin = () => {
     setIsOpen(!isOpen);
@@ -42,11 +40,8 @@ const LoginPage = () => {
 
 
 
-  return (loadingScreen ?
-    <div className='w-screen h-screen flex items-center justify-center bg-black text-white'>
-        <PiDogBold className='text-[350px] animate-expand'/>
-    </div>
-    :
+  return (
+
     <div className='h-screen flex bg-black text-white font-twitter '>
       <div className='hidden xl:flex w-9/12 text-[350px] justify-center pt-48 pl-[5%]'>
         <PiDogBold />
@@ -88,13 +83,11 @@ const LoginPage = () => {
         </div>
       </div>
       <Modal isVisible={isOpen} background='bg-login-modal'>
-        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} setLoading={setLoading} openRegister={openRegister} setLoadingScreen={setLoadingScreen} />}
-        {isRegister && <Register handleCloseModal={handleCloseModal} setLoading={setLoading}/>}
-        {isForgottenPassword && <ResetPassword handleCloseModal={handleCloseModal} setLoading={setLoading} />}
+        {isLogin && <Login handleCloseModal={handleCloseModal} openForgottenPassword={openForgottenPassword} openRegister={openRegister} />}
+        {isRegister && <Register handleCloseModal={handleCloseModal}/>}
+        {isForgottenPassword && <ResetPassword handleCloseModal={handleCloseModal}/>}
       </Modal>
     </div>
-    
-  )
-}
+)}
 
 export default LoginPage

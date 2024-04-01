@@ -11,12 +11,13 @@ export const AuthProvider = ({children}) => {
 
     const [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null);
     const [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null);
+
     // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
-    const loginUser = async(values, setErrorMessage, setLoading, setLoadingScreen) => {
+    const loginUser = async(values, setErrorMessage, setLoading) => {
         console.log('about to log in');
         setLoading(true);
         fetch('http://127.0.0.1:8000/token/', {
@@ -37,17 +38,19 @@ export const AuthProvider = ({children}) => {
                 navigate('/home');
             }
             else {
+                setLoading(false);
                 setErrorMessage('Invalid credentials, please check your username/password.');
             }
         })
         .catch(error => {
             console.log(error);
+            setLoading(false);
             setErrorMessage('An error occurred, please try again.');
         });
     }
     
 
-    const registerUser = (body, setErrorMessage, setLoading) => {
+    const registerUser = (body) => {
         console.log('BODY' , body);
         fetch('http://127.0.0.1:8000/register', {
             method: 'POST',

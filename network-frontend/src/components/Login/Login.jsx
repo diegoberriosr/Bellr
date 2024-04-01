@@ -3,19 +3,21 @@ import { useFormik } from 'formik';
 
 // Component imports
 import Input from '../Forms/Input';
+import MoonLoader from 'react-spinners/MoonLoader';
 import { GoogleLogin } from '@react-oauth/google';
+
 // Icon imports
 import { PiDogBold } from "react-icons/pi";
 import { IoArrowBack, IoCloseSharp } from "react-icons/io5";
 
 // Context imports
 import AuthContext from '../../context/AuthContext';
+ 
 
-
-const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoadingScreen, openRegister }) => {
+const Login = ({ handleCloseModal, openForgottenPassword, openRegister }) => {
 
   const [ errorMessage, setErrorMessage ] = useState(false);
-
+  const [ loading, setLoading ] = useState(false);
 
   const [ step, setStep] = useState(0);
 
@@ -29,11 +31,12 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoading
   });
 
   const handleContinue = () => {
+    console.log('x-zibit is here');
     if (step < 1) {
         setStep(step+1);
         return;
     }
-    loginUser(values, setErrorMessage, setLoading, setLoadingScreen);
+    loginUser(values, setErrorMessage, setLoading);
   }
 
   const STEPS = [
@@ -71,7 +74,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoading
         <PiDogBold className='text-4xl'/>
         <div className={`${step === 0 ? 'w-9/12' : 'w-full'} mt-6`}>
             <h2 className='ml-20 text-3xl font-bold'>{step === 0 ? 'Login' : 'Enter your password password'}</h2>
-            <form className='flex flex-col items-center jusitify-center w-full mt-9' onSubmit={(e) => {loginUser(e, setErrorMessage)}}>
+            <form className='flex flex-col items-center jusitify-center w-full mt-9' onSubmit={(e) => { e.preventDefault(); handleContinue();}}>
                 {step === 0 &&
                 <>
                      <GoogleLogin
@@ -112,7 +115,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, setLoading, setLoading
                 disabled={ step === 0 ? values.username.length === 0 : values.password.length === 0 }
                 className={`${ step === 0 ? 'mt-8 w-[300px] h-9 ' : 'mt-56 w-[440px] h-[52px]'} font-semibold  bg-white rounded-full 
                 ${(step === 0 && values.username.length === 0) || (step === 1 && values.password.length === 0) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90'} text-black flex items-center justify-center`} 
-                onClick={handleContinue}>{ step === 0 ? 'Continue' : 'Log in' }</button>
+                onClick={handleContinue}>{ loading ? <MoonLoader loading={loading} size={30} color='#1D9BF0'/>  : (step === 0 ? 'Continue' : 'Log in') }</button>
     
                    { step === 0 &&  <button type='button' className='mt-6 font-bold w-[300px] h-9  bg-transparent rounded-full border border-login-dark-border text-white hover:bg-login-highlight flex items-center justify-center transition-colors duration-200' onClick={openForgottenPassword}>Forgot password?</button> }
                   <p className={`${ step === 0 ? 'mt-12' : 'mt-6'} text-login-light-gray tex-base`}>Don't have an account? <span className='text-twitter-blue hover:underline cursor-pointer' onClick={openRegister}>Register</span></p>
