@@ -50,8 +50,8 @@ export const AuthProvider = ({children}) => {
     }
     
 
-    const registerUser = (body) => {
-        console.log('BODY' , body);
+    const registerUser = (body, setLoading) => {
+        setLoading(true);
         fetch('http://127.0.0.1:8000/register', {
             method: 'POST',
             headers:{
@@ -60,8 +60,6 @@ export const AuthProvider = ({children}) => {
             body: JSON.stringify(body)
         })
         .then( () => {
-            console.log('register successful, redirecting');
-            console.log(body.username, body.password);
             fetch('http://127.0.0.1:8000/token/', {
                 method : 'POST',
                 headers:{
@@ -76,14 +74,18 @@ export const AuthProvider = ({children}) => {
                     setAuthTokens(data);
                     setUser(jwtDecode(data.access));
                     localStorage.setItem('authTokens', JSON.stringify(data));
+                    setLoading(false);
                     navigate('/home')
                 }
                 else {
+                    setLoading(false);
                     console.log(response);
                 }
             }
             )
-            .catch((error) => console.log(error));
+            .catch((error) => {
+                setLoading(false);
+                console.log(error)});
 
         }
         )

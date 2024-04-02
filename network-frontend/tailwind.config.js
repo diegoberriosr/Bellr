@@ -49,7 +49,8 @@ module.exports = {
         },
       },
       screens : {
-        'mobile' : '431px'
+        'mobile' : '431px',
+        'fold': '281px'
       },
       colors: {
     

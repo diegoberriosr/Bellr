@@ -11,15 +11,14 @@ import { PiDogBold } from "react-icons/pi";
 // Component imports
 import Input from '../Forms/Input';
 import DateInput from '../Forms/DateInput';
-import ClipLoader from "react-spinners/ClipLoader";
 import PopupAlert from '../Alerts/PopupAlert.jsx';
+import MoonLoader from 'react-spinners/MoonLoader.js';
 
 // Context imports
 import AuthContext from '../../context/AuthContext';
 
 // Schema imports
 import { RegisterSchema } from '../../schemas';
-
 
 const DATE_OPTIONS = {
   
@@ -84,26 +83,26 @@ const Register = ({ handleCloseModal }) => {
   const STEPS = [
     {
         inputs :  [
-                    {value: values.username, type: 'text', name: 'username', id : 'Username', placeholder: 'Username', inputStyle: 'w-[440px] h-[56px] bg-transparent text-white'},
-                    {value: values.email , type: 'email', name: 'email', id : 'E-mail', placeholder: 'E-mail', containerStyle: 'mt-6', inputStyle: 'w-[440px] h-[56px] bg-transparent text-white'}
+                    {value: values.username, type: 'text', name: 'username', id : 'Username', containerStyle : 'w-[200px] fold:w-[300px] sm:w-[440px]', placeholder: 'Username', inputStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white', maxValue:15, displayMaxValue: true},
+                    {value: values.email , type: 'email', name: 'email', id : 'E-mail', placeholder: 'E-mail', containerStyle: 'mt-6', inputStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white'}
                   ]
     },
     {
       inputs : [
-        {value : values.code, type :'text', name: 'code', id: 'Code', placeholder: 'Confirmation code', inputStyle : 'w-[440px] h-[56px] bg-transparent text-white'}
+        {value : values.code, type :'text', name: 'code', id: 'Code', placeholder: 'Confirmation code', containerStyle : 'w-[200px] fold:w-[300px] sm:w-[440px]', inputStyle : 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white'}
       ]
     },
     {
         inputs : [
-                    {value: values.password, type: 'password', name: 'password', placeholder: 'Password', containerStyle: 'mt-6',  inputStyle: 'w-[440px] h-[56px] bg-transparent text-white'},
-                    {value : values.confirmPassword , type: 'password', name: 'confirmPassword', placeholder: 'Confirm password', containerStyle: 'mt-5',  inputStyle: 'w-[440px] h-[56px] bg-transparent text-white'},
+                    {value: values.password, type: 'password', name: 'password', id :'Password', placeholder: 'Password', containerStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] mt-6',  inputStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white'},
+                    {value : values.confirmPassword , type: 'password', name: 'confirmPassword', id:'Confirm Password', placeholder: 'Confirm password', containerStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] mt-5',  inputStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white'},
                  ]
     },
     {
         inputs : [
-                    {value : values.profilename, type: 'text', name: 'profilename', placeholder: "Profile's name", inputStyle: 'w-[440px] h-[56px] bg-transparent text-white'},
-                    {value : values.bio , type: 'text', name: 'bio', placeholder: 'Bio', containerStyle: 'mt-6', inputStyle: 'w-[440px] h-[56px] bg-transparent text-white'},
-                    {value: values.pfp , type: 'text', name: 'pfp', placeholder: 'Link to profile pic', containerStyle: 'mt-6', inputStyle: 'w-[440px] h-[56px] bg-transparent text-white'}
+                    {value : values.profilename, type: 'text', name: 'profilename', id : 'Profilename', placeholder: "Profile's name", containerStyle : 'w-[200px] fold:w-[300px] sm:w-[440px]', inputStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white', maxValue : 50, displayMaxValue : true},
+                    {value : values.bio , type: 'text', name: 'bio', id : 'Placeholder', placeholder: 'Bio', containerStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] mt-6', inputStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white', maxValue: 100, displayMaxValue : true},
+                    {value: values.pfp , type: 'text', name: 'pfp', id : 'Pfp',  placeholder: 'Link to profile pic', containerStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] mt-6', inputStyle: 'w-[200px] fold:w-[300px] sm:w-[440px] h-[56px] bg-transparent text-white'}
                  ]
     }
 ]
@@ -151,15 +150,13 @@ const Register = ({ handleCloseModal }) => {
         }
 
         // Send request to backend if there are no steps remaining.
-        else if (step === 3) { console.log('about to register') ; setReady(true);}
+        else if (step === 3) {setReady(true);}
   };
 
   useEffect(() => {
-    if (ready) registerUser(values);
+    if (ready) registerUser(values, setLoading);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
-
-  console.log(confirmation, values.code);
 
   useEffect( () => {
 
@@ -198,30 +195,28 @@ const Register = ({ handleCloseModal }) => {
   }, [alert])
 
   return (
-    <div className='relative w-[600px] bg-black text-white mt-9 h-[650px] flex flex-col items-center rounded-2xl'>
+    <div className='relative w-screen h-screen sm:w-[600px] bg-black text-white sm:mt-9 sm:h-[650px] flex flex-col items-center sm:rounded-2xl'>
     {alert && <PopupAlert containerStyle='fixed right-2 top-0 w-[300px] h-12 shadow-custom bg-black rounded-xl' downwards={true} redirectLink={undefined}> 
                 <span>{alert}</span>
             </PopupAlert>}
-    { loading && <div className='absolute inset-0 w-full h-full flex items-center justify-center backdrop-blur bg-black opacity-70 z-50 rounded-2xl'>
-        <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/>
-      </div>}
       <span className='absolute top-2.5 left-3 cursor-pointer hover:rounded-full p-1 hover:bg-login-highlight transition-all transition-colors duration-300'>
         {step > 0 ? <IoIosArrowRoundBack className='text-2xl' onClick={() => { if(step>0) {setStep(step-1)} }}/> : <IoCloseSharp className='text-2xl' onClick={handleCloseModal}/>}
       </span>
       <PiDogBold className='absolute top-2.5 mr-auto ml-auto text-4xl'/>
       <div className='relative w-9/12 h-full mt-3'>
-            <h2 className='text-xl font-bold transition-all -ml-1.5'>Step {step+1} from 3</h2>
-            <h2 className='text-3xl mt-8 font-bold'>{HEADERS[step]}</h2>
+            <h2 className='hidden fold:block fold:text-md sm:text-xl font-bold transition-all -ml-1.5'>Step {step+1} from 4</h2>
+            <h2 className='text-xl fold:text-3xl mt-8 font-bold'>{HEADERS[step]}</h2>
             {step === 1 && <span className='mt-1 text-sm text-login-light-gray'>{`Please introduce it below to verify that you are the owner of ${values.email}`}</span>}
             <div className='flex flex-col pt-10'>
                 {STEPS[step].inputs.map(props => (
                 <Input key={props.name} type={props.type} value={props.value} id={props.id} 
                 name={props.name} containerStyle={props.containerStyle} inputStyle={props.inputStyle}
                 error={errors[props.name]} touched={touched[props.name]} placeholder={props.placeholder}
+                maxValue={props.maxValue} displayMaxValue={props.displayMaxValue}
                 handleChange={handleChange} handleBlur={handleBlur}
                 />
                 ))}
-                {step === 1 && <span className='mt-2.5 ml-2.5 text-[12px] text-twitter-blue hover:underline' onClick={() => {handleGenerateCode(() => setAlert('A new code was sent'), false)}}>Did not receive a code? Send a new one.</span>}
+                {step === 1 && <span className='mt-5 ml-2.5 text-[12px] text-twitter-blue hover:underline' onClick={() => {handleGenerateCode(() => setAlert('A new code was sent'), false)}}>Did not receive a code? Send a new one.</span>}
                 {step === 0 && 
                    <div>
                     <h4 className='tex-base text-white font-semibold mt-14'>Birthday</h4>
@@ -231,19 +226,19 @@ const Register = ({ handleCloseModal }) => {
                     jemand anderen gedacht ist.</p>
                     <ul className='w-full flex items-center space-x-2.5 mt-5'> 
                     <li>
-                        <DateInput value={values.month} id='month' label='Month' handleChange={handleChange} handleBlur={handleBlur} error={errors} touched={touched} options={DATE_OPTIONS['months']} inputStyle='bg-transparent w-[208px] h-12'/>
+                        <DateInput value={values.month} id='month' label='Month' handleChange={handleChange} handleBlur={handleBlur} error={errors} touched={touched} options={DATE_OPTIONS['months']} inputStyle='bg-transparent w-[104px] fold:w-[156px] sm:w-[208px] h-12'/>
                       </li>
                       <li>
-                        <DateInput  value={values.day} id='day' label='Day' handleChange={handleChange} handleBlur={handleBlur} error={errors} touched={touched}  options={DATE_OPTIONS['days']['']} inputStyle='bg-transparent w-[90px] h-12'/>
+                        <DateInput  value={values.day} id='day' label='Day' handleChange={handleChange} handleBlur={handleBlur} error={errors} touched={touched}  options={DATE_OPTIONS['days']['']} inputStyle='bg-transparent w-[45px] sm:w-[90px] h-12'/>
                       </li>
                       <li>
-                        <DateInput  value={values.year} id='year' label='Year' handleChange={handleChange} handleBlur={handleBlur} error={errors} touched={touched}  options={DATE_OPTIONS['years']} inputStyle='bg-transparent w-[113.2px] h-12'/>
+                        <DateInput  value={values.year} id='year' label='Year' handleChange={handleChange} handleBlur={handleBlur} error={errors} touched={touched}  options={DATE_OPTIONS['years']} inputStyle='bg-transparent w-[56px] sm:w-[113.2px] h-12'/>
                       </li>
                     </ul>
                   </div>}
             </div>
                 <div className='absolute w-full bottom-5'>
-                    <button type='button' className={`w-full h-[51px] bg-gray-50 text-black text-xl text-bold rounded-full flex items-center justify-center ${isDisabled ? 'opacity-50' : 'focus:opacity-90'} focus:outline-none`} disabled={isDisabled} onClick={handleContinue}>Continue</button>
+                    <button type='button' className={`w-full h-[51px] bg-gray-50 text-black text-xl text-bold rounded-full flex items-center justify-center ${isDisabled ? 'opacity-50' : 'focus:opacity-90'} focus:outline-none`} disabled={isDisabled} onClick={handleContinue}>{loading ? <MoonLoader loading={loading} color='#1D9BF0' size={25} /> : 'Continue'}</button>
                 </div>
         </div>
     </div>

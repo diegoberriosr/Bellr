@@ -39,22 +39,22 @@ const ResetPassword = ({ handleCloseModal }) => {
     const STEPS = [
         {
             elements : [
-                {value:values.email, name : 'email' , type: 'email' , inputStyle : 'w-[440px] h-[40px] bg-transparent', containerStyle : 'mt-8', id : 'Email', placeholder: 'Email'}
+                {value:values.email, name : 'email' , type: 'email' , inputStyle : 'w-[200px] fold:w-[300px] sm:w-[440px] h-[40px] bg-transparent', containerStyle : 'mt-8', id : 'Email', placeholder: 'Email'}
             ],
             header : 'Password forgotten?',
             subheader : "Please provide to us your account's e-mail, we'll send you a code. Use it to reset your account's password."
         },
         {
             elements : [
-                {value:values.code, name : 'code' , type: 'text' , inputStyle : 'w-[440px] h-[40px] bg-transparent' , containerStyle : 'mt-8', id : 'Confirmation code', placeholder: 'Confirmation code'}
+                {value:values.code, name : 'code' , type: 'text' , inputStyle : 'w-[200px] fold:w-[300px] sm:w-[440px] h-[40px] bg-transparent' , containerStyle : 'mt-8', id : 'Confirmation code', placeholder: 'Confirmation code'}
             ],
             header : 'Enter confirmation code',
             subheader : 'We have sent you an e-mail with a confirmation code. It will expire in ten minutes.'
         },
         {
             elements : [
-                {value:values.password, name : 'password' , type: 'password' , inputStyle : 'w-[440px] h-[40px] bg-transparent' , containerStyle : 'mt-8', id : 'Password', placeholder: 'Password'},
-                {value:values.confirmation, name : 'confirmation' , type: 'password' , inputStyle : 'w-[440px] h-[40px] bg-transparent', containerStyle : 'mt-8' , id : 'Confirmation', placeholder: 'Confirmation'}
+                {value:values.password, name : 'password' , type: 'password' , inputStyle : 'w-[200px] fold:w-[300px] sm:w-[440px] bg-transparent' , containerStyle : 'mt-8', id : 'Password', placeholder: 'Password'},
+                {value:values.confirmation, name : 'confirmation' , type: 'password' , inputStyle : 'w-[200px] fold:w-[300px] sm:w-[440px] bg-transparent', containerStyle : 'mt-8' , id : 'Confirmation', placeholder: 'Confirmation'}
             ],
             header : 'Reset password',
             subheader : 'Please enter your new password.'
@@ -153,7 +153,7 @@ const ResetPassword = ({ handleCloseModal }) => {
       }, [values, errors, step])
     
 
-    return <div className='relative w-[600px] h-[650px] bg-black sm:mt-10 flex flex-col items-center text-white pt-2.5 rounded-xl'>
+    return <div className='relative w-screen h-screen sm:w-[600px] sm:h-[650px] bg-black sm:mt-10 flex flex-col items-center text-white pt-2.5 rounded-xl'>
         {alert && <PopupAlert containerStyle='fixed right-2 top-0 w-[300px] h-12 shadow-custom bg-black rounded-xl' downwards={true} redirectLink={undefined}> 
                 <span>{alert}</span>
             </PopupAlert>}
@@ -164,8 +164,8 @@ const ResetPassword = ({ handleCloseModal }) => {
          <IoCloseSharp className='absolute top-3.5 left-3 text-xl cursor-pointer' onClick={handleCloseModal}/>
          <PiDogBold className='text-4xl'/>
          <div className='w-9/12 mt-6'>
-            <h2 className='ml-1 text-3xl font-bold'>{STEPS[step].header}</h2>
-            <p className='w-[440px] ml-1 mt-3 text-sm text-login-light-gray'>{STEPS[step].subheader}</p>
+            <h2 className='ml-1 text-sm fold:text-xl text-3xl font-bold'>{STEPS[step].header}</h2>
+            <p className='w-[200px] fold:w-[300px] sm:w-[440px] ml-1 mt-3 text-sm text-login-light-gray'>{STEPS[step].subheader}</p>
             <div className='ml-1'>
                 {STEPS[step].elements.map(( element, index )=> (
                     <Input key={index} value={element.value} name={element.name} placeholder={element.placeholder}  type={element.type}
@@ -175,7 +175,7 @@ const ResetPassword = ({ handleCloseModal }) => {
                 {step === 1 && <p className='mt-5 ml-2 text-twitter-blue hover:underline cursor-pointer text-sm' onClick={() => handleGenerateCode(() => { setAlert('A new code was sent')})}> Did not receive the code? Resend</p>}
             </div>
          </div>
-         <button className={`absolute bottom-5 w-[430px] h-[50px] flex items-center justify-center bg-white text-black font-bold rounded-full ${isDisabled ? 'opacity-50' : 'hover:opacity-90'}`} disabled={isDisabled} onClick={handleContinue}>Continue</button>
+         <button className={`absolute bottom-5 w-[200px] fold:w-[300px] sm:w-[440px] h-[50px] flex items-center justify-center bg-white text-black font-bold rounded-full ${isDisabled ? 'opacity-50' : 'hover:opacity-90'}`} disabled={isDisabled} onClick={handleContinue}>Continue</button>
     </div>
 } 
 
