@@ -85,7 +85,7 @@ const Bottombar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={`block mobile:hidden fixed bottom-0 w-full h-20 bg-${mode.background} ${mode.text} border border-${mode.separator} border-b-0 border-l-0 border-r-0`}>
+    <div className={`block mobile:hidden fixed bottom-0 w-screen h-20 bg-${mode.background} ${mode.text} border border-${mode.separator} border-b-0 border-l-0 border-r-0`}>
       <ul className='flex items-center justify-center items-center  h-full w-full text-4xl'>
       {ICONS.map((icon, index) => {
                 if (icon.loginRequired && user===null ){

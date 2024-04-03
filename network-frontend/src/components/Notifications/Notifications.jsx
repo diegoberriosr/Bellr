@@ -83,26 +83,26 @@ const Notifications = () => {
     }, [filter, page]);
 
     
-    return <div className='relative w-[600px]'>
+    return <div className='relative w-screen h-screen sm:w-[600px]'>
         <div className={`flex items-center space-x-7 text-2xl border ${mode.separator} border-l-0 border-t-0 border-b-0 ${mode.background} ${mode.text} bg-opacity-50 backdrop-blur-sm sticky top-0 z-40`}>
             <p className='pl-3.5 my-2.5 text-xl font-bold'> Notifications </p>
         </div>
-        <ul className={`w-full h-12 flex border ${mode.separator} border-t-0 border-l-0 ${mode.background}`}>
+        <ul className={`w-full h-12 flex border ${mode.separator} border-t-0 border-l-0 ${mode.background} cursor-pointer`}>
             <li className={`relative w-4/12 flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('') }}>
                 <span>All</span>
-                {filter === '' && <span className={`absolute top-11 left-14 w-3/12 h-1 bg-twitter-blue rounded-full`}></span>}
+                {filter === '' && <span className={`absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-3/12 h-1 bg-twitter-blue rounded-full`}></span>}
             </li>
             <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('mention') }}>
                 <span>Mentions</span>
-                {filter === 'mention' && <span className='absolute top-11 left-9 w-6/12 h-1 bg-twitter-blue rounded-full'></span>}
+                {filter === 'mention' && <span className='absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-6/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
             <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('like')}}>
                 <span>Likes</span>
-                {filter === 'like' && <span className='absolute top-11 left-6 w-8/12 h-1 bg-twitter-blue rounded-full'></span>}
+                {filter === 'like' && <span className='absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-8/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
             <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('transmission')}}>
                 <span>Transmissions</span>
-                {filter === 'transmission' && <span className='absolute top-11 left-12 w-4/12 h-1 bg-twitter-blue rounded-full'></span>}
+                {filter === 'transmission' && <span className='absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-10/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
         </ul>
         {(notifications.length > 0) && notifications.map((notification, index) => {

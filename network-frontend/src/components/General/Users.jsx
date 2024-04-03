@@ -128,7 +128,7 @@ const Users = () => {
   }, [page])
 
   return (
-    <div className='w-[600px] min-h-screen'>
+    <div className='w-screen sm:w-[600px] min-h-screen'>
           <div className={`flex items-center space-x-7 pl-3 text-xl border border-b-0 border-l-0 border-t-0 ${mode.separator} ${mode.background} bg-opacity-50 sticky top-0`}>
           <BsArrowLeftShort className='ml-3.5 text-3xl opacity-100 hover:bg-gray-900 hover:rounded-full' onClick={() => { navigate(-1) }} />
             <div className='mt-1 ml-4 mb-1'>
@@ -137,17 +137,17 @@ const Users = () => {
             </div>
           </div>
           <ul className={`w-full h-10 flex h-[53px] border border-l-0 border-t-0 ${mode.separator}`}>
-                <li className={`relative w-4/12 flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { navigate(`/followers/${username}/verified`)}}>
+                <li className={`relative w-4/12 text-xs mobile:text-base flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { navigate(`/followers/${username}/verified`)}}>
                   <span className={filter === 'verified' ? 'font-bold' : 'text-gray-600'}>Verified followers</span>
-                  {filter === 'verified' && type === 'followers' && <span className={`absolute top-12 left-9 w-8/12 h-1 bg-${mode.color} rounded-full`}></span>}
+                  {filter === 'verified' && type === 'followers' && <span className={`absolute top-12 mr-auto ml-auto w-8/12 h-1 bg-${mode.color} rounded-full`}></span>}
                 </li>
-                <li className={`relative w-4/12 flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => {navigate(`/followers/${username}/`)} }>
+                <li className={`relative w-4/12 mr-auto ml-auto text-xs mobile:text-base flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => {navigate(`/followers/${username}/`)} }>
                   <span className={!filter && type === 'followers' ? 'font-bold' : 'text-gray-600'}>Followers</span>
-                  {!filter  && type ==='followers' && <span className={`absolute top-12 left-14 w-5/12 h-1 bg-${mode.color} rounded-full`}></span>}
+                  {!filter  && type ==='followers' && <span className={`absolute top-12 mr-auto ml-auto w-5/12 h-1 bg-${mode.color} rounded-full`}></span>}
                 </li>
-                <li className={`relative w-4/12 flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => {navigate(`/following/${username}/`)}}>
+                <li className={`relative w-4/12 flex mr-auto ml-auto text-xs mobile:text-base justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => {navigate(`/following/${username}/`)}}>
                   <span className={type === 'following' ? 'font-bold' : 'text-gray-600'}>Following</span>
-                  { type === 'following' && <span className={`absolute top-12 left-12 w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
+                  { type === 'following' && <span className={`absolute top-12 mr-auto ml-auto w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
                 </li>
               </ul>
           { loading && 
@@ -158,7 +158,7 @@ const Users = () => {
           { users &&
           users.length > 0 ?
             users.map((profile, index) =>
-              <div key={index} className='w-full flex items-start p-2.5 animate-grow'>
+              <div key={index} className={`w-full flex items-start p-2.5 animate-grow border-r border-b ${mode.separator}`}>
                 <div className='w-10 h-10 rounded-full overflow-hidden ml-2.5'>
                    <img src={profile.pfp} alt='user pfp' className='object-cover w-full h-full' />
                 </div>

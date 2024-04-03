@@ -93,8 +93,7 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
                 <img src={user.pfp} alt='user profile pic' className='h-full w-full object-fit' />
             </div>
             <div className={`w-full pr-2 ${!isFocused ? 'flex items-center' : ''}`}>
-             
-                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${mode.text} w-full` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} onFocus={handleFocus} onChange={handleChange} />
+                <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${mode.text} w-full` : 'text-twitter-light-gray w-6/12' } text-xs sm:text-sm md:text-lg text-bold ml-3 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} onFocus={handleFocus} onChange={handleChange} />
                 { !isFocused && 
                     <button disabled={true} className={`opacity-50 ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-md flex items-center`}>{message}</button>
                 }
@@ -143,7 +142,7 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
                         <span className='absolute top-1 left-2.5 text-red-900 text-xs'>0</span>  
                     }
                 </div>
-                <button onClick={handleNewPost} className={`ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-md flex items-center`}>{'Post'}</button>
+                <button onClick={handleNewPost} className={`ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-xs sm:text-sm md:text-md flex items-center`}>{'Post'}</button>
             </div>
         </footer>
         }

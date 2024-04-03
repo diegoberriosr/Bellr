@@ -43,7 +43,6 @@ const Profile = () => {
    if (account) setBlocked(account.isBlocked);
   } , [account])
 
-  console.log(blocked);
 
   return (
     

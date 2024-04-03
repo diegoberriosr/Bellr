@@ -56,18 +56,18 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
     }, [deleting])
 
     return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 ${ deleting ? 'animate-element-shrink' : 'animate-grow'}`}>
-        {post.transmission && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
+        {post.transmission && <p className='flex items-center pt-1.5 ml-10 fold:text-xs sm:text-sm max-w-full truncate text-info-gray'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter.username} reposted</span>
         </p>}
         {
-            post.reply && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
+            post.reply && <p className='flex items-center pt-1.5 ml-10 text-xs sm:text-sm max-w-[95%] truncate text-info-gray'>
                 <FaReplyAll />
                 <span className='ml-2'>{post.user.username} replied to {post.origin.username}</span>
             </p>
         }
         {
-            post.pinned && <p className='flex items-center pt-1.5 ml-10 text-sm text-info-gray'>
+            post.pinned && <p className='flex items-center pt-1.5 ml-10 fold:text-xs sm:text-sm max-w-full truncate text-info-gray'>
             <TbPinnedFilled />
             <span className='ml-2'>Pinned</span>
         </p>
@@ -78,13 +78,13 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                     <img src={post.user.pfp} className='h-full w-full object-fit' alt='profile pic' />
                 </div>
             </aside>
-            <main className={`w-[90%] ${post.transmission || post.reply ? 'mt-0' : 'mt-2.5'} p-1 pl-3 text-base w-full`}>
-                <div className='flex h-4 items-center'>
-                    <p className='font-bold hover:underline' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
+            <main className={`w-[90%] ${post.transmission || post.reply ? 'mt-0' : 'mt-2.5'} p-1 pl-3 text-xs sm:text-sm md:text-base w-full`}>
+                <div className='relative max-w-full flex h-4 items-center'>
+                    <p className='font-bold hover:underline max-w-[30%] mobile:max-w-[45%] sm:max-w-[30%] md:max-w-[45%] truncate' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
                     {post.user.verified && <MdVerified className='text-twitter-blue ml-0.5' />}
-                    <p className='text-post-gray ml-1'>@{post.user.username}</p>
+                    <p className='text-post-gray ml-1 hidden fold:block mobile:max-w-[30%] sm:max-w-[30%] md:max-w-[30%] truncate'>@{post.user.username}</p>
                     <p className='text-post-gray ml-1'>·</p>
-                    <p className='text-post-gray ml-1'>{formatDate(post)}</p>
+                    <p className='text-post-gray ml-1 mobile:max-w-[10%] sm:max-w-[30%] truncate'>{formatDate(post)}</p>
                     <DropDownMenu followed={post.followed} author_id={post.user.user_id} post={post} setPosts={setPosts} setDeleting={setDeleting}/>
                 </div>
                 <FormattedContent content={post.content}/>

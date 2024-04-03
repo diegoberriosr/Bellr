@@ -46,7 +46,7 @@ const DropdownMenu = ({ author_id, followed, post, setDeleting }) => {
 
 
   return (
-    <div className='relative ml-auto mr-2.5 animate-grow z-20' onMouseLeave={() => setShrink(true)}>
+    <div className='absolute right-0 mr-2.5 animate-grow z-20' onMouseLeave={() => setShrink(true)}>
         {isOpen ? <ul  tabIndex='0' className={`relative absolute top-7 -right-1 w-28 h-20 flex flex-col border shadow-custom pl-1 pr-1 bg-${mode.background} ${mode.text} rounded-lg border ${mode.separator} ${ shrink ? 'animate-shrink' : 'animate-grow'}`} onKeyDown={() => setShrink(true)}>
           { user.username !== post.user.username && 
             <li className='hover:bg-opacity-50 cursor-pointer inline-flex items-center' onClick={() => {handleFollow(post.user.user_id)}}> 

@@ -21,7 +21,6 @@ const ProfileHeader = ({ account }) => {
 
     const navigate = useNavigate()
     
-    console.log(account);
 
     const handleFilter = (url, updatedFilter) => {
         setLoading(true);
@@ -88,22 +87,22 @@ const ProfileHeader = ({ account }) => {
                 <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/followers/${account.username}/`)}}><span className='font-bold'>{account.followers}</span> Followers</p>
             </div>
         </div>
-        <ul className='w-full h-12 flex mt-2.5'>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`user/${account.username}`, 'All') }}>
+        <ul className='w-full h-12 flex mt-2.5 cursor-pointer'>
+            <li className={`relative w-4/12 flex items-center justify-center text-xs mobile:text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`user/${account.username}`, 'All') }}>
                 <span>All</span>
-                {filter === 'All' && <span className={`absolute top-11 left-9 w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
+                {filter === 'All' && <span className={`absolute top-11 mr-auto ml-auto w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`posts/replies/${account.username}`, 'Replies') }}>
+            <li className={`relative w-4/12 flex items-center justify-center text-xs mobile:text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`posts/replies/${account.username}`, 'Replies') }}>
                 <span>Replies</span>
-                {filter==='Replies' &&<span className={`absolute top-11 left-9 w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
+                {filter==='Replies' &&<span className={`absolute top-11 mr-auto ml-auto w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`posts/transmissions/${account.username}`, `Transmissions`) }}>
+            <li className={`relative w-4/12 flex items-center justify-center text-xs mobile:text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`posts/transmissions/${account.username}`, `Transmissions`) }}>
                 <span>Transmisisons</span>
-                {filter==='Transmissions' &&<span className={`absolute top-11 left-9 w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
+                {filter==='Transmissions' &&<span className={`absolute top-11 mr-auto ml-auto w-10/12 h-1 bg-${mode.color} rounded-full`}></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`posts/liked/${account.username}`, 'Likes')}}>
+            <li className={`relative w-4/12 flex items-center justify-center text-xs mobile:text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleFilter(`posts/liked/${account.username}`, 'Likes')}}>
                 <span>Likes</span>
-                {filter==='Likes' &&<span className={`absolute top-11 left-9 w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
+                {filter==='Likes' &&<span className={`absolute top-11 mr-auto ml-auto w-6/12 h-1 bg-${mode.color} rounded-full`}></span>}
             </li>
         </ul>
     </header>
