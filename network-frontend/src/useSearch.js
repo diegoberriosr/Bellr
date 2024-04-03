@@ -132,6 +132,9 @@ const useSearch = () => {
             else if (account) setAccount(prevAccount => {
               let updatedAccount = {...prevAccount}; // Destructure the state.
               updatedAccount.followed = !updatedAccount.followed; // Update.
+
+              updatedAccount.followed ? updatedAccount.followers++ : updatedAccount.followers-- ;
+
               return updatedAccount;
             })
 
@@ -248,7 +251,10 @@ const useSearch = () => {
                 let updatedAccount = {...prevAccount};
                 updatedAccount.isBlocked = !updatedAccount.isBlocked; // Update account's information
 
-                if(updatedAccount.isBlocked) updatedAccount.followed = false; // If the requester is following the account and blocks it, set the following status to false.
+                if(updatedAccount.isBlocked) {
+                  updatedAccount.followed = false; // If the requester is following the account and blocks it, set the following status to false.
+                  updatedAccount.followers--;
+                };
 
                 return updatedAccount;
             })
