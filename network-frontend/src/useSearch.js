@@ -321,6 +321,7 @@ const useSearch = () => {
         })
         .catch( err => {
             if (axios.isCancel(err)) return;
+            console.log(err);
             setError(true);
             setLoading(false);
         })
@@ -368,6 +369,7 @@ const useSearch = () => {
             else if ( err.message.includes('404') ) setError(404);
             else if ( err.message.includes('403')) setError(403);
             setLoading(false);
+            console.log(err);
         })
     }, [currentUrl])
     

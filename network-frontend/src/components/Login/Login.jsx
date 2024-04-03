@@ -41,15 +41,15 @@ const Login = ({ handleCloseModal, openForgottenPassword, openRegister }) => {
     {
         elements : [
           
-            {value: values.username, type: 'text', name: 'username', id : 'Username',  placeholder: 'Username or E-mail', containerStyle: 'mt-2', inputStyle: 'w-[250px] fold:w-[300px] h-[56px] bg-transparent', handleChange : handleChange, handleBlur : handleBlur },
+            {value: values.username, type: 'text', name: 'username', id : 'Username',  placeholder: 'Username or E-mail', containerStyle: 'mt-2', inputStyle: 'w-[250px] sm:w-[300px] h-[56px] bg-transparent', handleChange : handleChange, handleBlur : handleBlur },
 
             
         ]
     },
     {
         elements : [
-            {value: values.username, type: 'text', disabled:true, name: 'username',  id : 'Username', placeholder: 'Username or E-mail', inputStyle: 'w-[440px] h-[56px] bg-disabled-input text-login-gray'},
-            {value: values.password, type: 'password', name: 'password', id : 'Password',  placeholder: 'Password', containerStyle : 'mt-7', inputStyle: 'w-[440px] h-[60px] bg-transparent'},
+            {value: values.username, type: 'text', disabled:true, name: 'username',  id : 'Username', placeholder: 'Username or E-mail', inputStyle: 'w-[250px] sm:w-[440px] h-[56px] bg-disabled-input text-login-gray'},
+            {value: values.password, type: 'password', name: 'password', id : 'Password',  placeholder: 'Password', containerStyle : 'mt-7', inputStyle: 'w-[250px] sm:w-[440px] h-[60px] bg-transparent'},
         ]
     }
   ]
@@ -64,14 +64,14 @@ const Login = ({ handleCloseModal, openForgottenPassword, openRegister }) => {
   }, [errorMessage])
 
   return (
-    <div className='relative w-screen h-screen sm:w-[600px] sm:h-[650px] bg-black text-white  flex flex-col items-center rounded-xl pt-2.5 mt-auto mb-auto'>
+    <div className='relative w-screen h-screen sm:w-[600px] sm:h-[650px] bg-black text-white  flex flex-col items-center sm:rounded-xl pt-2.5 mt-auto mb-auto'>
         {step === 0 ? 
         <i className='absolute top-2 left-2 w-9 h-9 flex items-center justify-center rounded-full hover:bg-login-highlight transition-colors duration-150' onClick={handleCloseModal}>
           <IoCloseSharp className='text-[22px] cursor-pointer' /> 
         </i>: <IoArrowBack className='absolute top-3.5 left-3 text-xl cursor-pointer' onClick={ () => {setStep(step-1)}}/> }
         <PiDogBold className='text-4xl'/>
         <div className={`${step === 0 ? 'w-9/12' : 'w-full'} mt-6`}>
-            <h2 className='ml-20 text-3xl font-bold'>{step === 0 ? 'Login' : 'Enter your password password'}</h2>
+            <h2 className='ml-[15%] sm:ml-20 text-xl fold:text-3xl font-bold'>{step === 0 ? 'Login' : 'Enter your password'}</h2>
             <form className='flex flex-col items-center jusitify-center w-full mt-9' onSubmit={(e) => { e.preventDefault(); handleContinue();}}>
             { step === 0 && <>
             <button className='mt-6 w-[250px] fold:w-[300px] h-10 bg-white rounded-full text-black bg-opacity-90 hover:bg-opacity-100 flex items-center justify-center font-bold cursor-not-allowed'>
@@ -103,13 +103,13 @@ const Login = ({ handleCloseModal, openForgottenPassword, openRegister }) => {
                 <div className={` flex flex-col ${step === 0 ? 'items-center' : 'items-start'}`}>
                 <button type='button' 
                 disabled={ step === 0 ? values.username.length === 0 : values.password.length === 0 }
-                className={`${ step === 0 ? 'mt-8 w-[250px] fold:w-[300px] h-9 ' : 'mt-56 w-[440px] h-[52px]'} font-semibold  bg-white rounded-full 
+                className={`${ step === 0 ? 'mt-8 w-[250px] fold:w-[300px] h-9 ' : 'mt-56 w-[250px] fold:w-[300px] sm:w-[440px] h-[52px]'} font-semibold  bg-white rounded-full 
                 ${(step === 0 && values.username.length === 0) || (step === 1 && values.password.length === 0) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90'} text-black flex items-center justify-center`} 
                 onClick={handleContinue}>{ loading ? <MoonLoader loading={loading} size={25} color='#1D9BF0'/>  : (step === 0 ? 'Continue' : 'Log in') }</button>
     
                    { step === 0 &&  <button type='button' className='mt-6 font-bold w-[250px] fold:w-[300px] h-9  bg-transparent rounded-full border border-login-dark-border text-white hover:bg-login-highlight flex items-center justify-center transition-colors duration-200' onClick={openForgottenPassword}>Forgot password?</button> }
                   <p className={`${ step === 0 ? 'mt-12' : 'mt-6'} text-login-light-gray`}>Don't have an account? <span className='text-twitter-blue hover:underline cursor-pointer' onClick={openRegister}>Register</span></p>
-                  {step == 0 && <p className='mt-1 text-twitter-blue cursor-pointer hover:underline' onClick={() => {loginUser({ username : 'testboy' , password : 'Resorte1 '}, setErrorMessage, setLoading);}}>Log in with a guest account</p>}       
+                  {step === 0 && <p className='mt-1 text-twitter-blue cursor-pointer hover:underline' onClick={() => {loginUser({ username : 'testboy' , password : 'Resorte1 '}, setErrorMessage, setLoading);}}>Log in with a guest account</p>}       
                 </div>
             </form>
         </div>
