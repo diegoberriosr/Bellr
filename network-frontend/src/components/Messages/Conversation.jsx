@@ -36,8 +36,8 @@ const Conversation = () => {
   })
 
 
-  const handleNewMessage = () => {
-  
+  const handleNewMessage = (event) => {
+    event.preventDefault();
     let content = values.content;
     setFieldValue('content', '')
 
@@ -93,7 +93,7 @@ const Conversation = () => {
   return ( activeConversation ?
     <div className={`relative h-screen w-0 w-screen sm:w-[600px] border border-l-0  border-b-0 ${mode.separator}`}>
         <header className={`w-full h-[53px] flex items-center justify-between text-lg pl-4 pr-5 shadow-sm border-b ${mode.separator}`}>
-            <IoChevronBackOutline className={`${activeConversation ? 'block sm:hidden' : 'hidden'} text-${mode.color} text-2xl`} onClick={() => setActiveConversation(null)}/>
+            <IoChevronBackOutline className={`${activeConversation ? 'block sm:hidden' : 'hidden'}  text-${mode.color} text-2xl cursor-pointer`} onClick={() => setActiveConversation(null)}/>
             <div className='h-full flex items-center'>
                 <figure className='w-[32px] h-[32px] '>
                     <img src={activeConversation.partners[0].pfp} alt='user pfp' className='w-full h-full rounded-full object-fill' />
@@ -106,12 +106,14 @@ const Conversation = () => {
            { activeConversation && activeConversation.messages.map( message => <Message key={message.id} message={message} setActiveConversation={setActiveConversation}/>)}
         </main>
         <footer className={`absolute bottom-0 w-full bg-${mode.background} h-[50px] pt-2 fold:pt-0  z-20 flex `}>
-            <form className={`w-full h-full flex items-start pt-2.5 justify-evenly border-t ${mode.separator}`}>
+            <form className={`w-full h-full flex items-start pt-2.5 justify-evenly border-t ${mode.separator}`} onSubmit={(e) => handleNewMessage(e)}>
               <CiImageOn className={` text-lg fold:text-2xl text-${mode.color} cursor-pointer`}/>
               <HiOutlineGif className={`text-lg fold:text-2xl text-${mode.color} cursor-pointer`}/>
               <input value={values.content} name='content' type='text' className='focus:outline-none text-xs fold:text-base pl-8 bg-transparent w-[75%]' placeholder='Type your message here' onChange={handleChange}/>
               <BsEmojiSmile className={`text-md font:text-xl text-${mode.color} cursor-pointer mt-1`}/>
-              <LuSendHorizonal className={`text-md font:text-xl text-${mode.color} cursor-pointer mt-1`} onClick={handleNewMessage}/>
+              <button type='submit' disabled={disabled}>
+                <LuSendHorizonal className={` ${disabled ? 'opacity-50' : ''} text-md font:text-xl text-${mode.color} cursor-pointer mt-1`}/>
+              </button>
             </form>
         </footer>
     </div>

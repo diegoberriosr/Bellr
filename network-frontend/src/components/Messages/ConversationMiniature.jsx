@@ -93,7 +93,7 @@ const ConversationMiniature = ({ active, conversation }) => {
   const borderColor = borderColors[mode.color];
 
   return (
-    <div className={`w-full h-[72px] flex pl-4 space-x-4 hover:${mode.highlight} ${active ? `${mode.highlight} border-r-2 ${borderColor}` : ''}`} onClick={() => setActiveConversation(conversation)}>
+    <div className={`w-full h-[72px] flex pl-4 space-x-4 hover:${mode.highlight} ${active ? `${mode.highlight} border-r-2 ${borderColor}` : ''} cursor-pointer`} onClick={() => setActiveConversation(conversation)}>
       <figure className='w-10 h-10 mt-auto mb-auto cursor-pointer'>
         <img src={conversation.partners[0].pfp} alt='user pfp' className='w-full h-full rounded-full object-fill' onClick={() => { navigate(`/user/${conversation.partners[0].username}`)}}/>
       </figure>

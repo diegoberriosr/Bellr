@@ -23,7 +23,7 @@ import AuthContext from '../../context/AuthContext';
 
 const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) => {
 
-    const { mode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
+    const { mode, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
     const [ isFocused, setIsFocused ] = useState(isEditing);
     const [ loading, setLoading ] = useState(false);
     const [images, setImages] = useState([]);
