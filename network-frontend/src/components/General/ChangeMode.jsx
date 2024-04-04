@@ -80,21 +80,21 @@ const ChangeMode = ({ shrink, setShrink }) => {
       <div className='mt-5 flex flex-col justify-start w-full'>
         <span className='text-post-gray'>Background</span>
         <ul className={`mx-2 p-2 h-20 ${mode.subBackground} flex rounded-xl transition-all`}>
-            <li className={`w-4/12 h-full bg-white flex items-center justify-center mx-1 rounded-md ${mode.background ==='bg-white' ? 'border border-2 border-twitter-blue' : ''}`}
+            <li className={`w-4/12 h-full bg-white flex items-center justify-center mx-1 rounded-md ${mode.background ==='white' ? 'border border-2 border-twitter-blue' : ''}`}
             onClick={() => { updateBackground('black', 'white', 'text-black', 'bg-light-gray', 'bg-light-highlight', 'bg-light-sidebar-highlight', 'border-light-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-gray-900 font-bold ${mode.background === 'white' ? `border-0 bg-${mode.color} `  : ''} transition-colors duration-500`}>
                         { mode.background === 'white' && <IoMdCheckmark className='text-xs text-white'/>}
                     </div>
                     <span className='ml-1 text-black font-bold'>Default</span>
             </li>
-            <li className={`w-4/12 h-full bg-dim flex items-center justify-center mx-1 rounded-md ${mode.background ==='bg-dim' ? 'border border-2 border-twitter-blue' : ''}`}
+            <li className={`w-4/12 h-full bg-dim flex items-center justify-center mx-1 rounded-md ${mode.background ==='dim' ? 'border border-2 border-twitter-blue' : ''}`}
             onClick={() => { updateBackground('white', 'dim', 'text-white', 'bg-subdim', 'bg-dim-post-highlight', 'bg-dim-sidebar-highlight', 'border-dim-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-separator-gray font-bold ${mode.background === 'dim' ? `border-0 bg-${mode.color} ` : ''} transition-colors duration-500`}>
                         { mode.background === 'dim' && <IoMdCheckmark className='text-xs text-white'/> }
                     </div>
                     <span className='ml-1 text-white font-bold'>Dim</span>
             </li>
-            <li className={`w-4/12 h-full bg-black flex items-center justify-center mx-1 rounded-md ${mode.background ==='bg-black' ? 'border border-2 border-twitter-blue' : ''}`}
+            <li className={`w-4/12 h-full bg-black flex items-center justify-center mx-1 rounded-md ${mode.background ==='black' ? 'border border-2 border-twitter-blue' : ''}`}
             onClick={() => { updateBackground('white', 'black', 'text-white', 'bg-twitter-dark', 'bg-dark-highlight', 'bg-dark-sidebar-highlight', 'border-dark-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-white font-bold ${mode.background === 'black' ? `border-0 bg-${mode.color}`  : ''} transition-colors duration-500`}>
                         { mode.background === 'black' && <IoMdCheckmark className='text-xs text-white'/> }

@@ -17,6 +17,8 @@ const Users = () => {
 
   const [users, setUsers] = useState(null);
   const [ page, setPage ] = useState(1);
+
+  // eslint-disable-next-line no-unused-vars
   const [ hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +27,7 @@ const Users = () => {
   const navigate = useNavigate();
 
   const { authTokens, user } = useContext(AuthContext);
-  console.log(hasMore);
+
 
   const handleFollow = (userId) => {
     let headers = {
@@ -133,7 +135,7 @@ const Users = () => {
           <BsArrowLeftShort className='ml-3.5 text-3xl opacity-100 hover:bg-gray-900 hover:rounded-full' onClick={() => { navigate(-1) }} />
             <div className='mt-1 ml-4 mb-1'>
               <h3 className='font-bold' >{username}</h3>
-              <p className='text-gray-600 text-sm mt-0'>{`@${'yabadabadooo'}`}</p>
+              <p className='text-gray-600 text-sm mt-0'>{'Connections'}</p>
             </div>
           </div>
           <ul className={`w-full h-10 flex h-[53px] border border-l-0 border-t-0 ${mode.separator}`}>

@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState} from 'react';
 import useSearch from '../useSearch';
 
 const GeneralContext = createContext();

@@ -104,7 +104,7 @@ const PostInteractions = ({ shrink, setShrink}) => {
   console.log(users);
 
   return (
-    <div className={`w-screen h-screen sm:w-[500px] sm:h-[500px] ${shrink ? 'animate-shrink' : 'animate-grow'} bg-${mode.background} ${mode.text} rounded-xl`}>
+    <div className={`w-screen h-screen sm:w-[500px] sm:h-[500px] ${shrink ? 'animate-shrink' : 'animate-grow'} bg-${mode.background} ${mode.text} sm:rounded-xl`}>
         <header className='sticky top-0 h-12 p-5 z-10 transform'>
                     <MdClose className='text-2xl text-white mt-1 cursor-pointer' onClick={() => {setShrink(true)}}/>
                     <h3 className='absolute top-4 ml-[40%] text-2xl font-bold'>{filter}</h3>

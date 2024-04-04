@@ -115,8 +115,8 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
     }
 
     return (
-        <div className={`w-screen h-screen sm:w-[600px] sm:h-[600px] bg-${mode.background} ${mode.text}
-         ${ shrink ? 'animate-shrink' : 'animate-grow'} rounded-xl ${loading ? 'brightness-50' : ''}`}>
+        <div className={`w-screen h-screen sm:mt-10 sm:w-[600px] sm:h-[600px] bg-${mode.background} ${mode.text}
+         ${ shrink ? 'animate-shrink' : 'animate-grow'} sm:rounded-xl ${loading ? 'brightness-50' : ''}`}>
             <header className='sticky top-0 h-12 p-5 flex justify-between items-center z-11 transform'>
                 <div className='flex items-center'>
                     <MdClose className='text-2xl text-white mt-1 cursor-pointer' onClick={() => {setShrink(true)}}/>
@@ -137,7 +137,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
             </header>
             <main className='h-[552px] overflow-y-auto'>
                 { deleting ?
-                <div className='w-full h-6/12 flex flex-col items-center justify-center'>
+                <div className='w-full mt-[20%] flex flex-col items-center justify-center'>
                     <h3 className='text-2xl font-bold'>Are you sure?</h3>
                     <p>This action is irreversible. All your information will be lost.</p>
                     <button className='w-6/12 mt-5 h-10 border bg-white text-black opacity-80 hover:opacity-100 rounded-full' onClick={() =>{setDeleting(false)}}>Cancel</button>
@@ -168,7 +168,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                         </div>
                     </label>
                 </figure>
-                <form className='w-full px-5 py-5 mt-20'>
+                <form className='w-full px-1 sm:px-5 py-5 mt-20'>
                     <Input type='text' value={values.profilename} name='profilename' id='Profilename'  containerStyle='w-full h-5' 
                     inputStyle='w-full h-full bg-transparent' error={errors['profilename']} touched={touched['profilename']} 
                     maxValue={15} displayMaxValue={true}

@@ -28,7 +28,7 @@ import PostButton from './PostButton';
 import SidebarDropdownMenu from './SidebarDropdownMenu';
 import ImageDropdownMenu from './ImageDropdownMenu';
 
-const ICONS = [
+let ICONS = [
     {
         'name' : 'Home',
         'image' : {
@@ -80,7 +80,7 @@ const ICONS = [
             'nonselected' : IoPersonOutline, 
             'selected' : IoPersonSharp
         },
-        'route' : 'me',
+        'route' :  '',
         'loginRequired' : true
     }
 ];
@@ -104,38 +104,43 @@ const Sidebar = ({ setModeModal }) => {
         'bg-dark-sidebar-highlight' : 'hover:bg-dark-sidebar-highlight'
     }
     
+    if(user) ICONS[ICONS.length -1].route = `user/${user.username}`;
     
     const hoverClass = hoverColors[mode.sidebarHighlight];
 
     useEffect( () => {
+        if( user ){
+            let headers;
 
-        let headers;
-
-        if (authTokens) {
-            headers = {
-                'Authorization' : 'Bearer ' + String(authTokens.access)
+            if (authTokens) {
+                headers = {
+                    'Authorization' : 'Bearer ' + String(authTokens.access)
+                }
             }
+    
+            axios({
+                url : 'http://127.0.0.1:8000/notifications/unseen',
+                method : 'GET',
+                headers : headers
+            })
+            .then( res => {
+                setUnseenNotifications(res.data.unseen);
+            }
+            )
         }
-
-        axios({
-            url : 'http://127.0.0.1:8000/notifications/unseen',
-            method : 'GET',
-            headers : headers
-        })
-        .then( res => {
-            setUnseenNotifications(res.data.unseen);
-        }
-        )
+   
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active]);
 
 
     useEffect( () => {
-        setUnseenMessages(0);
-        if (conversations) {
-            conversations.forEach( conversation => conversation.messages.forEach( message => {
-                if (message && !message.seen && message.sender.user_id !== user.user_id) setUnseenMessages( prevUnseenMessages => prevUnseenMessages + 1);
-            }));
+        if( user) {
+            setUnseenMessages(0);
+            if (conversations) {
+                conversations.forEach( conversation => conversation.messages.forEach( message => {
+                    if (message && !message.seen && message.sender.user_id !== user.user_id) setUnseenMessages( prevUnseenMessages => prevUnseenMessages + 1);
+                }));
+        }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [conversations])

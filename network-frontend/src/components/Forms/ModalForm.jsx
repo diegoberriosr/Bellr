@@ -76,7 +76,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
         setImages(images.filter( image => image !== url));
     };
 
-    return <div className={`w-screen sm:w-[600px] bg-${mode.background} p-2.5 rounded-xl transition-all ${ shrink ? 'animate-shrink' : 'animate-grow'}`}>
+    return <div className={`w-screen mt-10 sm:w-[600px] bg-${mode.background} p-2.5 rounded-xl transition-all ${ shrink ? 'animate-shrink' : 'animate-grow'}`}>
         <header className='w-full flex items-center justify-between'>
         <IoCloseSharp className={`left-2 text-xl ${mode.text} cursor-pointer`} onClick={() => {setShrink(true)}}/>
         <span className={`right-11 text-${mode.color} font-bold text-sm`}>Drafts</span>
@@ -87,7 +87,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
                 <img src={user.pfp} alt='user profile pic' className='h-full w-full object-fit' />
                 </div>
                 <div className={`w-full pr-2 ${!isFocused ? 'flex items-center' : ''}`}>
-                    <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${mode.text} w-[90%]` : 'text-twitter-light-gray w-6/12' } text-lg text-bold ml-3 h-24 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} defaultValue={placeholder} onFocus={handleFocus} onChange={handleChange}/>
+                    <textarea  maxLength={280} value={values.content} name='content' ref={text} className={`${isFocused ? `${mode.text} w-[90%]` : 'text-twitter-light-gray w-6/12' } text-sm fold:text-base sm:text-lg text-bold ml-3 h-24 box-sizing:border-box p-1 resize-none focus:outline-none ${textAreaStyle}`} defaultValue={placeholder} onFocus={handleFocus} onChange={handleChange}/>
                 </div>
                 </div>
         </main>
