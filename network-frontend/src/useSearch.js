@@ -333,6 +333,7 @@ const useSearch = () => {
         })
 
         return () => cancel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page])
 
     useEffect( () => {
@@ -347,6 +348,7 @@ const useSearch = () => {
         setAccount(null);
         setError(null);
 
+        // eslint-disable-next-line no-unused-vars
         let cancel;
         let headers;
 
@@ -377,6 +379,7 @@ const useSearch = () => {
             setLoading(false);
             console.log(err);
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUrl])
     
     return { loading, setLoading, error, posts, setPosts, setPage, account, setAccount, hasMore, handleLike, handleBookmark, 

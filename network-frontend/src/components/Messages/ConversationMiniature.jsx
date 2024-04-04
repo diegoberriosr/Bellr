@@ -16,7 +16,7 @@ import { PiArrowElbowDownRightLight } from "react-icons/pi";
 // Component imports
 import MessageDropdownMenu from './MessageDropdownMenu';
 
-const ConversationMiniature = ({ mostRecentMessage, active, unreadMessages, conversation }) => {
+const ConversationMiniature = ({ active, conversation }) => {
 
   const { user, authTokens } = useContext(AuthContext);
   const { mode } = useContext(GeneralContext);
@@ -101,7 +101,7 @@ const ConversationMiniature = ({ mostRecentMessage, active, unreadMessages, conv
         <div className='w-full relative flex items-center text-base mt-3 w-full'>
             <span className='font-bold max-w-[200px] truncate'>{conversation.partners[0].profilename}</span>
             {conversation.partners[0].verified && <MdVerified className='ml-0.5 text-twitter-blue'/>}
-            <span className={`text-gray-600 ml-1`}>@{conversation.partners[0].username}</span>
+            <span className={`text-gray-600 ml-1 hidden font:block`}>@{conversation.partners[0].username}</span>
             <span className={`text-gray-600 ml-1`}>~ { conversation.messages.length > 0 ? formatDate(conversation.messages[conversation.messages.length - 1]): ''}</span>
             <div className='absolute top-0 right-3'>
             <MessageDropdownMenu conversation_id={conversation.id} handleClearConversation={handleClearConversation} handleDeleteConversation={handleDeleteConversation}/>

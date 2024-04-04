@@ -26,14 +26,13 @@ import ImageToggler from '../components/Posts/ImageToggler';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
-import MessageContext from '../context/MessageContext';
 
 // Provider imports
 import { MessageProvider } from '../context/MessageContext';
 
 const MainPage = () => {
 
-  const { profileModal, filter, mode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
+  const { profileModal, mode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
           imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, 
           handleProfileModal, postImageModal, setPostImageModal } = useContext(GeneralContext);
   
@@ -104,6 +103,7 @@ const MainPage = () => {
       return () => clearTimeout(timer)
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   } , [shrink])
 
 
@@ -125,7 +125,7 @@ const MainPage = () => {
                 </Routes>
                 { currentUrl.pathname === '/messages' ? <Conversation/> : <Recomendations/> }
                 <Bottombar/>
-                <div className='block md:hidden fixed bottom-[10%] right-[5%]'> 
+                <div className={ currentUrl.pathname === '/messages' ? 'hidden' : 'block md:hidden fixed bottom-[10%] right-[5%] animate-grow'}> 
                     <PostButton handleClick={handleModal} mobile={true}/>
                 </div>
                 <Modal isVisible={modalOpen} background='bg-login-modal'>

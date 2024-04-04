@@ -96,7 +96,7 @@ const Inbox = () => {
  
   return (
     <>
-    <div className={`w-screen mobile:w-[450px] h-screen text-center text-xl border border-l-0 border-b-0 ${mode.separator} ${mode.text}`}>
+    <div className={` ${activeConversation ? 'hidden sm:block' : ''} w-screen xl:w-[450px] h-screen text-center text-xl border border-l-0 border-b-0 ${mode.separator} ${mode.text}`}>
         <header className='w-full h-[53px] pl-3.5 pr-2 py-2.5 font-bold flex justify-between items-center'>
             <h3 className='h-full'>Messages</h3>
             <div className='h-full flex items-center text-[19px]'>

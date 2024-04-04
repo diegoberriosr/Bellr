@@ -18,6 +18,7 @@ import { IoPersonSharp } from "react-icons/io5";
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
 import AuthContext from '../../context/AuthContext';
+import MessageContext from '../../context/MessageContext';
 
 const ICONS = [
   {
@@ -82,10 +83,12 @@ const Bottombar = () => {
   const [active, setActive] = useState(0);
   const { mode } = useContext(GeneralContext);
   const { user } = useContext(AuthContext);
+  const { activeConversation } = useContext(MessageContext);
+
   const navigate = useNavigate();
 
   return (
-    <div className={`block mobile:hidden fixed bottom-0 w-screen h-20 bg-${mode.background} ${mode.text} border border-${mode.separator} border-b-0 border-l-0 border-r-0`}>
+    <div className={`${ activeConversation ? 'hidden' : 'block mobile:hidden '} fixed bottom-0 w-screen h-20 bg-${mode.background} ${mode.text} border border-${mode.separator} border-b-0 border-l-0 border-r-0`}>
       <ul className='flex items-center justify-center items-center  h-full w-full text-4xl'>
       {ICONS.map((icon, index) => {
                 if (icon.loginRequired && user===null ){

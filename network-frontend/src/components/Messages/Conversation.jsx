@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 
@@ -9,6 +9,7 @@ import { CiImageOn } from "react-icons/ci";
 import { HiOutlineGif } from "react-icons/hi2";
 import { BsEmojiSmile } from "react-icons/bs";
 import { LuSendHorizonal } from "react-icons/lu";
+import { IoChevronBackOutline } from "react-icons/io5";
 
 // Component imports
 import Message from './Message';
@@ -21,6 +22,7 @@ import MessageContext from '../../context/MessageContext';
 
 const Conversation = () => {
 
+  const [disabled, setDisabled] = useState(true);
 
   const { authTokens} = useContext(AuthContext);
   const { activeConversation, setActiveConversation, setConversations, chatSocket} = useContext(MessageContext);
@@ -35,7 +37,7 @@ const Conversation = () => {
 
 
   const handleNewMessage = () => {
-    
+  
     let content = values.content;
     setFieldValue('content', '')
 
@@ -67,9 +69,8 @@ const Conversation = () => {
     .catch( err => {
       console.log(err);
     })
-  }
+  };
   
-
  useEffect( () => {
   if (activeConversation){
     setConversations( prevStatus => {
@@ -82,11 +83,17 @@ const Conversation = () => {
   }
 
 // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [activeConversation])
+}, [activeConversation]);
+
+  useEffect( () => {
+    if (values.content.length === 0) setDisabled(true);
+    else setDisabled(false);
+  }, [values.content]);
 
   return ( activeConversation ?
-    <div className={`relative h-screen w-0 mobile:w-[600px] border border-l-0  border-b-0 ${mode.separator}`}>
-        <header className='w-full h-[53px] flex items-center justify-between text-lg pl-4 pr-5'>
+    <div className={`relative h-screen w-0 w-screen sm:w-[600px] border border-l-0  border-b-0 ${mode.separator}`}>
+        <header className={`w-full h-[53px] flex items-center justify-between text-lg pl-4 pr-5 shadow-sm border-b ${mode.separator}`}>
+            <IoChevronBackOutline className={`${activeConversation ? 'block sm:hidden' : 'hidden'} text-${mode.color} text-2xl`} onClick={() => setActiveConversation(null)}/>
             <div className='h-full flex items-center'>
                 <figure className='w-[32px] h-[32px] '>
                     <img src={activeConversation.partners[0].pfp} alt='user pfp' className='w-full h-full rounded-full object-fill' />
@@ -98,22 +105,24 @@ const Conversation = () => {
         <main className={`w-full h-[calc(100vh-103px)] overflow-y-auto overflow-x-hidden z-20`}>
            { activeConversation && activeConversation.messages.map( message => <Message key={message.id} message={message} setActiveConversation={setActiveConversation}/>)}
         </main>
-        <footer className={`absolute bottom-0 w-full bg-${mode.background} h-[50px] z-20 flex items-start pt-1 justify-evenly`}>
-            <CiImageOn className={`text-2xl text-${mode.color} cursor-pointer`}/>
-            <HiOutlineGif className={`text-2xl text-${mode.color} cursor-pointer`}/>
-            <input value={values.content} name='content' type='text' className='focus:outline-none pl-8 bg-transparent w-[75%]' placeholder='Type your message here' onChange={handleChange}/>
-            <BsEmojiSmile className={`text-xl text-${mode.color} cursor-pointer mt-1`}/>
-            <LuSendHorizonal className={`text-xl text-${mode.color} cursor-pointer mt-1`} onClick={handleNewMessage}/>
+        <footer className={`absolute bottom-0 w-full bg-${mode.background} h-[50px] pt-2 fold:pt-0  z-20 flex `}>
+            <form className={`w-full h-full flex items-start pt-2.5 justify-evenly border-t ${mode.separator}`}>
+              <CiImageOn className={` text-lg fold:text-2xl text-${mode.color} cursor-pointer`}/>
+              <HiOutlineGif className={`text-lg fold:text-2xl text-${mode.color} cursor-pointer`}/>
+              <input value={values.content} name='content' type='text' className='focus:outline-none text-xs fold:text-base pl-8 bg-transparent w-[75%]' placeholder='Type your message here' onChange={handleChange}/>
+              <BsEmojiSmile className={`text-md font:text-xl text-${mode.color} cursor-pointer mt-1`}/>
+              <LuSendHorizonal className={`text-md font:text-xl text-${mode.color} cursor-pointer mt-1`} onClick={handleNewMessage}/>
+            </form>
         </footer>
     </div>
     :
-    <div className={`relative h-screen w-full border border-l-0  border-b-0 ${mode.separator} flex flex-col items-center justify-center`}>
+    <div className={`hidden relative h-screen w-full border border-l-0  border-b-0 ${mode.separator} sm:flex flex-col items-center justify-center`}>
         <h3 className='text-4xl font-extrabold'>Select a message</h3>
         <p className='text-sm text-gray-600 mt-2.5'>Choose from your existing conversations, start a new one, or just keep swimming.</p>
         <button className={`w-[200px] h-[50px] p-2.5 flex justify-center items-center bg-${mode.color} mt-2.5 opacity-70 
         hover:opacity-100 text-lg font-bold rounded-full`}>New message</button>
     </div>
-  )
+    )
 }
 
 export default Conversation

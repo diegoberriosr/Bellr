@@ -16,8 +16,8 @@ const MessageDropdownMenu = ({ conversation_id, handleClearConversation, handleD
 
   return (
     <div className='flex items-center justify-end'>
-      <BsThreeDots onClick={() => setVisible(!visible)}/>
-      { visible && <div className={`z-50 absolute flex flex-col top-0 bg-${mode.background} w-28 border ${mode.separator} animate-grow border border-gray-800 shadow-custom cursor-pointer font-bold`} onMouseLeave={() => setVisible(false)}> 
+      <BsThreeDots className='cursor-pointer' onClick={(е) => {е.stopPropagation(); setVisible(!visible)}}/>
+      { visible && <div className={`z-50 absolute flex flex-col top-0 bg-${mode.background} w-28 border ${mode.separator} animate-grow border border-gray-800 shadow-custom cursor-pointer font-bold rounded`} onMouseLeave={() => setVisible(false)}> 
       <div className={`flex items-center space-x-1 text-sm w-full hover:${mode.highlight} px-2.5 py-1`}>
             <BsPinFill/>
             <span>Pin</span>
