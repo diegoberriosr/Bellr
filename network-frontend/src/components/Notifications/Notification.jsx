@@ -37,6 +37,7 @@ const Notification = forwardRef(({notification}, ref) => {
         console.log(`Notification with id=${notification.id} was successfully updated.`)
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -88,21 +88,21 @@ const Notifications = () => {
             <p className='pl-3.5 my-2.5 text-xl font-bold'> Notifications </p>
         </div>
         <ul className={`w-full h-12 flex border ${mode.separator} border-t-0 border-l-0 ${mode.background} cursor-pointer`}>
-            <li className={`relative w-4/12 flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('') }}>
+            <li className={`relative w-4/12  text-xs fold:text-sm sm:text-base flex justify-center items-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('') }}>
                 <span>All</span>
-                {filter === '' && <span className={`absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-3/12 h-1 bg-twitter-blue rounded-full`}></span>}
+                {filter === '' && <span className={`absolute top-11 text-xs mobile:text-base w-3/12 h-1 bg-twitter-blue rounded-full`}></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('mention') }}>
+            <li className={`relative w-4/12 text-xs fold:text-sm sm:text-base flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('mention') }}>
                 <span>Mentions</span>
-                {filter === 'mention' && <span className='absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-6/12 h-1 bg-twitter-blue rounded-full'></span>}
+                {filter === 'mention' && <span className='absolute top-11 mr-auto ml-auto w-6/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('like')}}>
+            <li className={`relative w-4/12  text-xs fold:text-sm sm:text-base flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('like')}}>
                 <span>Likes</span>
-                {filter === 'like' && <span className='absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-8/12 h-1 bg-twitter-blue rounded-full'></span>}
+                {filter === 'like' && <span className='absolute top-11 mr-auto ml-auto w-8/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
-            <li className={`relative w-4/12 flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('transmission')}}>
+            <li className={`relative w-4/12  text-xs fold:text-sm sm:text-base flex items-center justify-center text-base hover:${mode.sidebarHighlight} hover:bg-opacity-50`} onClick={() => { handleChangeFilter('transmission')}}>
                 <span>Transmissions</span>
-                {filter === 'transmission' && <span className='absolute top-11 mr-auto ml-auto text-xs mobile:text-base w-10/12 h-1 bg-twitter-blue rounded-full'></span>}
+                {filter === 'transmission' && <span className='absolute top-11 mr-auto ml-auto w-10/12 h-1 bg-twitter-blue rounded-full'></span>}
             </li>
         </ul>
         {(notifications.length > 0) && notifications.map((notification, index) => {
@@ -110,9 +110,9 @@ const Notifications = () => {
             return <Notification key={index} notification={notification}/>
             }
         )}
-        {(!loading && notifications.length === 0) && <div className='mt-16 w-full flex flex-col items-center justify-center'>
-            <h3 className='text-3xl font-bold'>Nothing to see here - yet</h3>
-            <p className='text-gray-600'>When someone mentions you, you'll find it here.</p>
+        {(!loading && notifications.length === 0) && <div className='px-2 fold:px-0 mt-16 w-full flex flex-col items-center justify-center'>
+            <h3 className='text-xl fold:text-3xl font-bold'>Nothing to see here - yet</h3>
+            <p className='text-sm fold:text-base text-gray-600'>When someone mentions you, you'll find it here.</p>
         </div>}
         {loading && <div className='mt-40 w-full flex justify-center items-center'> 
         <MoonLoader color={'#1D9BF0'} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader' />
