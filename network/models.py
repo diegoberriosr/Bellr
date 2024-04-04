@@ -15,6 +15,8 @@ class User(AbstractUser):
     verified = models.BooleanField(default=False)
     following = models.ManyToManyField('self', blank=True, related_name='followers', symmetrical=False)
     bio = models.CharField(max_length=100, blank=True)
+    location = models.TextField(default=None, null=True)
+    website = models.TextField(default=None, null=True)
     date_joined = models.DateField(default=timezone.now)
     blocklist = models.ManyToManyField('self', blank=True, related_name='blocked', symmetrical=False)
 
@@ -38,7 +40,9 @@ class User(AbstractUser):
             'background' : self.backgroundpic,
             'number_of_posts' : len(self.posts.all()),
             'followers' : len(self.followers.all()),
-            'following' : len(self.following.all())
+            'following' : len(self.following.all()),
+            'location' : self.location,
+            'website' : self.website
         }
     
     def fserialize(self, user):
@@ -61,7 +65,7 @@ class User(AbstractUser):
         'user_id' : self.id,
         'username' : self.username,
         'profilename' : self.profilename,
-        'pfp' : self.pfp,
+        'pfp' : self.pfp
         }
 
     

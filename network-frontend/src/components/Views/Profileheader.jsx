@@ -3,7 +3,8 @@ import { MdVerified } from "react-icons/md";
 import { useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaRegCalendarAlt } from "react-icons/fa";
-
+import { LuLink } from "react-icons/lu";
+import { MdLocationOn } from "react-icons/md";
 
 // Context imports
 import AuthContext from '../../context/AuthContext';
@@ -79,9 +80,19 @@ const ProfileHeader = ({ account }) => {
             <h3 className='text-2xl font-bold flex items-center'>{account.profilename} {account.verified && <MdVerified className='ml-0.5 text-twitter-blue'/>}</h3>
             <p className='text-base text-gray-600'>@{account.username}</p>
             <p className='mt-2.5 text-base'>{account.bio}</p>
-            <p className='flex items-center text-gray-600 mt-1.5'>
-                <FaRegCalendarAlt />
-                <span className='ml-1'>Joined on {moment(account.date_joined).format('MMM DD YYYY')}</span>
+            <p className='flex items-center space-x-[2%] text-gray-600 mt-1.5 w-full'>
+                <div className='flex items-center'>
+                    <FaRegCalendarAlt />
+                    <span className='ml-1'>Joined on {moment(account.date_joined).format('MMM DD YYYY')}</span>
+                </div>
+                { account.website && <div className='flex items-center max-w-[45%] truncate'>
+                    <LuLink/>
+                    <a href={account.website} className='ml-1 text-twitter-blue hover:underline cursor-pointer'>{account.website}</a>
+                    </div>}
+                { account.location && <div className='flex max-w-[45%] truncate items-center'>
+                    <MdLocationOn/>
+                    <span  className='ml-1 max-w-[30%]'>{account.location}</span>
+                    </div>}
             </p>
             <div className='flex text-sm space-x-5 mt-1.5'>
                 <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/following/${account.username}/`)}}><span className='font-bold'>{account.following}</span> Following</p>
