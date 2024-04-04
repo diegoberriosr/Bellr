@@ -11,7 +11,7 @@ import ProfileHeader from './Profileheader';
 import EmptyProfileHeader from '../Alerts/EmptyProfileHeader';
 import NewPost from '../Posts/Post';
 import ErrorMessage from '../Alerts/ErrorMessage';
-import ClipLoader from "react-spinners/ClipLoader";
+import MoonLoader from "react-spinners/MoonLoader";
 
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
@@ -51,7 +51,7 @@ const Profile = () => {
         { account && 
         <>
           <div className={`absolute flex items-center space-x-7 text-2xl border ${mode.text} ${mode.background} ${mode.separator} border-l-0 border-b-0 border-t-0 backdrop-blur bg-opacity-30 sticky top-0 z-20`}>
-            <BsArrowLeftShort className={`ml-3.5 text-3xl opacity-100 hover:${mode.highlight} hover:rounded-full`} onClick={() => { navigate(-1) }} />
+            <BsArrowLeftShort className={`ml-3.5 text-3xl opacity-100 hover:${mode.highlight} hover:rounded-full cursor-pointer`} onClick={() => { navigate(-1) }} />
             <div className='mb-1'>
                 <p className='flex items-center'>
                     <span className='font-bold'>{account.username}</span>
@@ -67,7 +67,7 @@ const Profile = () => {
         })}
         { posts && posts.length === 0  && <ErrorMessage text={`Nothing to show here`} subtext={`When @${account.username} posts something, it'll show here.`}/>}
         {loading && <div className='w-full mt-[10%] flex items-center justify-center'>
-          <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
+          <MoonLoader color={'#1D9BF0'} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader'/> 
        </div>}
        {account && blocked && 
         <div className='w-full h-[200px] flex flex-col items-center justify-center p-2.5'>

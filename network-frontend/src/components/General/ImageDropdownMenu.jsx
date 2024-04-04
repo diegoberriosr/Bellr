@@ -8,17 +8,17 @@ import { TiBrush } from "react-icons/ti";
 import GeneralContext from '../../context/GeneralContext';
 import AuthContext from '../../context/AuthContext'
 
-const SidebarDropdownMenu = ({ setModeModal, children }) => {
+const ImageDropdownMenu = ({ setModeModal, children }) => {
     const { mode } = useContext(GeneralContext);
     const { logoutUser } = useContext(AuthContext);
     const [ visible, setVisible ] = useState(false);
 
   return (
-    <div className='hidden xl:flex items-center justify-end cursor-pointer'>
+    <div className='flex items-center justify-end cursor-pointer xl:cursor-auto'>
       <div onClick={() => setVisible(!visible)}>
         {children}
       </div>
-      { visible && <div className={`absolute flex flex-col bottom-2 bg-${mode.background} w-28 border ${mode.separator} animate-grow border border-gray-800 shadow-custom cursor-pointer font-bold`} onMouseLeave={() => setVisible(false)}> 
+      { visible && <div className={`z-[999] xl:hidden absolute flex flex-col items-center -top-[80%] left-[30%] bg-${mode.background} w-28 border ${mode.separator} animate-grow border border-gray-800 shadow-custom cursor-pointer font-bold`} onMouseLeave={() => setVisible(false)}> 
       <div className={`flex items-center space-x-1 text-sm w-full hover:${mode.highlight} px-2.5 py-1`} onClick={() => setModeModal(true)}>
             <TiBrush/>
             <span>Edit theme</span>
@@ -32,4 +32,4 @@ const SidebarDropdownMenu = ({ setModeModal, children }) => {
   ) 
 }
 
-export default SidebarDropdownMenu
+export default ImageDropdownMenu

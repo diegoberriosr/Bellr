@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext} from 'react';
 import { useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,11 +15,10 @@ import { CiBookmark } from "react-icons/ci";
 import { FaBookmark} from "react-icons/fa";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
-
+import { BsThreeDots } from "react-icons/bs";
 import { LuDog } from "react-icons/lu";
 
 // Authentication context imports
-import { useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 import MessageContext from '../../context/MessageContext';
@@ -27,6 +26,7 @@ import MessageContext from '../../context/MessageContext';
 // Helper components imports
 import PostButton from './PostButton';
 import SidebarDropdownMenu from './SidebarDropdownMenu';
+import ImageDropdownMenu from './ImageDropdownMenu';
 
 const ICONS = [
     {
@@ -168,15 +168,19 @@ const Sidebar = ({ setModeModal }) => {
                 </>
             }
             { user &&
-                    <li className='absolute bottom-0 w-full mt-1 p-2.5 flex items-center'>
-                        <div className='min-w-10 w-10 h-10 overflow-hidden rounded-full overflow-hidden'>
-                            <img src={user.pfp} alt='user profile pic' className='w-full h-full object-cover'/>
-                        </div>
+                    <li className='absolute bottom-0 w-7/12 mt-1 p-2.5 flex items-center'>
+                        <ImageDropdownMenu setModeModal={setModeModal}>
+                            <div className='min-w-10 h-10 overflow-hidden rounded-full overflow-hidden ml-[15%] visible'>
+                                <img src={user.pfp} alt='user profile pic' className='w-full h-full object-cover'/>
+                            </div>
+                        </ImageDropdownMenu>
                         <div className='w-full ml-2.5'>
-                            <p className='invisible xl:visible max-w-full font-bold text-base'>{user.profilename}</p>
-                            <p className='invisible xl:visible text-gray-600 text-sm mt-0 pt-0'>@{user.username}</p>
+                            <p className='invisible xl:visible max-w-[90%] truncate font-bold text-base'>{user.profilename}</p>
+                            <p className='invisible xl:visible max-w-[90%] truncate text-gray-600 text-sm mt-0 pt-0'>@{user.username}</p>
                         </div>
-                        <SidebarDropdownMenu setModeModal={setModeModal}/>
+                        <SidebarDropdownMenu setModeModal={setModeModal}>
+                            <BsThreeDots/>
+                        </SidebarDropdownMenu>
                     </li>
             }
         </ul>

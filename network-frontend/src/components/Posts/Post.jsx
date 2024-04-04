@@ -80,7 +80,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
             </aside>
             <main className={`w-[90%] ${post.transmission || post.reply ? 'mt-0' : 'mt-2.5'} p-1 pl-3 text-xs sm:text-sm md:text-base w-full`}>
                 <div className='relative max-w-full flex h-4 items-center'>
-                    <p className='font-bold hover:underline max-w-[30%] mobile:max-w-[45%] sm:max-w-[30%] md:max-w-[45%] truncate' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
+                    <p className='font-bold hover:underline max-w-[30%] mobile:max-w-[45%] sm:max-w-[30%] md:max-w-[30%] truncate' onClick={() => { navigate(`/user/${post.user.username}`) }}>{post.user.profilename}</p>
                     {post.user.verified && <MdVerified className='text-twitter-blue ml-0.5' />}
                     <p className='text-post-gray ml-1 hidden fold:block mobile:max-w-[30%] sm:max-w-[30%] md:max-w-[30%] truncate'>@{post.user.username}</p>
                     <p className='text-post-gray ml-1'>·</p>
@@ -107,10 +107,10 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                                 {post.liked ?
                                     <FaHeart className={`text-red-600 group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[15px]`} onClick={() => {handleLike(post.id)}} />
                                     :
-                                    <CiHeart className='group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[18px]' onClick={() => {handleLike(post.id)}}/>
+                                    <CiHeart className='text-icon-gray group-hover:bg-red-300 group-hover:text-red-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[18px]' onClick={() => {handleLike(post.id)}}/>
                                 }
                                 
-                                <span className={`${post.likes ? 'text-red-600' : ''} w-2 group-hover:text-red-600 transition-colors cursor-default text-xs`} onClick={() => {openInteractionsModal(post, 'likes')}}>{post.likes> 0 && post.likes}</span>
+                                <span className={`${post.liked ? 'text-red-600' : 'text-icon-gray'} w-2 group-hover:text-red-600 transition-colors cursor-default text-xs`} onClick={() => {openInteractionsModal(post, 'likes')}}>{post.likes> 0 && post.likes}</span>
                             </li>
                             <li className='group flex items-center space-x-1'>
                                 <FaRetweet className={`${post.transmitted ? 'text-green-600' : 'text-icon-gray'} group-hover:bg-green-300 group-hover:text-green-600 group-hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => {handleTransmit(post.id)}} />
@@ -121,10 +121,10 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                             { post.bookmarked ?
                             <FaBookmark className={`text-twitter-blue hover:bg-twitter-blue hover:bg-opacity-50 hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => {handleBookmark(post.id)}} />
                             :
-                            <IoBookmarkOutline className='hover:bg-twitter-blue hover:bg-opacity-50 hover:text-twitter-blue hover:rounded-full peer duration-300 cursor-pointer text-[19px]' onClick={() => {handleBookmark(post.id)}}/>
+                            <IoBookmarkOutline className='text-icon-gray hover:bg-twitter-blue hover:bg-opacity-50 hover:text-twitter-blue hover:rounded-full peer duration-300 cursor-pointer text-[19px]' onClick={() => {handleBookmark(post.id)}}/>
                                 
                             }
-                            <FiShare2 className='hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' />
+                            <FiShare2 className='text-icon-gray hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' />
                         </div>
                     </ul>
                 </footer>

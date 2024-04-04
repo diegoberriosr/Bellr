@@ -101,7 +101,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, openRegister }) => {
                 )}
                 { step === 1 && <span className='text-twitter-blue text-[12px] mt-0.5 mr-auto ml-[15%] hover:underline' onClick={openForgottenPassword}>Forgot password?</span>}
                 <div className={` flex flex-col ${step === 0 ? 'items-center' : 'items-start'}`}>
-                <button type='button' 
+                <button type='submit' 
                 disabled={ step === 0 ? values.username.length === 0 : values.password.length === 0 }
                 className={`${ step === 0 ? 'mt-8 w-[250px] fold:w-[300px] h-9 ' : 'mt-56 w-[250px] fold:w-[300px] sm:w-[440px] h-[52px]'} font-semibold  bg-white rounded-full 
                 ${(step === 0 && values.username.length === 0) || (step === 1 && values.password.length === 0) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90'} text-black flex items-center justify-center`} 

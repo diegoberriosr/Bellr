@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Icon imports
-import ClipLoader from "react-spinners/ClipLoader";
+import MoonLoader from "react-spinners/MoonLoader";
 
 // Component imports
 import Notification from './Notification';
@@ -114,7 +114,9 @@ const Notifications = () => {
             <h3 className='text-3xl font-bold'>Nothing to see here - yet</h3>
             <p className='text-gray-600'>When someone mentions you, you'll find it here.</p>
         </div>}
-        {loading && <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader' />}
+        {loading && <div className='mt-40 w-full flex justify-center items-center'> 
+        <MoonLoader color={'#1D9BF0'} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader' />
+        </div>}
     </div>
 }
 

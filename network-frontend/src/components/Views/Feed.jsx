@@ -5,7 +5,7 @@ import { useContext, useCallback, useRef} from 'react';
 import Form from '../Forms/Form';
 import NewPost from '../Posts/Post';
 import ErrorMessage from '../Alerts/ErrorMessage';
-import ClipLoader from "react-spinners/ClipLoader";
+import MoonLoader from "react-spinners/MoonLoader";
 
 // Context imports
 import AuthContext from '../../context/AuthContext';
@@ -50,7 +50,7 @@ const Feed = ({ form,  url, loginRequired}) => {
        return <NewPost key={index} post={post}/>})}
        {(posts && posts.length === 0) && <ErrorMessage text='No posts to show here' subtext='When something appears, it will show here.'/>}
        {loading && <div className='w-full mt-[25%] flex items-center justify-center'>
-          <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
+          <MoonLoader color={'#1D9BF0'} loading={loading} size={75} data-testid='loader'/> 
        </div>}
     </div>
   )

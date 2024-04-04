@@ -1,6 +1,6 @@
 // Icon imports
 import { MdVerified } from "react-icons/md";
-import { useState, useContext } from 'react';
+import { useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaRegCalendarAlt } from "react-icons/fa";
 
@@ -23,6 +23,7 @@ const ProfileHeader = ({ account }) => {
     
 
     const handleFilter = (url, updatedFilter) => {
+        setPosts(null);
         setLoading(true);
         let headers;
         
