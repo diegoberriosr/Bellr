@@ -15,6 +15,7 @@ import PostImages1 from '../Posts/PostImages1';
 import PostImages2 from '../Posts/PostImages2';
 import PostImages3 from '../Posts/PostImages3';
 import PostImages4 from '../Posts/PostImages4';
+import MoonLoader from 'react-spinners/MoonLoader';
 
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
@@ -24,6 +25,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
 
     const { mode, handleModal, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
     const [ isFocused, setIsFocused ] = useState(isEditing);
+    const [ loading, setLoading ] = useState(false);
     const [images, setImages] = useState([]);
     const postImages = new FormData();
 
@@ -40,13 +42,13 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
     const percentage = (values.content.length/280) * 100 
 
     const handleNewPost = () => {            
-        isEditing ? handleEdit(editedPost.id, values.content) : handleNew(values.content);
+        isEditing ? handleEdit(editedPost.id, values.content, setLoading) : handleNew(values.content, setLoading);
             setIsFocused(false);
             setIsEditing(false);
             setEditedPost(null);
             values.content = "What's happening !?";
             values.image = null;
-            handleModal();
+            setShrink(true);
     }
 
     const handleFocus = () => {
@@ -134,7 +136,9 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
                         <span className='absolute top-1 left-2.5 text-red-900 text-xs'>0</span>  
                     }
                 </div>
-                <button onClick={handleNewPost} disabled={(!isFocused || values.content.length === 0 )} className={`${ !isFocused || values.content.length === 0 ? 'opacity-50' : ''} ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center bg-${mode.color}`}>{message}</button>
+                <button onClick={handleNewPost} disabled={(!isFocused || values.content.length === 0 )} className={`${ !isFocused || values.content.length === 0 ? 'opacity-50' : ''} ml-auto rounded-full bg-twitter-blue text-white p-5 h-5 text-md flex items-center bg-${mode.color}`}>
+                    {loading ? <MoonLoader loading={loading} size={25} color='#FFFFFF'/> : message }
+                    </button>
             </li>
         </footer>
     </div>

@@ -14,7 +14,7 @@ import PostImages1 from '../Posts/PostImages1';
 import PostImages2 from '../Posts/PostImages2';
 import PostImages3 from '../Posts/PostImages3';
 import PostImages4 from '../Posts/PostImages4';
-
+import MoonLoader from 'react-spinners/MoonLoader';
 
 // Context imports
 import AuthContext from '../../context/AuthContext';
@@ -25,6 +25,7 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
 
     const [ isFocused, setIsFocused ] = useState(false);
     const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const { user } = useContext(AuthContext);
     const { mode, handleImageModal, handleNew, handleReply } = useContext(GeneralContext);
@@ -42,8 +43,8 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
     const percentage = (values.content.length/280) * 100 
 
     const handleNewPost = () => {
- 
-        replyId ? handleReply(replyId, values.content) : handleNew(values.content) ; // If the Id of a post is passed in the parameters, it is a reply form.
+        
+        replyId ? handleReply(replyId, values.content, setLoading) : handleNew(values.content, setLoading) ; // If the Id of a post is passed in the parameters, it is a reply form.
         text.current.value=placeholder;
         setIsFocused(false);
         values.content = "What's happening !?";
@@ -142,7 +143,7 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
                         <span className='absolute top-1 left-2.5 text-red-900 text-xs'>0</span>  
                     }
                 </div>
-                <button onClick={handleNewPost} className={`ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-xs sm:text-sm md:text-md flex items-center`}>{'Post'}</button>
+                <button onClick={handleNewPost} className={`ml-auto rounded-full bg-${mode.color} text-white p-5 h-5 text-xs sm:text-sm md:text-md flex items-center justify-center`}>{ loading ? <MoonLoader loading={loading} size={25} color='#FFFFFF'/> : 'Post'}</button>
             </div>
         </footer>
         }

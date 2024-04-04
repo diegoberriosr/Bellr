@@ -206,7 +206,8 @@ const useSearch = () => {
       };
 
 
-      const handleNew = (content) => {
+      const handleNew = (content, setLoading) => {
+        setLoading(true);
         let headers;
     
         if (authTokens){
@@ -226,8 +227,13 @@ const useSearch = () => {
             setPosts(prevPosts => {
                 return [res.data, ...prevPosts] // Append the new post to the top of the array.
             })
+            setLoading(false);
         }
         )
+        .catch( err => {
+          setLoading(false);
+          console.log(err);
+        })
 
       }
 
@@ -263,7 +269,8 @@ const useSearch = () => {
 
       }
 
-      const handleReply = (postId, content) => {
+      const handleReply = (postId, content, setLoading) => {
+        setLoading(true);
         let headers;
         if (authTokens) {
           headers = {
@@ -288,8 +295,10 @@ const useSearch = () => {
             return [origin, ...updatedReplies];
 
           })
+          setLoading(false);
         })
         .catch( err => {
+          setLoading(false);
           console.log(err);
         })
       }
