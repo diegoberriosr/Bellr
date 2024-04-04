@@ -121,7 +121,7 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
                 <li>
                     <EmojiMenu content={values.content} setFieldValue={setFieldValue}/>
                 </li>
-                <li>
+                <li className='hidden mobile:block'>
                     <MdOutlineLocationOn className='opacity-50 cursor-not-allowed'/>
                 </li>
             </ul>

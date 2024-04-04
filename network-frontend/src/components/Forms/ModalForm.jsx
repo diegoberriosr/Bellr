@@ -111,7 +111,7 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
                 <li>
                     <HiOutlineGif className='cursor-pointer'/>
                 </li>
-                <li>
+                <li className='hidden mobile:block'>
                     <EmojiMenu content={values.content} setFieldValue={setFieldValue} />
                 </li>
                 <li>
