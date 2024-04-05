@@ -20,6 +20,12 @@ const ProfileHeader = ({ account }) => {
     const { user, authTokens } = useContext(AuthContext);
     const { mode, handleImageModal, setPfpBig, handleFollow, handleBlock, setPosts, setPage, setLoading, handleProfileModal} = useContext(GeneralContext);
 
+    let ringColor;
+
+    if ( mode.background === 'white') ringColor = 'border-white';
+    else if ( mode.background === 'dim') ringColor = 'border-dim';
+    else ringColor = 'border-black';
+
     const navigate = useNavigate()
     
 
@@ -55,7 +61,7 @@ const ProfileHeader = ({ account }) => {
             <div className='absolute h-full w-full z-10'>
                 <img src={account.background} alt="user's background pic" className='absolute top-0 w-full h-full object-cover' />
             </div>
-            <div className={`absolute left-3 -bottom-16 w-[130px] h-[130px] rounded-full border ${mode.background} border-${mode.background} border-[3.5px] z-10`}>
+            <div className={`absolute left-3 -bottom-16 w-[130px] h-[130px] rounded-full border ${mode.background} ${ringColor} border-[3.5px] z-10`}>
                 <img src={account.pfp} alt="user's profile pic" width='130' className='object-cover w-full h-full rounded-full cursor-pointer' onClick={() => {setPfpBig(account.pfp) ; handleImageModal()}} />
             </div>
             <div className='absolute -bottom-10 right-3 flex items-center space-x-2'>

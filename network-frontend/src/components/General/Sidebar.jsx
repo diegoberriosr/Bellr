@@ -173,7 +173,7 @@ const Sidebar = ({ setModeModal }) => {
                 </>
             }
             { user &&
-                    <li className='absolute bottom-0 w-7/12 mt-1 p-2.5 flex items-center'>
+                    <li className='absolute bottom-0 w-full mt-1 p-2.5 flex items-center'>
                         <ImageDropdownMenu setModeModal={setModeModal}>
                             <div className='min-w-10 h-10 overflow-hidden rounded-full overflow-hidden ml-[15%] visible'>
                                 <img src={user.pfp} alt='user profile pic' className='w-full h-full object-cover'/>

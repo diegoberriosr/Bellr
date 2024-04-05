@@ -13,6 +13,7 @@ import { RegisterSchema } from '../../schemas/index.js';
 // Component imports
 import Input from '../Forms/Input.jsx';
 import ClipLoader from "react-spinners/ClipLoader";
+import MoonLoader from 'react-spinners/MoonLoader';
 
 // Context imports
 import AuthContext from '../../context/AuthContext.js';
@@ -20,7 +21,7 @@ import GeneralContext from '../../context/GeneralContext.js';
 
 const EditProfile = ({ profile, shrink, setShrink }) => {
 
-    const { authTokens } = useContext(AuthContext); 
+    const { authTokens, logoutUser } = useContext(AuthContext); 
     const [loading, setLoading] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const { mode,  account, setAccount} = useContext(GeneralContext);
@@ -32,10 +33,10 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
         initialValues: {
             email: account.email,
             username: account.username,
-            password: '',
-            confirmation: '',
             profilename: account.profilename,
             bio: account.bio,
+            website : account.website,
+            location : account.location,
             pfp: account.pfp,
             background: account.background
 
@@ -60,8 +61,8 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
             url : `http://127.0.0.1:8000/user/edit/${account.username}`,
             method : 'PUT',
             headers : headers,
-            data : {email : values.email, username : values.username, password: values.password, confirmation: values.confirmation, profilename : values.profilename,
-                    bio : values.bio, pfp : values.pfp }
+            data : {email : values.email, username : values.username, profilename : values.profilename,
+                    bio : values.bio, website : values.website, location: values.location, pfp : values.pfp }
         })
         .then( ( res ) => {
             setLoading(false);
@@ -79,13 +80,12 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
         values : {
             email: account.email,
             username: account.username,
-            password: '',
-            confirmation: '',
             profilename: account.profilename,
             bio: account.bio,
+            website : account.website,
+            location : account.location,
             pfp: account.pfp,
             background: account.background
-
         }
       })
     }
@@ -112,6 +112,31 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
             const localImageUrl = URL.createObjectURL(file);
             setFieldValue('pfp', localImageUrl);
         }   
+    }
+
+    const handleDeleteProfile = () => {
+        setLoading(true);
+        let headers;
+
+        if (authTokens) {
+            headers = {
+                'Authorization' : 'Bearer ' + String(authTokens.access)
+            }
+        }
+
+        axios({
+            url : `http://127.0.0.1:8000/user/delete/${account.username}`,
+            method : 'PUT',
+            headers : headers
+        })
+        .then( () => {
+            logoutUser();
+            setLoading(false);
+        })
+        .catch( err => {
+            setLoading(false);
+            console.log(err);
+        })
     }
 
     return (
@@ -141,7 +166,10 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                     <h3 className='text-2xl font-bold'>Are you sure?</h3>
                     <p>This action is irreversible. All your information will be lost.</p>
                     <button className='w-6/12 mt-5 h-10 border bg-white text-black opacity-80 hover:opacity-100 rounded-full' onClick={() =>{setDeleting(false)}}>Cancel</button>
-                    <button className='w-6/12 mt-5 h-10 border border-red-900 bg-transparent text-white opacity-80 hover:bg-red-900 hover:opacity-100 rounded-full'>Delete account</button>
+                    <button className='w-6/12 mt-5 h-10 border border-red-900 bg-transparent text-white opacity-80 hover:bg-red-900 hover:opacity-100 rounded-full flex items-center justify-center'
+                    onClick={handleDeleteProfile}>{
+                        loading ? <MoonLoader color='#FFFFFF' size={25} loading={loading}/> : 'Delete'
+                    }</button>
                 </div>
                 :
                 <>
@@ -182,7 +210,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                     placeholder='Location' handleBlur={handleBlur} handleChange={handleChange}/>
                     <Input type='text' value={values.website} name='website' id='Website'  containerStyle='mt-16 w-full h-5' 
                     inputStyle='w-full h-full bg-transparent' error={errors['website']} touched={touched['website']} 
-                    placeholder='website' handleBlur={handleBlur} handleChange={handleChange}/>
+                    placeholder='Website' handleBlur={handleBlur} handleChange={handleChange}/>
                     <button type='button' className='w-full mt-16 h-10 border border-red-900 bg-transparent text-white opacity-80 hover:bg-red-900 hover:opacity-100 rounded-full' onClick={() => setDeleting(true)}>Delete account</button>
                 </form>
                 </>

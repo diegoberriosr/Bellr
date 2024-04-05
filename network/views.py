@@ -886,13 +886,15 @@ def edit_profile(request, username):
     # Update user's information.
     user.profilename = profilename
     user.bio= bio 
+    user.location = location
+    user.website = website
     user.save()
 
     return JsonResponse({
         'account' : user.serialize(request.user)
     })
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def delete_profile(request, username):
 
