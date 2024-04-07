@@ -1,5 +1,12 @@
 from django.core.paginator import Paginator, EmptyPage
+from django.http import JsonResponse, HttpResponseForbidden
 from math import ceil
+from .models import Image
+import mimetypes
+import io
+from PIL import Image as PILImage, ImageSequence
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from botocore.exceptions import NoCredentialsError
 
 def paginate(list, items_per_page, current_page):
     '''
@@ -29,3 +36,63 @@ def paginate(list, items_per_page, current_page):
     hasMore = current_page < paginator.num_pages
 
     return paginated_list, hasMore
+
+def resize_image(image, image_extension):
+    img = PILImage.open(image)
+
+    if img.mode == 'RGBA':
+         img = img.convert('RGBA')
+         format = 'PNG'
+
+    else:
+         img = img.convert('RGB') 
+         format = 'JPEG'
+
+
+    if image_extension.lower() == '.gif': # Check if the image is a gif
+        image.seek(0)
+        return image
+
+    else: # Otherwise process a static image 
+         # Resize image
+        img.thumbnail((800, 800))
+
+        # Compress the image
+        img_io = io.BytesIO()
+        img.save(img_io, format=format, quality=70)       
+
+    img_io.seek(0)
+
+    resized_image = InMemoryUploadedFile(
+         img_io,
+         None,
+         image.name,
+         f'image/{format.lower()}',
+         img_io.tell,
+         None
+    )
+
+    return resized_image
+
+def post_to_bucket(s3, image, post, image_index):
+    try:
+        # Ensure the file's position is at the beginning
+        image.seek(0)
+        mime_type, _ = mimetypes.guess_type(image.name)
+        file_extension =  mimetypes.guess_extension(mime_type)
+        s3_file_name = f'images/{post.id}/{image_index}{file_extension}'
+        resized_image = resize_image(image, file_extension)
+        s3.upload_fileobj(
+            resized_image,
+            'bellr-image-storage', 
+            s3_file_name
+        )
+
+        image = Image(post=post, url=f'https://s3.amazonaws.com/bellr-image-storage/{s3_file_name}')
+        image.save()
+        image_index += 1
+
+    except NoCredentialsError:
+            return HttpResponseForbidden('ERROR: AWS credentials not available')
+    except Exception as e:
+            return JsonResponse({ 'error' : str(e) }, status=500)

@@ -206,13 +206,14 @@ const useSearch = () => {
       };
 
 
-      const handleNew = (content, setLoading) => {
+      const handleNew = (data, setLoading) => {
         setLoading(true);
         let headers;
-    
+
         if (authTokens){
           headers = {
-            'Authorization' : 'Bearer ' + String(authTokens.access)
+            'Authorization' : 'Bearer ' + String(authTokens.access),
+            'Content-Type' : 'multipart/form-data'
           }
         }
         
@@ -221,7 +222,7 @@ const useSearch = () => {
           method : 'POST',
           url : `http://127.0.0.1:8000/new`,
           headers : headers,
-          data: {content:content}
+          data: data
         })
         .then( (res) => { // Backend returns the new post's information if operation was successful.
             setPosts(prevPosts => {

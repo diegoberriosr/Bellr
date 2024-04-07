@@ -17,11 +17,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-from .models import User, Post, Transmission, Notification, Code
+from .models import User, Post, Transmission, Notification, Code, Image
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .utils import paginate
+import boto3
+from .utils import paginate, post_to_bucket
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -102,7 +104,6 @@ def get_posts_all(request):
     
     # Get the requester's blocklist (list is empty if the user is not logged in).
     requester_blocklist = [] if request.user.is_anonymous else request.user.blocklist.all()
-
 
 
     # Get posts/transmissions and filter those whose authors have been blocked by the requester.
@@ -260,8 +261,8 @@ def get_post_by_id(request, post_id):
 def create_post(request):
 
     # Get the content and image of the post from the request's body.
-    content = json.loads(request.body).get('content', '')
-    image = json.loads(request.body).get('image', '')
+    content = request.POST.get('content')
+    images = request.FILES.getlist('images[]')
 
     # Make a new post and add it to the database
     newpost = Post(user=request.user, content=content)
@@ -277,30 +278,44 @@ def create_post(request):
             newmention = Notification(origin=request.user, post=newpost, target=user)
             newmention.save()
 
+    # Upload images to S3 and save Image objects
+    if len(images) > 0:
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,    
+            )
+        
+        image_index = 1 # Keep track of an index for images
+        for image in images:
+            if image.size == 0: # Skip empty images
+                continue
+            
+            post_to_bucket(s3, image, newpost, image_index) # Post image to bucket
+
+        
     return JsonResponse(newpost.serialize(request.user), safe=False)
 
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def edit_post(request, post_id):
-    print('inside endpoint')
+
     # Search post and check its validity
     post = Post.objects.get(id=post_id)
 
     if post == None:
         return JsonResponse({'ERROR' : f'post with id={post_id} does not exist'}, status=404)
 
-    print('post exists')
-
     if request.method == 'PUT' and post.user == request.user:
-        print('inside contitional')
+
         # Get content 
         content = json.loads(request.body).get('content', '')
         image = json.loads(request.body).get('image', '')
         post.content = content
         post.image = image
         post.save()
-        print('saved')
+
         return JsonResponse({'SUCCESS' : f'post with id={post_id} was sucessfully edited'}, status=200)
     
     else:
