@@ -22,7 +22,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 import boto3
-from .utils import paginate, post_to_bucket
+from .utils import paginate, post_to_bucket, post_profile_image_to_bucket
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -893,16 +893,43 @@ def edit_profile(request, username):
         return HttpResponseForbidden('Requester does not own the target account.')
 
     # Get all the user information from the request.
-    profilename = json.loads(request.body).get('username', '')
-    bio  = json.loads(request.body).get('bio', '')
-    location = json.loads(request.body).get('location', '')
-    website = json.loads(request.body).get('website', '')
-
+    profilename = request.POST.get('profilename', '')
+    bio  = request.POST.get('bio', '')
+    location = request.POST.get('location', '')
+    website = request.POST.get('website', '')
+    pfp = request.FILES.get('pfp', '')
+    background = request.FILES.get('background', '')
+    
     # Update user's information.
-    user.profilename = profilename
-    user.bio= bio 
-    user.location = location
-    user.website = website
+    if profilename is not None:
+        user.profilename = profilename
+    
+    if bio is not None:
+        user.bio= bio 
+
+    if location is not None:
+        user.location = location
+
+    if website is not None:
+        user.website = website
+
+    if pfp or background:
+
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,    
+            )
+
+        if pfp:
+            post_profile_image_to_bucket(s3, pfp, user, 'pfp')
+
+        if background:
+            post_profile_image_to_bucket(s3, background, user, 'background')
+    
+    print(user.backgroundpic)
+        
+
     user.save()
 
     return JsonResponse({

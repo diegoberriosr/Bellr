@@ -21,13 +21,14 @@ import GeneralContext from '../../context/GeneralContext.js';
 
 const EditProfile = ({ profile, shrink, setShrink }) => {
 
-    const { authTokens, logoutUser } = useContext(AuthContext); 
+    const { authTokens, logoutUser, setUser, user } = useContext(AuthContext); 
     const [loading, setLoading] = useState(false);
     const [deleting, setDeleting] = useState(false);
-    const { mode,  account, setAccount} = useContext(GeneralContext);
-
-    const pfpData = new FormData();
-    const backgroundData = new FormData();
+    const { mode,  account, setAccount, setPosts} = useContext(GeneralContext);
+    const [imageData, setImageData] = useState({
+      pfp : null,
+      background : null  
+    });
 
     const { values, errors, touched, handleChange, handleBlur, resetForm, setFieldValue } = useFormik({
         initialValues: {
@@ -47,13 +48,30 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
     })
 
     const handleUpdate = () => {
-
+        
         setLoading(true);
+
+        const data = new FormData();
+        data.append('email', values.email);
+        data.append('username', values.username);
+        data.append('profilename', values.profilename);
+        data.append('bio', values.bio);
+        data.append('website', values.website);
+        data.append('location', values.location);
+        if ( imageData.pfp ) data.append('pfp', imageData.pfp);
+        if ( imageData.background) data.append('background', imageData.background);
+
+        
+        for ( const [key, value] of data.entries()){
+            console.log(key, value);
+        }
+
         let headers;
 
         if (authTokens) {
             headers = {
-                'Authorization' : 'Bearer ' + String(authTokens.access)
+                'Authorization' : 'Bearer ' + String(authTokens.access),
+                'Content-Type' : 'multipart/form-data'
             }
         }
 
@@ -61,13 +79,28 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
             url : `http://127.0.0.1:8000/user/edit/${account.username}`,
             method : 'PUT',
             headers : headers,
-            data : {email : values.email, username : values.username, profilename : values.profilename,
-                    bio : values.bio, website : values.website, location: values.location, pfp : values.pfp }
+            data : data
         })
         .then( ( res ) => {
             setLoading(false);
             setAccount( res.data.account);
+            setUser( prevStatus => ({...prevStatus, 
+                profilename : res.data.account.profilename, 
+                username: res.data.account.username, 
+                pfp : res.data.account.pfp}));
+            setPosts( prevStatus => {
+                const updatedStatus = prevStatus.map( post => {
+                    if (post.user.id === user.id) {
+                        post.user.profilename = res.data.account.profilename;
+                        post.user.username = res.data.account.username;
+                        post.user.pfp = res.data.account.pfp;
+                    };
+                    return post;
+                });
+                return updatedStatus;
+            })
             setShrink(true);
+
         })
         .catch( error => {
             setLoading(false);
@@ -92,14 +125,15 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
 
     const handleDeleteBackground = () => {
         setFieldValue('background', '');
+        setImageData({...imageData, background : null});
     }
 
     const handleLoadBackground = (event) => {
         const file = event.target.files[0];
         
         if (file) {
-            backgroundData.append('image', file)
             const localImageUrl = URL.createObjectURL(file);
+            setImageData({...imageData, background : file});
             setFieldValue('background', localImageUrl);
         }    
     }
@@ -108,9 +142,9 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
         const file = event.target.files[0];
         
         if (file) {
-            pfpData.append('image', file)
             const localImageUrl = URL.createObjectURL(file);
             setFieldValue('pfp', localImageUrl);
+            setImageData({...imageData, pfp: file});
         }   
     }
 

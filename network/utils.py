@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator, EmptyPage
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponseBadRequest
 from math import ceil
 from .models import Image
 import mimetypes
@@ -74,6 +74,7 @@ def resize_image(image, image_extension):
 
     return resized_image
 
+
 def post_to_bucket(s3, image, post, image_index):
     try:
         # Ensure the file's position is at the beginning
@@ -96,3 +97,37 @@ def post_to_bucket(s3, image, post, image_index):
             return HttpResponseForbidden('ERROR: AWS credentials not available')
     except Exception as e:
             return JsonResponse({ 'error' : str(e) }, status=500)
+    
+
+
+def post_profile_image_to_bucket(s3, image, user, type):
+    if type != 'pfp' and type != 'background':
+         print(f'bad request')
+         return HttpResponseBadRequest('ERROR: incorrect attribute')
+    
+    try:
+        # Ensure the file's position is at the beginning
+        image.seek(0)
+        mime_type, _ = mimetypes.guess_type(image.name)
+        file_extension =  mimetypes.guess_extension(mime_type)
+
+        s3_file_name = f'profiles/{user.pk}/{type}{file_extension}'
+        resized_image = resize_image(image, file_extension)
+
+        s3.upload_fileobj(
+            resized_image,
+            'bellr-image-storage', 
+            s3_file_name
+        )
+
+        if type == 'pfp':
+             user.pfp = f'https://s3.amazonaws.com/bellr-image-storage/{s3_file_name}'
+        
+        if type == 'background':
+             user.backgroundpic = f'https://s3.amazonaws.com/bellr-image-storage/{s3_file_name}'
+
+    except NoCredentialsError:
+            return HttpResponseForbidden('ERROR: AWS credentials not available')
+    except Exception as e:
+            return JsonResponse({ 'error' : str(e) }, status=500)
+
