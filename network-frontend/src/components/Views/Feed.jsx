@@ -45,7 +45,6 @@ const Feed = ({ form,  url, loginRequired}) => {
         </div>
        }
        {(posts && posts.length > 0) && posts.map((post,index) => {
-    
        if (posts.length - 1 === index) return <NewPost ref={lastPostRef} key={index} post={post}/>;
        return <NewPost key={index} post={post}/>})}
        {(posts && posts.length === 0) && <ErrorMessage text='No posts to show here' subtext='When something appears, it will show here.'/>}

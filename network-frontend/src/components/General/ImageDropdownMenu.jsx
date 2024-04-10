@@ -14,7 +14,7 @@ const ImageDropdownMenu = ({ setModeModal, children }) => {
     const [ visible, setVisible ] = useState(false);
 
   return (
-    <div className='flex items-center justify-end cursor-pointer xl:cursor-auto'>
+    <div className='z-[999] flex items-center justify-end cursor-pointer xl:cursor-auto'>
       <div onClick={() => setVisible(!visible)}>
         {children}
       </div>

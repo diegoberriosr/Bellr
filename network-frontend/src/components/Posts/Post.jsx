@@ -55,7 +55,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
         };
     }, [deleting])
 
-    return <div ref={ref} className={`border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 ${ deleting ? 'animate-element-shrink' : 'animate-grow'}`}>
+    return <div ref={ref} className={`z-[1] border border-t-0 border-l-0 ${mode.separator} ${hoverClass} w-full cursor-pointer transition-colors duration-500 ${ deleting ? 'animate-element-shrink' : 'animate-grow'}`}>
         {post.transmission && <p className='flex items-center pt-1.5 ml-10 fold:text-xs sm:text-sm max-w-full truncate text-info-gray'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter.username} reposted</span>
@@ -72,10 +72,10 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
             <span className='ml-2'>Pinned</span>
         </p>
         }
-        <div className='flex'>
-            <aside className={`${post.transmission || post.reply ? 'mt-0.5' : 'mt-3'} ml-4`}>
-                <div className='w-10 h-10 overflow-hidden rounded-full'>
-                    <img src={post.user.pfp} className='h-full w-full object-fit' alt='profile pic' />
+        <div className='flex z-[1]'>
+            <aside className={`${post.transmission || post.reply ? 'mt-0.5' : 'mt-3'} ml-4 z-[1]`}>
+                <div className='w-10 h-10 overflow-hidden rounded-full z-[1]'>
+                    <img src={post.user.pfp} className='h-full w-full object-fit z-[1]' alt='profile pic' />
                 </div>
             </aside>
             <main className={`w-[90%] ${post.transmission || post.reply ? 'mt-0' : 'mt-2.5'} p-1 pl-3 text-xs sm:text-sm md:text-base w-full`}>

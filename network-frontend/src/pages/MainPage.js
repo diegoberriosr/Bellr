@@ -109,7 +109,7 @@ const MainPage = () => {
 
   return (
         <MessageProvider>
-        <div className={`relative flex ${currentUrl.pathname === '/messages' ? 'md:pl-20 lg:pl-32' : 'md:px-20 lg:px-32'} bg-${mode.background} ${mode.text} duration-300 transition-colors`}>
+        <div className={`flex ${currentUrl.pathname === '/messages' ? 'md:pl-20 lg:pl-32' : 'md:px-20 lg:px-32'} bg-${mode.background} ${mode.text} duration-300 transition-colors`}>
               <Sidebar setModeModal={setModeModal}/>
                 <Routes>
                     <Route key='home' element={<Feed form={true} url='posts' /> } path='/home'/>
