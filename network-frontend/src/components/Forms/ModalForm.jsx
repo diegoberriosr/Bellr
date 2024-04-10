@@ -26,9 +26,9 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
     const { mode, isEditing, setIsEditing, editedPost, setEditedPost, handleEdit, handleNew } = useContext(GeneralContext);
     const [ isFocused, setIsFocused ] = useState(isEditing);
     const [ loading, setLoading ] = useState(false);
-    const [images, setImages] = useState([]);
-    const postImages = new FormData();
-
+    const [images, setImages] = useState( editedPost ? editedPost.images : []);
+    const [ files, setFiles] = useState([]);
+    console.log(files);
     const { user } = useContext(AuthContext);
 
     const { values, handleChange, setFieldValue } = useFormik({
@@ -42,7 +42,14 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
     const percentage = (values.content.length/280) * 100 
 
     const handleNewPost = () => {            
-        isEditing ? handleEdit(editedPost.id, values.content, setLoading) : handleNew(values.content, setLoading);
+        const data = new FormData();
+
+        data.append('content', values.content);
+
+        if ( files.length > 0) files.forEach( file => data.append('images[]', file));
+        if ( isEditing ) images.forEach( image => data.append('updated_images[]', image));
+
+        isEditing ? handleEdit(editedPost.id, data) : handleNew(data, setLoading);
             setIsFocused(false);
             setIsEditing(false);
             setEditedPost(null);
@@ -57,20 +64,14 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
     }
 
     const handleLoadImage = (event) => {
-        const files = Array.from(event.target.files);
+        const file = event.target.files[0];
 
-        if (files) {
-            const localUrls = files.map( file => {
-                postImages.append('image', file)
-                const localImageUrl = URL.createObjectURL(file);
-                return localImageUrl;
-            })
-            setImages( prevUrls => {
-                if (prevUrls) return [ ...prevUrls, ...localUrls];
-                return [...localUrls];
-            });
-        }    
-    }
+        if (file){
+            setFiles( prevStatus => ([...prevStatus, file]));
+            const localUrl = URL.createObjectURL(file);
+            setImages( prevStatus => ([...prevStatus, localUrl]));
+        }
+    };
 
     const handleDeleteImage = (url) => {
         setImages(images.filter( image => image !== url));

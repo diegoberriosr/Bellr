@@ -307,19 +307,36 @@ def edit_post(request, post_id):
     if post == None:
         return JsonResponse({'ERROR' : f'post with id={post_id} does not exist'}, status=404)
 
-    if request.method == 'PUT' and post.user == request.user:
 
-        # Get content 
-        content = json.loads(request.body).get('content', '')
-        image = json.loads(request.body).get('image', '')
-        post.content = content
-        post.image = image
-        post.save()
+    # Get content, new image files, and a list with the remaining original images after edition.
+    content = request.POST.get('content')
+    images = request.FILES.getlist('images[]')
+    updated_images = request.POST.getlist('updated_images')
 
-        return JsonResponse({'SUCCESS' : f'post with id={post_id} was sucessfully edited'}, status=200)
-    
-    else:
-        return JsonResponse({'ERROR' : 'PUT method is required / user id must match the post id'}, status=400)
+    post.content = content # Update post's content.
+
+    for image in post.images.all(): # Check if an original image is on the updated list.
+        if image.url not in updated_images: 
+            image.delete() # Remove it if it does not.
+
+
+    # Upload new images to S3 and save Image objects.
+    if len(images) > 0: # Check if any images were attatched.
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,    
+            )
+        
+        image_index = post.images.count() # Keep track of an index for images.
+        for image in images:
+            if image.size == 0: # Skip empty images.
+                continue
+            
+            post_to_bucket(s3, image, post, image_index) # Post image to bucket.
+        
+    post.save()
+    return JsonResponse( post.serialize(request.user), safe=False)
 
 
 @api_view(['PUT'])

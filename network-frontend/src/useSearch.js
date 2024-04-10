@@ -179,12 +179,13 @@ const useSearch = () => {
         })
       }    
 
-      const handleEdit = (postId, updatedContent) => {
+      const handleEdit = (postId, data) => {
         let headers;
     
         if (authTokens){
           headers = {
-            'Authorization' : 'Bearer ' + String(authTokens.access)
+            'Authorization' : 'Bearer ' + String(authTokens.access),
+            'Content-Type' : 'multipart/form-data'
           }
         }
         
@@ -193,16 +194,17 @@ const useSearch = () => {
           method : 'PUT',
           url : `http://127.0.0.1:8000/edit/${postId}`,
           headers : headers,
-          data: {content:updatedContent}
+          data: data
         })
-        .then(
-            setPosts( () => {
-                return posts.map(post => {
-                    if (post.id === postId) return {...post, content:updatedContent}; // Get the edited post and update its content.
-                    else return post
-                })
+        .then( res => {
+          setPosts( () => {
+            return posts.map(post => {
+                if (post.id === postId) return {...post, content:res.data.content, images: res.data.images}; // Get the edited post and update its content.
+                else return post
             })
-        )
+        })
+        })
+        .catch( err => console.log(err));
       };
 
 
