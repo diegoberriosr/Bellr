@@ -22,6 +22,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 import boto3
+from botocore.exceptions import ClientError
+import mimetypes
 from .utils import paginate, post_to_bucket, post_profile_image_to_bucket
 
 
@@ -483,6 +485,26 @@ def delete_post(request, post_id):
     # If post does not exist return an error
     if not post:
         return JsonResponse({'ERROR' : f'Post with id={post_id} does not exist'})
+
+    images = post.images.all()
+
+    if images:
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+        )
+        
+        counter = 1
+        for image in images:
+
+            try:
+                mime_type, _ = mimetypes.guess_type(image.url)
+                file_extension =  mimetypes.guess_extension(mime_type)
+                s3.delete_object(Bucket='bellr-image-storage', Key=f'images/{post.id}/{counter}{file_extension}')
+                counter += 1
+            except ClientError as e:
+                return JsonResponse({ 'ERROR' : f'failed to delete image {str(e)}'})
 
     post.delete() # Delete post
 
