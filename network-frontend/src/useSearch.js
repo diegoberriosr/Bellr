@@ -321,7 +321,7 @@ const useSearch = () => {
 
         axios({
             method : 'GET',
-            url : `http://127.0.0.1:8000${currentUrl}`,
+            url : `https://bellr.onrender.com${currentUrl}`,
             params : {page : page},
             headers : headers,
             cancelToken : new axios.CancelToken( c => {cancel = c})
@@ -373,7 +373,7 @@ const useSearch = () => {
         // Make a request to the current route, and update the information appropriately.
         axios({
             method : 'GET',
-            url : `http://127.0.0.1:8000${currentUrl}`,
+            url : `https://bellr.onrender.com${currentUrl}`,
             params : {page : page},
             headers : headers,
             cancelToken : new axios.CancelToken( c => {cancel = c})
