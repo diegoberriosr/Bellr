@@ -37,7 +37,7 @@ const Users = () => {
       headers['Authorization'] = 'Bearer ' + String(authTokens.access);
     }
     axios({
-      url : `http://127.0.0.1:8000/follow/${userId}`,
+      url : `https://bellr.onrender.com/follow/${userId}`,
       method : 'PUT',
       headers: headers,
     })
@@ -74,7 +74,7 @@ const Users = () => {
     }
 
     axios({
-      url:`http://127.0.0.1:8000/${type}/${username}/`,
+      url:`https://bellr.onrender.com/${type}/${username}/`,
       headers:headers,
       method: 'GET',
       params : {page : page}
@@ -106,7 +106,7 @@ const Users = () => {
     }
 
     axios({
-      url:`http://127.0.0.1:8000/${type}/${username}/`,
+      url:`https://bellr.onrender.com/${type}/${username}/`,
       headers:headers,
       method: 'GET',
       params : {page : page}

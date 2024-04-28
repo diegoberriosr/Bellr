@@ -5,12 +5,12 @@ const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
 
 export const RegisterSchema = yup.object().shape({
     username : yup.string().max(15, 'Must be less or equal than 15 characters').required('This field is required').test('username', 'Username already exists', async value => {
-        const response = await fetch(`http://127.0.0.1:8000/usernameExists/${value}`);
+        const response = await fetch(`https://bellr.onrender.com/usernameExists/${value}`);
         const result = await response.json();
         return result.exists ? false : true;
     }),
     email : yup.string().email("Please enter a valid email").required('This field is required').test('email', 'Email already exists', async value => {
-        const response = await fetch(`http://127.0.0.1:8000/emailExists/${value}`);
+        const response = await fetch(`https://bellr.onrender.com/emailExists/${value}`);
         const result = await response.json();
         return result.exists ? false : true;
     }),

@@ -55,7 +55,7 @@ const Notifications = () => {
 
         axios({
             method: 'GET',
-            url: 'http://127.0.0.1:8000/notifications',
+            url: 'https://bellr.onrender.com/notifications',
             headers: headers,
             params: { filter: filter , page : page }
         })

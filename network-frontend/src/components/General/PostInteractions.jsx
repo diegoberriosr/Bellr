@@ -48,7 +48,7 @@ const PostInteractions = ({ shrink, setShrink}) => {
     }
 
     axios({
-      url : `http://127.0.0.1:8000/follow/${userId}`,
+      url : `https://bellr.onrender.com/follow/${userId}`,
       method : 'PUT',
       headers: headers,
       params : {page : page}
@@ -81,7 +81,7 @@ const PostInteractions = ({ shrink, setShrink}) => {
     }
 
     axios({
-      url : `http://127.0.0.1:8000/post/interactions/${editedPost.id}`,
+      url : `https://bellr.onrender.com/post/interactions/${editedPost.id}`,
       method : 'GET',
       headers : headers,
       params : { filter : filter}

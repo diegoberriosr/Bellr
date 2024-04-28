@@ -28,7 +28,7 @@ const Notification = forwardRef(({notification}, ref) => {
         }
       }
       axios({
-        url: 'http://127.0.0.1:8000/notifications/watch',
+        url: 'https://bellr.onrender.com/notifications/watch',
         method : 'PUT',
         headers: headers,
         data : { notification_id : notification.id }

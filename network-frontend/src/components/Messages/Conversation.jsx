@@ -42,7 +42,7 @@ const Conversation = () => {
     setFieldValue('content', '')
 
     axios({
-      url : `http://127.0.0.1:8000/messages/new`,
+      url : `https://bellr.onrender.com/messages/new`,
       method : 'POST',
       headers : { 'Authorization' : 'Bearer ' + String(authTokens.access)},
       params : {conversation_id : activeConversation.id},

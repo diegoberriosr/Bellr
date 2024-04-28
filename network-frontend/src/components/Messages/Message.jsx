@@ -22,7 +22,7 @@ const Message = ({ message }) => {
 
   const handleDelete = () => {
     axios({
-      url : `http://127.0.0.1:8000/messages/delete`,
+      url : `https://bellr.onrender.com/messages/delete`,
       method : 'POST',
       headers : {
         'Authorization' : 'Bearer ' + String(authTokens.access)
@@ -40,7 +40,7 @@ const Message = ({ message }) => {
   useEffect( () => {
     if (!message.seen && user.username !== message.sender.username) {
       axios({
-        url: `http://127.0.0.1:8000/messages/seen`,
+        url: `https://bellr.onrender.com/messages/seen`,
         method : 'PUT',
         headers : {
           'Authorization' : 'Bearer ' + String(authTokens.access)

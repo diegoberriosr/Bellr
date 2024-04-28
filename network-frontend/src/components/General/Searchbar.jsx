@@ -20,7 +20,7 @@ const Searchbar = () => {
     if (event.target.value !== '')
     {
       axios({
-        url : `http://127.0.0.1:8000/search`,
+        url : `https://bellr.onrender.com/search`,
         method : 'GET',
         params : { s : event.target.value}
       })

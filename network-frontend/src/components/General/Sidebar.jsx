@@ -119,7 +119,7 @@ const Sidebar = ({ setModeModal }) => {
             }
     
             axios({
-                url : 'http://127.0.0.1:8000/notifications/unseen',
+                url : 'https://bellr.onrender.com/notifications/unseen',
                 method : 'GET',
                 headers : headers
             })

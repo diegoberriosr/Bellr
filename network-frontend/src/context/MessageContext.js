@@ -25,7 +25,7 @@ export const MessageProvider = ({children}) => {
             }
     
             axios({
-                url : 'http://127.0.0.1:8000/messages/conversations',
+                url : 'https://bellr.onrender.com/messages/conversations',
                 method : 'GET',
                 headers : headers,
                 params : {user_id : user.user_id}
@@ -65,7 +65,7 @@ export const MessageProvider = ({children}) => {
                     }
     
                     axios({
-                        url : 'http://127.0.0.1:8000/messages/message',
+                        url : 'https://bellr.onrender.com/messages/message',
                         method : 'GET',
                         headers : headers,
                         params : { message_id : data.message_id }

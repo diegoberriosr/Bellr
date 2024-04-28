@@ -76,7 +76,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
         }
 
         axios({
-            url : `http://127.0.0.1:8000/user/edit/${account.username}`,
+            url : `https://bellr.onrender.com/user/edit/${account.username}`,
             method : 'PUT',
             headers : headers,
             data : data
@@ -159,7 +159,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
         }
 
         axios({
-            url : `http://127.0.0.1:8000/user/delete/${account.username}`,
+            url : `https://bellr.onrender.com/user/delete/${account.username}`,
             method : 'PUT',
             headers : headers
         })

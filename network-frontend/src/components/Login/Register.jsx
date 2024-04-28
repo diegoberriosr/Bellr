@@ -111,7 +111,7 @@ const Register = ({ handleCloseModal }) => {
 
       if (showLoader) setLoading(true);
       axios({
-        url : 'http://127.0.0.1:8000/code/generate',
+        url : 'https://bellr.onrender.com/code/generate',
         method : 'POST',
         data : { email : values.email},
         params : {new_account : true}

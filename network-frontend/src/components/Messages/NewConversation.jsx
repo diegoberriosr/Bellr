@@ -58,7 +58,7 @@ const NewConversation = ({ shrink, setShrink }) => {
     }
 
     axios({
-      url : 'http://127.0.0.1:8000/messages/conversations/new',
+      url : 'https://bellr.onrender.com/messages/conversations/new',
       method : 'POST',
       headers : headers,
       data : { partners : [user.username, selected] }
@@ -78,7 +78,7 @@ const NewConversation = ({ shrink, setShrink }) => {
   
       if (search.length > 0) {
         axios({
-          url : `http://127.0.0.1:8000/search`,
+          url : `https://bellr.onrender.com/search`,
           method : 'GET',
           params : { s : search}
         })

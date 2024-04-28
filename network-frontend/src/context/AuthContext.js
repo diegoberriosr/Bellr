@@ -20,7 +20,7 @@ export const AuthProvider = ({children}) => {
     const loginUser = async(values, setErrorMessage, setLoading) => {
         console.log('about to log in');
         setLoading(true);
-        fetch('http://127.0.0.1:8000/token/', {
+        fetch('https://bellr.onrender.com/token/', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ export const AuthProvider = ({children}) => {
 
     const registerUser = (body, setLoading) => {
         setLoading(true);
-        fetch('http://127.0.0.1:8000/register', {
+        fetch('https://bellr.onrender.com/register', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ export const AuthProvider = ({children}) => {
             body: JSON.stringify(body)
         })
         .then( () => {
-            fetch('http://127.0.0.1:8000/token/', {
+            fetch('https://bellr.onrender.com/token/', {
                 method : 'POST',
                 headers:{
                     'Content-Type' : 'application/json'
@@ -102,7 +102,7 @@ export const AuthProvider = ({children}) => {
 
     const updateToken = async () => {
         
-        fetch('http://127.0.0.1:8000/token/refresh/', {
+        fetch('https://bellr.onrender.com/token/refresh/', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'

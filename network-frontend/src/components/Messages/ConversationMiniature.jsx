@@ -35,7 +35,7 @@ const ConversationMiniature = ({ active, conversation }) => {
     }
 
     axios({
-      url : 'http://127.0.0.1:8000/messages/conversations/delete',
+      url : 'https://bellr.onrender.com/messages/conversations/delete',
       method : 'PUT',
       headers : headers,
       data : { conversation_id : conversation.id }
@@ -62,7 +62,7 @@ const ConversationMiniature = ({ active, conversation }) => {
     }
 
     axios({
-      url : 'http://127.0.0.1:8000/messages/conversations/delete',
+      url : 'https://bellr.onrender.com/messages/conversations/delete',
       method : 'PUT',
       headers : headers,
       data : { conversation_id : conversation.id }

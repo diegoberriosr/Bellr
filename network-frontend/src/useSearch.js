@@ -29,7 +29,7 @@ const useSearch = () => {
         // Make a request
         axios({ 
             method : 'PUT',
-            url : `http://127.0.0.1:8000/like/${postId}`,
+            url : `https://bellr.onrender.com/like/${postId}`,
             headers : headers
         })
         .then(
@@ -58,7 +58,7 @@ const useSearch = () => {
         // Make a request
         axios({
             method : 'PUT',
-            url : `http://127.0.0.1:8000/transmit/${postId}`,
+            url : `https://bellr.onrender.com/transmit/${postId}`,
             headers : headers
         })
         .then(
@@ -87,7 +87,7 @@ const useSearch = () => {
         // Make a request.
         axios({
             method : 'PUT',
-            url : `http://127.0.0.1:8000/bookmark/${postId}`,
+            url : `https://bellr.onrender.com/bookmark/${postId}`,
             headers : headers
         })
         .then(
@@ -119,7 +119,7 @@ const useSearch = () => {
         // Make a request
         axios({
           method : 'PUT',
-          url : `http://127.0.0.1:8000/follow/${authorId}`,
+          url : `https://bellr.onrender.com/follow/${authorId}`,
           headers : headers
         })
         .then( () => {
@@ -169,7 +169,7 @@ const useSearch = () => {
         // Make a request.
         axios({
           method : 'POST',
-          url : `http://127.0.0.1:8000/delete/${postId}`,
+          url : `https://bellr.onrender.com/delete/${postId}`,
           headers : headers
         })
         .then( () => {
@@ -192,7 +192,7 @@ const useSearch = () => {
         // Make a request.
         axios({
           method : 'PUT',
-          url : `http://127.0.0.1:8000/edit/${postId}`,
+          url : `https://bellr.onrender.com/edit/${postId}`,
           headers : headers,
           data: data
         })
@@ -222,7 +222,7 @@ const useSearch = () => {
         // Make a request
         axios({
           method : 'POST',
-          url : `http://127.0.0.1:8000/new`,
+          url : `https://bellr.onrender.com/new`,
           headers : headers,
           data: data
         })
@@ -252,7 +252,7 @@ const useSearch = () => {
         // Make a request.
         axios({
           method : 'PUT',
-          url : `http://127.0.0.1:8000/block/${username}`,
+          url : `https://bellr.onrender.com/block/${username}`,
           headers : headers,
         })
         .then( (res) => {
@@ -282,7 +282,7 @@ const useSearch = () => {
         }
 
         axios({
-          url : `http://127.0.0.1:8000/reply/${postId}`,
+          url : `https://bellr.onrender.com/reply/${postId}`,
           method : 'POST',
           headers:headers,
           data : {content:content}

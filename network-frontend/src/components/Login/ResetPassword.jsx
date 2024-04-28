@@ -63,7 +63,7 @@ const ResetPassword = ({ handleCloseModal }) => {
 
     const handleGenerateCode = (func, loaderShown) => {
         if (loaderShown) setLoading(true);
-        fetch('http://127.0.0.1:8000/code/generate', {
+        fetch('https://bellr.onrender.com/code/generate', {
             method : 'POST',
             body   : JSON.stringify({ 'email' : values.email })
         })
@@ -91,7 +91,7 @@ const ResetPassword = ({ handleCloseModal }) => {
 
             else {
                 setLoading(true);
-                fetch(`http://127.0.0.1:8000/code/validate`, {
+                fetch(`https://bellr.onrender.com/code/validate`, {
                          method : 'PUT',
                          headers : {
                             'Content-Type' : 'application/json'
@@ -114,7 +114,7 @@ const ResetPassword = ({ handleCloseModal }) => {
 
     useEffect( () => {
         if (ready){
-            fetch('http://127.0.0.1:8000/reset', {
+            fetch('https://bellr.onrender.com/reset', {
                 method : 'PUT',
                 headers : {
                     'Content-type' : 'application/json'

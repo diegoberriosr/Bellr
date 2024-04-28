@@ -5,14 +5,14 @@ const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
 
 export const ResetPasswordSchema = yup.object().shape({
     email : yup.string().email('Please enter a valid email.').required('This field is required.').test('email', 'Incorrect email.', async value => {
-        const response = await fetch(`http://127.0.0.1:8000/emailExists/${value}`);
+        const response = await fetch(`https://bellr.onrender.com/emailExists/${value}`);
         const result = await response.json();
         return result.exists ? true : false;
     }),
     code : yup.string().required('This field is required.').test('code', 'Incorrect code', async (value, context) => {
         const email = context.parent.email;
 
-        const response = await fetch(`http://127.0.0.1:8000/code/validate`, {
+        const response = await fetch(`https://bellr.onrender.com/code/validate`, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
