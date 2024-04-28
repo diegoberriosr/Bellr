@@ -41,7 +41,7 @@ const LoginPage = () => {
 
   return (
 
-    <div className='h-screen w-screen flex bg-black text-white font-twitter '>
+    <div className='h-screen w-screen flex bg-black text-white'>
       <div className='hidden xl:flex w-9/12 text-[350px] justify-center pt-48 pl-[5%]'>
         <PiDogBold />
       </div>
