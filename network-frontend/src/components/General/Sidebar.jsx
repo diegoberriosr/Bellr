@@ -17,6 +17,8 @@ import { IoPersonOutline } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { LuDog } from "react-icons/lu";
+import { CiLogin } from "react-icons/ci";
+import { IoBrushOutline } from "react-icons/io5";
 
 // Authentication context imports
 import AuthContext from '../../context/AuthContext';
@@ -186,7 +188,19 @@ const Sidebar = ({ setModeModal }) => {
                         <SidebarDropdownMenu setModeModal={setModeModal}>
                             <BsThreeDots/>
                         </SidebarDropdownMenu>
+                    </li>                
+            }
+            {
+                !user && <div>
+                    <li className={`relative inline-flex items-center px-4 p-2.5 ${hoverClass} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => navigate('/login')}>
+                        <CiLogin/>
+                        <span className='ml-4 hidden xl:block text-xl'>Log in</span>
                     </li>
+                    <li className={`inline-flex items-center px-4 p-2.5 ${hoverClass} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => setModeModal(true)}>
+                        <IoBrushOutline/>
+                        <span className='ml-4 hidden xl:block text-xl'>Change mode</span>
+                    </li>
+                </div>
             }
         </ul>
     </nav>

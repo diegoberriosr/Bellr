@@ -34,7 +34,7 @@ const MainPage = () => {
 
   const { profileModal, mode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
           imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, 
-          handleProfileModal, postImageModal, setPostImageModal } = useContext(GeneralContext);
+          handleProfileModal, postImageModal, setPostImageModal} = useContext(GeneralContext);
   
   const [shrink, setShrink] = useState(false);
   const [modeModal, setModeModal] = useState(false);

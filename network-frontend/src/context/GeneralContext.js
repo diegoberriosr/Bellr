@@ -32,7 +32,7 @@ export const GeneralProvider = ({ children }) => {
     const [postImages, setPostImages] = useState(null);
     const [activeImageIndex, setActiveImageIndex] = useState(null);
     const [postImageModal, setPostImageModal] = useState(false);
-
+ 
     const handleModal = () => {
       setModalOpen(!modalOpen);
     };
@@ -114,7 +114,7 @@ export const GeneralProvider = ({ children }) => {
       setActiveImageIndex:setActiveImageIndex,
       handleImageToggler:handleImageToggler,
       postImageModal:postImageModal,
-      setPostImageModal:setPostImageModal
+      setPostImageModal:setPostImageModal,
     };
 
     return (
