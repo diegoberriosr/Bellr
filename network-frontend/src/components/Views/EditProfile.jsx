@@ -19,7 +19,7 @@ import MoonLoader from 'react-spinners/MoonLoader';
 import AuthContext from '../../context/AuthContext.js';
 import GeneralContext from '../../context/GeneralContext.js';
 
-const EditProfile = ({ profile, shrink, setShrink }) => {
+const EditProfile = ({ shrink, setShrink }) => {
 
     const { authTokens, logoutUser, setUser, user } = useContext(AuthContext); 
     const [loading, setLoading] = useState(false);
@@ -29,6 +29,10 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
       pfp : null,
       background : null  
     });
+
+    let border = 'border-black'
+
+    if (mode.background === 'black' || mode.background === 'dim') border = 'border-white';
 
     const { values, errors, touched, handleChange, handleBlur, resetForm, setFieldValue } = useFormik({
         initialValues: {
@@ -178,13 +182,13 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
          ${ shrink ? 'animate-shrink' : 'animate-grow'} sm:rounded-xl ${loading ? 'brightness-50' : ''}`}>
             <header className='sticky top-0 h-12 p-5 flex justify-between items-center z-11 transform'>
                 <div className='flex items-center'>
-                    <MdClose className='text-2xl text-white mt-1 cursor-pointer' onClick={() => {setShrink(true)}}/>
+                    <MdClose className={`text-2xl ${mode.text} mt-1 cursor-pointer`} onClick={() => {setShrink(true)}}/>
                     <h3 className='text-xl ml-5 font-bold'> { deleting ? 'Delete' : 'Edit' } Profile </h3>
                 </div>
                 {!deleting &&
                 <div className='flex items-center'>
                     <TfiReload className='text-lg mr-2.5 cursor-pointer' onClick={reset}/>
-                    <button disabled={loading} className={`bg-white w-[100px] h-9 flex items-center justify-center rounded-full text-black font-bold ${ loading ? 'opacity-90' : 'opacity-90 hover:opacity-100'}`} onClick={handleUpdate}>
+                    <button disabled={loading} className={`w-[100px] h-9 flex items-center justify-center rounded-full border ${border} ${mode.text} font-bold ${ loading ? 'opacity-90' : 'opacity-90 hover:opacity-100'}`} onClick={handleUpdate}>
                         { loading ? 
                             <ClipLoader loading={loading} size={20} aria-label='Loading spinner' data-testid='loader'/>
                             :
@@ -245,7 +249,7 @@ const EditProfile = ({ profile, shrink, setShrink }) => {
                     <Input type='text' value={values.website} name='website' id='Website'  containerStyle='mt-16 w-full h-5' 
                     inputStyle='w-full h-full bg-transparent' error={errors['website']} touched={touched['website']} 
                     placeholder='Website' handleBlur={handleBlur} handleChange={handleChange}/>
-                    <button type='button' className='w-full mt-16 h-10 border border-red-900 bg-transparent text-white opacity-80 hover:bg-red-900 hover:opacity-100 rounded-full' onClick={() => setDeleting(true)}>Delete account</button>
+                    <button type='button' className={`w-full mt-16 h-10 border border-red-900 bg-transparent ${mode.text} font-bold opacity-80 hover:bg-red-900 hover:opacity-100 rounded-full`} onClick={() => setDeleting(true)}>Delete account</button>
                 </form>
                 </>
                 }
