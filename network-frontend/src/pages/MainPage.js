@@ -38,6 +38,7 @@ const MainPage = () => {
   
   const [shrink, setShrink] = useState(false);
   const [modeModal, setModeModal] = useState(false);
+  const [newModal, setNewModal] = useState(false);
 
   const currentUrl = useLocation();
     
@@ -121,9 +122,9 @@ const MainPage = () => {
                     <Route key='profile' element={<Profile me={true}/>} path={`/me`} />
                     <Route key='edit' element={<EditProfile/>} path='/me/edit'/>
                     <Route key='followers' element={<Users/>} path=':type/:username/:filter?'/>
-                    <Route key='messages' element={<Inbox/>} path='/messages'/>
+                    <Route key='messages' element={<Inbox newModal={newModal} setNewModal={setNewModal}/>} path='/messages'/>
                 </Routes>
-                { currentUrl.pathname === '/messages' ? <Conversation/> : <Recomendations/> }
+                { currentUrl.pathname === '/messages' ? <Conversation setNewModal={setNewModal}/> : <Recomendations/> }
                 <Bottombar/>
                 <div className={ currentUrl.pathname === '/messages' ? 'hidden' : 'block md:hidden fixed bottom-[10%] right-[5%] animate-grow'}> 
                     <PostButton handleClick={handleModal} mobile={true}/>

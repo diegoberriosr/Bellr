@@ -20,11 +20,10 @@ import AuthContext from '../../context/AuthContext';
 import Modal from '../General/Modal';
 import NewConversation from './NewConversation';
 
-const Inbox = () => {
+const Inbox = ({ newModal, setNewModal }) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [matches, setMatches] = useState([]);
-  const [newModal, setNewModal] = useState(false);
   const [shrink, setShrink] = useState(false);
 
   const { activeConversation, conversations } = useContext(MessageContext);

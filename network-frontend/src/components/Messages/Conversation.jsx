@@ -20,7 +20,7 @@ import GeneralContext from '../../context/GeneralContext';
 import AuthContext from '../../context/AuthContext';
 import MessageContext from '../../context/MessageContext';
 
-const Conversation = () => {
+const Conversation = ({ setNewModal }) => {
 
   const [disabled, setDisabled] = useState(true);
 
@@ -122,7 +122,7 @@ const Conversation = () => {
         <h3 className='text-4xl font-extrabold'>Select a message</h3>
         <p className='text-sm text-gray-600 mt-2.5'>Choose from your existing conversations, start a new one, or just keep swimming.</p>
         <button className={`w-[200px] h-[50px] p-2.5 flex justify-center items-center bg-${mode.color} mt-2.5 opacity-70 
-        hover:opacity-100 text-lg font-bold rounded-full`}>New message</button>
+        hover:opacity-100 text-lg font-bold rounded-full`} onClick={() => setNewModal(true)}>New message</button>
     </div>
     )
 }
