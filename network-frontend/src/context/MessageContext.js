@@ -46,7 +46,7 @@ export const MessageProvider = ({children}) => {
     // Establish a connection to a web socket.
     useEffect( () => {
         if (user){
-            let url = `ws://127.0.0.1:8000/ws/${user.user_id}/`
+            let url = `ws://bellr-alpha.vercel.app/ws/${user.user_id}/`
             const chatSocket = new WebSocket(url);
             setChatSocket(chatSocket)
     

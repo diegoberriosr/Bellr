@@ -43,6 +43,9 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
     const hoverClass = hoverColors[mode.highlight];
     //------------------------------------------------------------------------------------
 
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(`bellr-alpha.vercel.app/post/1`)
+    };
 
     useEffect( () => {
         if (deleting) {
@@ -124,7 +127,7 @@ const Post = forwardRef(({ post, setPosts }, ref) => {
                             <IoBookmarkOutline className='text-icon-gray hover:bg-twitter-blue hover:bg-opacity-50 hover:text-twitter-blue hover:rounded-full peer duration-300 cursor-pointer text-[19px]' onClick={() => {handleBookmark(post.id)}}/>
                                 
                             }
-                            <FiShare2 className='text-icon-gray hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' />
+                            <FiShare2 className='text-icon-gray hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' onClick={handleCopyLink} />
                         </div>
                     </ul>
                 </footer>

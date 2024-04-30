@@ -86,19 +86,20 @@ const ProfileHeader = ({ account }) => {
             </div>
             <div className='absolute -bottom-10 right-3 flex items-center space-x-2'>
                     {
-                        user && user.username === account.username ? 
+                        user && user.username === account.username &&
                         <button className={` w-[100px] h-8 flex items-center justify-center ${subColor} ${bgColor} opacity-90 hover:opacity-100 rounded-full font-bold`}
                         onClick={() => { handleProfileModal() }}>Edit</button>
-                        :
+                    }
+                    { (user && user.username !== account.username && !account.isBlocked) &&
+                    <>
                         <button className={`border ${ account.isBlocked ? 'bg-red-900 border-red-900 bg-opacity-30 text-red-900 hover:bg-transparent hover:border-twitter-blue hover:text-twitter-blue' : `border border-${mode.subColor}  ${mode.text} hover:border-red-900 hover:bg-red-900 hover:bg-opacity-30 hover:text-red-900`} w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold transition-colors `} onClick={() => {handleBlock(account.username)}}>
                         { account.isBlocked ? 'Unblock' : 'Block'}
                     </button>
-                    }
-                    { (user && user.username !== account.username && !account.isBlocked) &&
-                    <button className={`w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold 
-                    ${account.followed ? `bg-transparent border ${mode.text} border-${mode.subColor} hover:border-red-900 hover:text-red-900` 
-                    : `border border-${mode.subColor} ${mode.text}`} transition-colors`}
-                    onClick={() => { handleFollow(account.user_id)}}>{account.followed ? 'Unfollow' : 'Follow' }</button>
+                        <button className={`w-[100px] h-8 flex items-center justify-center rounded-full p-2.5 font-bold 
+                        ${account.followed ? `bg-transparent border ${mode.text} border-${mode.subColor} hover:border-red-900 hover:text-red-900` 
+                        : `border border-${mode.subColor} ${mode.text}`} transition-colors`}
+                        onClick={() => { handleFollow(account.user_id)}}>{account.followed ? 'Unfollow' : 'Follow' }</button>
+                    </>
                     }
                 </div>
         </figure>

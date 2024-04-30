@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios'
 
@@ -13,11 +14,18 @@ const useSearch = () => {
     const [posts, setPosts] = useState(null);
     const [hasMore, setHasMore] = useState(false);
 
-    const {authTokens} = useContext(AuthContext);
+    const {authTokens, user} = useContext(AuthContext);
     const url = useLocation();
     const currentUrl = url.pathname;
 
+    const navigate = useNavigate();
+
     const handleLike = (postId) => {
+
+      if (!user) {
+        navigate('/login');
+        return;
+      }
         let headers;
 
         if (authTokens) {
@@ -48,6 +56,11 @@ const useSearch = () => {
     }
 
     const handleTransmit = (postId) => {
+        if (!user) {
+          navigate('/login');
+          return;
+        }
+
         let headers;
         if (authTokens) {
             headers = {
@@ -77,6 +90,10 @@ const useSearch = () => {
     }
 
     const handleBookmark = (postId) => {
+      if (!user) {
+        navigate('/login');
+        return;
+      }
         let headers;
         if (authTokens) {
             headers = {
@@ -108,6 +125,10 @@ const useSearch = () => {
     }
 
     const handleFollow = (authorId) => {
+      if (!user) {
+        navigate('/login');
+        return;
+      }
         let headers;
     
         if (authTokens){
@@ -158,6 +179,10 @@ const useSearch = () => {
     
     
       const handleDelete = (postId) => {
+        if (!user) {
+          navigate('/login');
+          return;
+        }
         let headers;
     
         if (authTokens){
@@ -310,6 +335,11 @@ const useSearch = () => {
 
         // If the pagination number changes, update the data accordingly.
         if (currentUrl === '/messages' || currentUrl=== '/login') return;
+        if ( (currentUrl === '/feed' || currentUrl === '/bookmarked')  && !user) {
+          navigate('/login');
+          return;
+        };
+
         setLoading(true);
         setError(false);
         let cancel;
@@ -353,6 +383,11 @@ const useSearch = () => {
         // Do nothing if requesting for messages
         if (currentUrl === '/messages' || currentUrl=== '/login') return;
 
+        if ( (currentUrl === '/feed' || currentUrl === '/bookmarked')  && !user) {
+          navigate('/login');
+          return;
+        };
+        
         // If the route change, set all states to default.
         setLoading(true);
         setPosts(null);

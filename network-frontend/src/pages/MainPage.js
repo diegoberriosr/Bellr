@@ -24,6 +24,7 @@ import Conversation from '../components/Messages/Conversation';
 import PostButton from '../components/General/PostButton';
 import ImageToggler from '../components/Posts/ImageToggler';
 
+
 // Context imports
 import GeneralContext from '../context/GeneralContext';
 
@@ -35,13 +36,13 @@ const MainPage = () => {
   const { profileModal, mode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
           imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, 
           handleProfileModal, postImageModal, setPostImageModal} = useContext(GeneralContext);
-  
+
   const [shrink, setShrink] = useState(false);
   const [modeModal, setModeModal] = useState(false);
   const [newModal, setNewModal] = useState(false);
 
   const currentUrl = useLocation();
-    
+  
   useEffect( () => {
     if (imageModal && shrink) {
       const timer = setTimeout( () => {
@@ -113,13 +114,12 @@ const MainPage = () => {
         <div className={`flex ${currentUrl.pathname === '/messages' ? 'md:pl-20 lg:pl-32' : 'md:px-20 lg:px-32'} bg-${mode.background} ${mode.text} duration-300 transition-colors`}>
               <Sidebar setModeModal={setModeModal}/>
                 <Routes>
-                    <Route key='home' element={<Feed form={true} url='posts' /> } path='/home'/>
-                    <Route key='feed' element={<Feed form={true} url='posts/feed' loginRequired={true}/>} path='/feed'/>
+                    <Route key='home' element={<Feed form={true} url='posts'/> } path='/home'/>
+                    <Route key='feed' element={<Feed form={true} url='posts/feed' loginRequired/>} path='/feed'/>
                     <Route element={<Profile me={false}/>} path='user/:username'/>
-                    <Route key='bookmarked' element={<Feed form={false} url='posts/bookmarked' loginRequired={true} />} path='/bookmarked'/>
+                    <Route key='bookmarked' element={<Feed form={false} url='posts/bookmarked' loginRequired/>} path='/bookmarked'/>
                     <Route key='post' element={<SinglePostView/>} path='/post/:postId'/>
                     <Route key='notifications' element={<Notifications/>} path='/notifications'/>
-                    <Route key='profile' element={<Profile me={true}/>} path={`/me`} />
                     <Route key='edit' element={<EditProfile/>} path='/me/edit'/>
                     <Route key='followers' element={<Users/>} path=':type/:username/:filter?'/>
                     <Route key='messages' element={<Inbox newModal={newModal} setNewModal={setNewModal}/>} path='/messages'/>

@@ -1,5 +1,5 @@
 import { useContext, useCallback, useRef} from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 // Component imports
 import Form from '../Forms/Form';
@@ -11,10 +11,15 @@ import MoonLoader from "react-spinners/MoonLoader";
 import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 
-const Feed = ({ form,  url, loginRequired}) => {
+const Feed = ({ form, loginRequired}) => {
 
   const { user } = useContext(AuthContext);
   const { mode, posts, hasMore, loading, setPage} = useContext(GeneralContext);
+  const navigate = useNavigate();
+
+  if (loginRequired && !user) {
+    navigate('/login');
+  };
 
   const observer = useRef();
   const lastPostRef = useCallback( post => {

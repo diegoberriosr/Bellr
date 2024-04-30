@@ -17,6 +17,7 @@ import PostImages2 from './PostImages2';
 import PostImages3 from './PostImages3';
 import PostImages4 from './PostImages4';
 
+
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
 
@@ -37,7 +38,7 @@ const OriginPost = ({ post, handleAction, postView }) => {
 
         return moment.utc(post.timestamp).format('YYYY-MM-DD'); // Otherwise output in standard calendar format
     }
-
+    
     // Mention's functionality
     const regex = /@[a-zA-Z0-9_]+/; // Search for a mention inside a post
     const parsedContent = post.content.split(' ').map(word => regex.test(word) ? <span key={word} className='text-twitter-blue hover:underline cursor-pointer' onClick={() => { navigate(`/${word.slice(1)}`) }}>{word}</span> : word); // Parse it's content
@@ -45,7 +46,12 @@ const OriginPost = ({ post, handleAction, postView }) => {
         return [...prev, curr, ' '];
     }, []);
 
-    return <div className={`border border-t-0 border-l-0 border-b-0 ${mode.separator} w-full cursor-pointer`}>
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(`bellr-alpha.vercel.app/post/1`)
+    };
+
+
+    return <div className={`border border-t-0 border-l-0 border-b-0 ${mode.separator} w-full cursor-pointer animate-grow`}>
         {post.transmission && <p className='flex items-center mt-3 ml-10 text-sm text-gray-700'>
             <FaRetweet />
             <span className='ml-2'>{post.transmitter} reposted</span>
@@ -102,7 +108,7 @@ const OriginPost = ({ post, handleAction, postView }) => {
                             <IoBookmarkOutline className={`${post.bookmarked ? 'text-purple-600' : 'text-gray-600'} hover:bg-purple-300 hover:text-purple-600 hover:rounded-full peer duration-300 cursor-pointer text-[19px]`} onClick={() => { handleTransmit(post.id) }} />
                         </li>
                         <li className='mr-2.5'>
-                            <FiShare2 className='hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' onClick={() => navigator.clipboard.writeText(`http://localhost:3000/post/${post.id}`)}/>
+                            <FiShare2 className='hover:bg-blue-300 hover:text-blue-600 hover:rounded-full duration-300 text-[15px]' onClick={handleCopyLink}/>
                         </li>
                     </div>
                 </ul>

@@ -31,6 +31,10 @@ const Inbox = ({ newModal, setNewModal }) => {
   const { user } = useContext(AuthContext)
 
   const navigate = useNavigate();
+
+  if (!user) {
+   navigate('/login');
+  }
  
   const { values, handleChange, resetForm } = useFormik(
     {

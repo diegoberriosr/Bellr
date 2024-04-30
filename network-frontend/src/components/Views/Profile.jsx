@@ -47,11 +47,6 @@ const Profile = () => {
   return (
     
      <div className='relative w-[600px]'>
-        { loading &&
-        <div className='w-full h-1/2 flex items-center justify-center'>
-            <MoonLoader color='#1D9BF0' size={75} loading={loading}/>
-        </div>
-        }
         {error && <EmptyProfileHeader username={username} message={error === 404 ? 'This account does not exist' : "You're blocked"}  submessage={error===404 ?'Try searching for another' : `You cant follow or see @${username}'s posts.`} />}
         { account && 
         <>
