@@ -6,6 +6,9 @@ import { MdClose } from 'react-icons/md';
 import { IoIosSearch } from 'react-icons/io';
 import { MdVerified } from 'react-icons/md';
 
+// Component imports
+import BarLoader from 'react-spinners/BarLoader';
+
 // Context imports
 import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
@@ -22,6 +25,14 @@ const NewConversation = ({ shrink, setShrink }) => {
   const [loading, setLoading] = useState(false);
   const [ selected, setSelected] = useState(null);
 
+  let barColor = '#1D9BF0';
+
+  if (mode.color === 'twitter-pink') barColor = '#F6187F' ;
+  if (mode.color === 'twitter-purple') barColor = '#7557FF' ;
+  if (mode.color === 'twitter-yellow') barColor = '#FCD500';
+  if (mode.color === 'twitter-orange') barColor = '#FC7A00';
+  if (mode.color === 'twitter-green') barColor = '#00B978';
+
   const handleChange = (e) => {
     setSearch(e.target.value);
   }
@@ -32,23 +43,17 @@ const NewConversation = ({ shrink, setShrink }) => {
     setMatches([]);
   }
 
-  console.log(selected);
-
   const handleNewConversation = () => {
 
     if (selected) {
 
       const index = conversations.findIndex( conversation => conversation.partners.map( profile => profile.username).includes(selected));
-      console.log(index);
       if (index >= 0 ) {
-        console.log('conversation already exists')
         setActiveConversation(conversations[index]);
         setShrink(true);
         return;
       }
 
-
-      console.log('conversation does not exist');
       let headers;
 
     if (authTokens) {
@@ -80,7 +85,7 @@ const NewConversation = ({ shrink, setShrink }) => {
         axios({
           url : `https://bellr.onrender.com/search`,
           method : 'GET',
-          params : { s : search}
+          params : { s : search, exclude : true}
         })
         .then( res => {
           setMatches(res.data);
@@ -100,7 +105,7 @@ const NewConversation = ({ shrink, setShrink }) => {
 
   
   return (
-    <div className={`w-[500px] h-[500px] flex flex-col bg-${mode.background} ${mode.text} ${ shrink ? 'animate-shrink' : 'animate-grow'} rounded-xl`} >
+    <div className={`w-screen h-screen mobile:w-[500px] mobile:h-[500px] mobile:mt-10 flex flex-col bg-${mode.background} ${mode.text} ${ shrink ? 'animate-shrink' : 'animate-grow'} rounded-xl`} >
       <header className='w-full flex items-center justify-between p-2.5'>
         <div className='flex items-center space-x-10'>
           <MdClose className='text-2xl' onClick={handleClose}/>
@@ -113,7 +118,7 @@ const NewConversation = ({ shrink, setShrink }) => {
           className='w-full h-full focus:outline-none bg-transparent pl-5 peer' onChange={handleChange}/>
           <IoIosSearch className='text-lg peer-focus:text-twitter-blue'/>
       </div>
-      <div className={`w-10 h-1 ${mode.color} `}></div>
+      { loading && <BarLoader loading={loading} width='100%' color={barColor}/>}
       { !loading && <div className='w-full max-h-[400px] overflow-y-auto'>  
         {
          matches.map(profile => <div key={profile.user_id} className='w-full flex items-center cursor-pointer hover:bg-gray-800 p-3 rounded-xl' onClick={ () => setSelected(profile.username)}>
