@@ -57,22 +57,22 @@ const ChangeMode = ({ shrink, setShrink }) => {
       <div className='mt-5 flex flex-col justify-start w-full'>
         <span className='text-post-gray'>Color</span>
         <ul className={`flex justify-between ${mode.subBackground} rounded-lg p-2.5 mt-1`}>
-            <li className='w-8 h-8 rounded-full bg-twitter-blue flex items-center justify-center' onClick={() => {updateMode('twitter-blue')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-blue flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-blue')}}>
                 {mode.color === 'twitter-blue' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-yellow flex items-center justify-center' onClick={() => {updateMode('twitter-yellow')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-yellow flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-yellow')}}>
                 {mode.color === 'twitter-yellow' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-pink flex items-center justify-center' onClick={() => {updateMode('twitter-pink')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-pink flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-pink')}}>
                 {mode.color === 'twitter-pink' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-purple flex items-center justify-center' onClick={() => {updateMode('twitter-purple')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-purple flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-purple')}}>
                 {mode.color === 'twitter-purple' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-orange flex items-center justify-center' onClick={() => {updateMode('twitter-orange')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-orange flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-orange')}}>
                 {mode.color === 'twitter-orange' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-green flex items-center justify-center' onClick={() => {updateMode('twitter-green')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-green flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-green')}}>
                 {mode.color === 'twitter-green' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
         </ul>
@@ -80,26 +80,26 @@ const ChangeMode = ({ shrink, setShrink }) => {
       <div className='mt-5 flex flex-col justify-start w-full'>
         <span className='text-post-gray'>Background</span>
         <ul className={`mx-2 p-2 h-20 ${mode.subBackground} flex rounded-xl transition-all`}>
-            <li className={`w-4/12 h-full bg-white flex items-center justify-center mx-1 rounded-md ${mode.background ==='white' ? 'border border-2 border-twitter-blue' : ''}`}
+            <li className={`w-4/12 h-full bg-white flex items-center justify-center mx-1 rounded-md ${mode.background ==='white' ? 'border border-2 border-twitter-blue' : ''} cursor-pointer`}
             onClick={() => { updateBackground('black', 'white', 'text-black', 'bg-light-gray', 'bg-light-highlight', 'bg-light-sidebar-highlight', 'border-light-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-gray-900 font-bold ${mode.background === 'white' ? `border-0 bg-${mode.color} `  : ''} transition-colors duration-500`}>
                         { mode.background === 'white' && <IoMdCheckmark className='text-xs text-white'/>}
                     </div>
-                    <span className='ml-1 text-black font-bold'>Default</span>
+                    <span className='ml-1 text-black font-bold max-w-[50%] mobile:max-w-full truncate'>Default</span>
             </li>
-            <li className={`w-4/12 h-full bg-dim flex items-center justify-center mx-1 rounded-md ${mode.background ==='dim' ? 'border border-2 border-twitter-blue' : ''}`}
+            <li className={`w-4/12 h-full bg-dim flex items-center justify-center mx-1 rounded-md ${mode.background ==='dim' ? 'border border-2 border-twitter-blue' : ''} cursor-pointer`}
             onClick={() => { updateBackground('white', 'dim', 'text-white', 'bg-subdim', 'bg-dim-post-highlight', 'bg-dim-sidebar-highlight', 'border-dim-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-separator-gray font-bold ${mode.background === 'dim' ? `border-0 bg-${mode.color} ` : ''} transition-colors duration-500`}>
                         { mode.background === 'dim' && <IoMdCheckmark className='text-xs text-white'/> }
                     </div>
-                    <span className='ml-1 text-white font-bold'>Dim</span>
+                    <span className='ml-1 text-white font-bold max-w-[50%] mobile:max-w-full truncate'>Dim</span>
             </li>
-            <li className={`w-4/12 h-full bg-black flex items-center justify-center mx-1 rounded-md ${mode.background ==='black' ? 'border border-2 border-twitter-blue' : ''}`}
+            <li className={`w-4/12 h-full bg-black flex items-center justify-center mx-1 rounded-md ${mode.background ==='black' ? 'border border-2 border-twitter-blue' : ''} cursor-pointer`}
             onClick={() => { updateBackground('white', 'black', 'text-white', 'bg-twitter-dark', 'bg-dark-highlight', 'bg-dark-sidebar-highlight', 'border-dark-separator') }}>
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center border-white font-bold ${mode.background === 'black' ? `border-0 bg-${mode.color}`  : ''} transition-colors duration-500`}>
                         { mode.background === 'black' && <IoMdCheckmark className='text-xs text-white'/> }
                     </div>
-                    <span className='ml-1 text-white font-bold'>Lights out</span>
+                    <span className='ml-1 text-white font-bold max-w-[50%] mobile:max-w-full truncate'>Lights out</span>
             </li>
         </ul>
       </div>
