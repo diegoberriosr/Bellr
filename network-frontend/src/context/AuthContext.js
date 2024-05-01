@@ -18,7 +18,6 @@ export const AuthProvider = ({children}) => {
     const navigate = useNavigate();
 
     const loginUser = async(values, setErrorMessage, setLoading) => {
-        console.log('about to log in');
         setLoading(true);
         fetch('https://bellr.onrender.com/token/', {
             method: 'POST',

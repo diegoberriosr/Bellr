@@ -46,10 +46,13 @@ export const MessageProvider = ({children}) => {
     // Establish a connection to a web socket.
     useEffect( () => {
         if (user){
-            let url = `ws://bellr-alpha.vercel.app/ws/${user.user_id}/`
+            let url = `wss://bellr.onrender.com/ws/${user.user_id}/`
             const chatSocket = new WebSocket(url);
             setChatSocket(chatSocket)
-    
+            chatSocket.onopen = () => {
+                console.log('connected');
+            };
+            
             chatSocket.onmessage = function(e) {
                   
                   let data = JSON.parse(e.data)
