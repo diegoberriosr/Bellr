@@ -1,0 +1,6 @@
+services:
+  - name: django
+    env: python
+    buildCommand: python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: daphne -b 0.0.0.0 -p $PORT project4.asgi:application
+    websockets: true

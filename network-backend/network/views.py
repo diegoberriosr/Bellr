@@ -465,12 +465,17 @@ def get_user(request):
 
     # Get an user provided a string.
     s = request.GET.get('s', '')
-    
+    exclude_requester = request.GET.get('exclude', '')
+
     if s == '':
         raise Http404('Search query cannot be empty/blank.')
 
     # Search user by username or profilename
     users = User.objects.filter(username__icontains=s) | User.objects.filter(profilename__icontains=s)
+
+    if exclude_requester: # Exclude user if it is not relevant for the query.
+        users.exclude(pk=request.user.id)
+
 
     return JsonResponse([user.pserialize() for user in users.all()], safe=False)
 
