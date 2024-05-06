@@ -190,6 +190,7 @@ def update_seen_status(request):
 def get_message_by_id(request):
 
     message_id = request.GET.get('message_id', '')
+    unregistered = request.GET.get('registered', '')
 
     # Search message in the database, raise an exception if it does not exist
     try:
@@ -199,6 +200,9 @@ def get_message_by_id(request):
     
     if (request.user not in message.conversation.users.all()):
         raise Http404(f'ERROR: User does not belong to the conversation')
+    
+    if unregistered is True: # Return the whole conversation if it is not registered on the requester's inbox
+        return JsonResponse( message.conversation.serialize(request.user)) 
     
     return JsonResponse(
         message.serialize(request.user),  safe=False)
