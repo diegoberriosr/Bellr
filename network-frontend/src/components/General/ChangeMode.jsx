@@ -10,10 +10,11 @@ const ChangeMode = ({ shrink, setShrink }) => {
 
   const { mode, setMode } = useContext(GeneralContext);
 
-  const updateMode = (newColor) => {
+  const updateMode = (newColor, hex) => {
     setMode(prevMode => {
         let newMode = {...prevMode};
         newMode.color = newColor;
+        newMode.spinnerColor = hex;
         return newMode;
     })
   }
@@ -57,22 +58,22 @@ const ChangeMode = ({ shrink, setShrink }) => {
       <div className='mt-5 flex flex-col justify-start w-full'>
         <span className='text-post-gray'>Color</span>
         <ul className={`flex justify-between ${mode.subBackground} rounded-lg p-2.5 mt-1`}>
-            <li className='w-8 h-8 rounded-full bg-twitter-blue flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-blue')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-blue flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-blue','#1D9BF0' )}}>
                 {mode.color === 'twitter-blue' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-yellow flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-yellow')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-yellow flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-yellow', '#FCD500')}}>
                 {mode.color === 'twitter-yellow' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-pink flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-pink')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-pink flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-pink', '#F6187F')}}>
                 {mode.color === 'twitter-pink' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-purple flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-purple')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-purple flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-purple', '#7557FF')}}>
                 {mode.color === 'twitter-purple' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-orange flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-orange')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-orange flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-orange', '#FC7A00')}}>
                 {mode.color === 'twitter-orange' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
-            <li className='w-8 h-8 rounded-full bg-twitter-green flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-green')}}>
+            <li className='w-8 h-8 rounded-full bg-twitter-green flex items-center justify-center cursor-pointer' onClick={() => {updateMode('twitter-green', '#00B978' )}}>
                 {mode.color === 'twitter-green' && <IoMdCheckmark className='text-white animate-grow'/>}
             </li>
         </ul>

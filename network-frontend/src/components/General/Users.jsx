@@ -154,7 +154,7 @@ const Users = () => {
               </ul>
           { loading && 
           <div className='w-full flex justify-center'>
-               <ClipLoader color={'#1D9BF0'} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
+               <ClipLoader color={mode.spinnerColor} loading={loading} size={150} aria-label='Loading spinner' data-testid='loader'/> 
             </div>
             }
           { users &&

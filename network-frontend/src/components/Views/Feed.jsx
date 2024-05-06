@@ -11,6 +11,9 @@ import MoonLoader from "react-spinners/MoonLoader";
 import AuthContext from '../../context/AuthContext';
 import GeneralContext from '../../context/GeneralContext';
 
+
+
+
 const Feed = ({ form, loginRequired}) => {
 
   const { user } = useContext(AuthContext);
@@ -54,7 +57,7 @@ const Feed = ({ form, loginRequired}) => {
        return <NewPost key={index} post={post}/>})}
        {(posts && posts.length === 0) && <ErrorMessage text='No posts to show here' subtext='When something appears, it will show here.'/>}
        {loading && <div className='w-full mt-[25%] flex items-center justify-center'>
-          <MoonLoader color={'#1D9BF0'} loading={loading} size={75} data-testid='loader'/> 
+          <MoonLoader color={mode.spinnerColor} loading={loading} size={75} data-testid='loader'/> 
        </div>}
     </div>
   )

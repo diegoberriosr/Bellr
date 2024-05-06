@@ -12,6 +12,7 @@ import EmptyProfileHeader from '../Alerts/EmptyProfileHeader';
 import NewPost from '../Posts/Post';
 import ErrorMessage from '../Alerts/ErrorMessage';
 import MoonLoader from "react-spinners/MoonLoader";
+import LoadingProfileHeader from './LoadingProfileHeader';
 
 // Context imports
 import GeneralContext from '../../context/GeneralContext';
@@ -41,12 +42,13 @@ const Profile = () => {
 
   useEffect(() => {
    if (account) setBlocked(account.isBlocked);
-  } , [account])
+  } , [account]);
 
 
   return (
     
      <div className='relative w-[600px]'>
+        { !account && <LoadingProfileHeader/>}
         {error && <EmptyProfileHeader username={username} message={error === 404 ? 'This account does not exist' : "You're blocked"}  submessage={error===404 ?'Try searching for another' : `You cant follow or see @${username}'s posts.`} />}
         { account && 
         <>
@@ -67,7 +69,7 @@ const Profile = () => {
         })}
         { posts && posts.length === 0  && <ErrorMessage text={`Nothing to show here`} subtext={`When @${account.username} posts something, it'll show here.`}/>}
         {loading && <div className='w-full mt-[10%] flex items-center justify-center'>
-          <MoonLoader color={'#1D9BF0'} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader'/> 
+          <MoonLoader color={mode.spinnerColor} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader'/> 
        </div>}
        {account && blocked && 
         <div className='w-full h-[200px] flex flex-col items-center justify-center p-2.5'>

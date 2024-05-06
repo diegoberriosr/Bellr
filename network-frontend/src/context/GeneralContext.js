@@ -19,7 +19,8 @@ export const GeneralProvider = ({ children }) => {
       'subBackground' : 'bg-light-gray',
       'highlight' : 'bg-light-highlight',
       'sidebarHighlight' : 'bg-light-sidebar-highlight',
-      'separator' : 'border-light-separator'
+      'separator' : 'border-light-separator',
+      'spinnerColor' : '#1D9BF0'
     });
     const [ modalOpen, setModalOpen] = useState(false);
     const [ isEditing, setIsEditing ] = useState(false);

@@ -115,7 +115,7 @@ const Notifications = () => {
             <p className='text-sm fold:text-base text-gray-600'>When someone mentions you, you'll find it here.</p>
         </div>}
         {loading && <div className='mt-40 w-full flex justify-center items-center'> 
-        <MoonLoader color={'#1D9BF0'} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader' />
+        <MoonLoader color={mode.spinnerColor} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader' />
         </div>}
     </div>
 }

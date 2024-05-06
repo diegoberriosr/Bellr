@@ -142,7 +142,7 @@ const PostInteractions = ({ shrink, setShrink}) => {
         </main>
         { loading &&      
         <div className='mt-5 w-full flex justify-center'>
-               <MoonLoader color={'#1D9BF0'} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader'/> 
+               <MoonLoader color={mode.spinnerColor} loading={loading} size={75} aria-label='Loading spinner' data-testid='loader'/> 
         </div>
         }
     </div>
