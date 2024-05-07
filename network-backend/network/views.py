@@ -466,7 +466,8 @@ def get_user(request):
     # Get an user provided a string.
     s = request.GET.get('s', '')
     exclude_requester = request.GET.get('exclude', '')
-
+    exclude_requester = exclude_requester.lower() == 'true'
+    
     if s == '':
         raise Http404('Search query cannot be empty/blank.')
 
