@@ -27,6 +27,7 @@ import ImageToggler from '../components/Posts/ImageToggler';
 
 // Context imports
 import GeneralContext from '../context/GeneralContext';
+import AuthContext from '../context/AuthContext';
 
 // Provider imports
 import { MessageProvider } from '../context/MessageContext';
@@ -36,6 +37,7 @@ const MainPage = () => {
   const { profileModal, mode, modalOpen, isEditing, pfpBig, setPfpBig, handleImageModal, 
           imageModal, handleModal, interactionsModal, handleInteractionsModal, setEditedPost, setFilter, 
           handleProfileModal, postImageModal, setPostImageModal} = useContext(GeneralContext);
+  const { user } = useContext(AuthContext);
 
   const [shrink, setShrink] = useState(false);
   const [modeModal, setModeModal] = useState(false);
@@ -125,10 +127,12 @@ const MainPage = () => {
                     <Route key='messages' element={<Inbox newModal={newModal} setNewModal={setNewModal}/>} path='/messages'/>
                 </Routes>
                 { currentUrl.pathname === '/messages' ? <Conversation setNewModal={setNewModal}/> : <Recomendations/> }
-                <Bottombar/>
+                <Bottombar setModeModal={setModeModal}/>
+                { user && 
                 <div className={ currentUrl.pathname === '/messages' ? 'hidden' : 'block md:hidden fixed bottom-[10%] right-[5%] animate-grow'}> 
                     <PostButton handleClick={handleModal} mobile={true}/>
                 </div>
+                }
                 <Modal isVisible={modalOpen} background='bg-login-modal'>
                     <ModalForm borderStyle='border none' textAreaStyle='bg-transparent' message={isEditing ? 'Save' : 'Post'} shrink={shrink} setShrink={setShrink}/>
                 </Modal>

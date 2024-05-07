@@ -80,9 +80,8 @@ const Users = () => {
       params : {page : page}
     })
     .then( res => {
-      console.log(res.data);
+
       setUsers(prevUsers => {
-        console.log(prevUsers, users);
         if (page === 1) return res.data.profiles; // If page = 1, just set the data to the response's array
         else return [...prevUsers, ...res.data.profiles] // Otherwise, append the new posts at the end of the array.
       });
@@ -112,9 +111,7 @@ const Users = () => {
       params : {page : page}
     })
     .then( res => {
-      console.log(res.data);
       setUsers(prevUsers => {
-        console.log(prevUsers, users);
         if (page === 1) return res.data.profiles; // If page = 1, just set the data to the response's array
         else return [...prevUsers, ...res.data.profiles] // Otherwise, append the new posts at the end of the array.
       });

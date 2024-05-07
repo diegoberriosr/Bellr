@@ -28,7 +28,6 @@ const ModalForm = ({ placeholder, message, textAreaStyle, shrink, setShrink}) =>
     const [ loading, setLoading ] = useState(false);
     const [images, setImages] = useState( editedPost ? editedPost.images : []);
     const [ files, setFiles] = useState([]);
-    console.log(files);
     const { user } = useContext(AuthContext);
 
     const { values, handleChange, setFieldValue } = useFormik({

@@ -1,4 +1,4 @@
-import { createContext , useState, useEffect, useContext } from 'react';
+import { createContext , useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 
 import AuthContext from './AuthContext';
@@ -9,9 +9,14 @@ export default MessageContext
 
 export const MessageProvider = ({children}) => {
     const [ conversations, setConversations ] = useState(null);
+    const conversationsRef = useRef();
     const [activeConversation, setActiveConversation] = useState(null);
     const [chatSocket, setChatSocket] = useState(null);
     const { authTokens, user } = useContext(AuthContext);
+
+    useEffect( () => {
+        conversationsRef.current = conversations;
+    }, [conversations]);
   
     // Load conversations for the first time
     useEffect( () => {
@@ -49,10 +54,7 @@ export const MessageProvider = ({children}) => {
             let url = `wss://bellr.onrender.com/ws/${user.user_id}/`
             const chatSocket = new WebSocket(url);
             setChatSocket(chatSocket)
-            chatSocket.onopen = () => {
-                console.log('connected');
-            };
-            
+
             chatSocket.onmessage = function(e) {
                   
                   let data = JSON.parse(e.data)
@@ -67,19 +69,18 @@ export const MessageProvider = ({children}) => {
                         }
                     }
 
-                    
-                    const index = conversations ? conversations.findIndex( conversation => conversation.id === Number(data.conversation_id)) : -1;
+                    const index = conversationsRef.current ? conversationsRef.current.findIndex( conversation => conversation.id === Number(data.conversation_id)) : -1;
 
                     axios({
                         url : 'https://bellr.onrender.com/messages/message',
                         method : 'GET',
                         headers : headers,
-                        params : { message_id : data.message_id }
+                        params : { message_id : data.message_id, unregistered : index === -1 }
                     })
                     .then ( (res) => {
                         setConversations( prevStatus => {
                             
-                            let updatedStatus = [...prevStatus];
+                            let updatedStatus =  prevStatus ? [...prevStatus] : [];
                             
                             if (index >= 0){
                                 if (updatedStatus[index].messages) updatedStatus[index].messages = [...updatedStatus[index].messages, res.data]
@@ -87,24 +88,24 @@ export const MessageProvider = ({children}) => {
                                 updatedStatus[index].unseen++;
                             }
                             else {
-                                if(conversations) updatedStatus = [res.data, ...updatedStatus];
+                                if (updatedStatus.length >  0) updatedStatus = [res.data, ...updatedStatus];
                                 else updatedStatus = [res.data];
                             }
-                            console.log(updatedStatus);
                             return updatedStatus;
                         })
                     })          
                   }
     
                   else if (data.type === 'delete_message') {
-                    console.log(conversations);
                     setConversations( prevStatus => {
                         let updatedStatus = [...prevStatus];
-                        const index = updatedStatus.findIndex( conversation => conversation.id === Number(data.conversation_id))
-                        updatedStatus[index].messages = updatedStatus[index].messages.filter(message => message.id !== data.message_id)
-                        return updatedStatus
-                    })
+                        const index = updatedStatus ? updatedStatus.findIndex( conversation => Number(conversation.id) === Number(data.conversation_id)) : -1;
+                        if (index >= 0) updatedStatus[index].messages = updatedStatus[index].messages.filter(message => Number(message.id) !== Number(data.message_id));
+
+                        return updatedStatus;
+                    });
                   }
+                  
               }
     
             return () => chatSocket.close();

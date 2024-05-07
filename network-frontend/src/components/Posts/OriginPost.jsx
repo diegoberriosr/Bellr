@@ -54,7 +54,7 @@ const OriginPost = ({ post, handleAction, postView }) => {
     return <div className={`border border-t-0 border-l-0 border-b-0 ${mode.separator} w-full cursor-pointer animate-grow`}>
         {post.transmission && <p className='flex items-center mt-3 ml-10 text-sm text-gray-700'>
             <FaRetweet />
-            <span className='ml-2'>{post.transmitter} reposted</span>
+            <span className='ml-2'>{post.transmitter.username} reposted</span>
         </p>}
         {
             post.reply && <p className='flex items-center mt-3 ml-10 text-sm text-gray-700'>
@@ -82,13 +82,13 @@ const OriginPost = ({ post, handleAction, postView }) => {
                 <p className='text-sm text-gray-600 mt-3'>{formatDate(post.timestamp)}</p>
             </main>
             { post.images &&
-                <div className={`mt-2 flex flex-row w-[98%] h-6/12 pl-`}>
+                <div className={`mt-2 flex flex-row w-[98%] h-6/12 pl-2.5`}>
                    { post.images.length === 1 && <PostImages1 sources={post.images}/> }
                    { post.images.length === 2 && <PostImages2 sources={post.images}/> }
                    { post.images.length === 3 && <PostImages3 sources={post.images}/> }
                    { post.images.length >= 4 &&  <PostImages4 sources={post.images}/> }
                 </div>
-                }
+            }
             <footer className='px-3.5'>
                 <ul className={`flex items-center mt-3 mb-1.5 text-twitter-light-gray border ${mode.separator} border-l-0 border-r-0 h-10 transition-colors duration-500`}>
                     <div className='w-full flex items-center justify-between ml-2.5'>

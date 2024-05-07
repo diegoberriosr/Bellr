@@ -65,7 +65,6 @@ const PostInteractions = ({ shrink, setShrink}) => {
         updatedUser.followed = !updatedUser.followed;
 
         updatedUsers[index] = updatedUser;
-        console.log('--- comparison ---', updatedUsers[index], prevUsers[index])
         return updatedUsers;
       })
     })

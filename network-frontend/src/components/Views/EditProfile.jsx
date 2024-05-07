@@ -66,10 +66,6 @@ const EditProfile = ({ shrink, setShrink }) => {
         if ( imageData.background) data.append('background', imageData.background);
 
         
-        for ( const [key, value] of data.entries()){
-            console.log(key, value);
-        }
-
         let headers;
 
         if (authTokens) {

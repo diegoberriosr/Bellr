@@ -198,7 +198,7 @@ const Sidebar = ({ setModeModal }) => {
                     </li>
                     <li className={`inline-flex items-center px-4 p-2.5 ${hoverClass} rounded-3xl cursor-pointer duration-[400ms]`} onClick={() => setModeModal(true)}>
                         <IoBrushOutline/>
-                        <span className='ml-4 hidden xl:block text-xl'>Change mode</span>
+                        <span className='ml-4 hidden xl:block text-xl'>Mode</span>
                     </li>
                 </div>
             }

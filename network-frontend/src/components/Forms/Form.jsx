@@ -72,7 +72,6 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
 
     const handleDeleteImage = (url) => {
         const index = images.findIndex( image => url === image);
-        console.log('index is:', index);
         setImages(images.filter( image => image !== url));
         const file = files[index];
         setFiles(files.filter( image => image !== file));
@@ -91,7 +90,7 @@ const Form = ({ replying, placeholder, borderStyle, textAreaStyle, message, repl
 
     
     return <header className={`relative flex flex-col w-full p-2 border ${mode.separator} ${borderStyle} pt-1 pr-2.5 pb-2.5 transition-all`}>
-         { replying && isFocused && user && <p className='relative left-16 ml-2 bottom-1 text-sm text-gray-600 animate-image-grow'>Replying to <span className='text-twitter-blue'>@puta</span></p>}
+         { replying && isFocused && user && <p className='relative left-16 ml-2 bottom-1 text-sm text-gray-600 animate-image-grow'>Replying...</p>}
         <div className='mt-4 flex w-full items-start'>
             <div className='w-10 h-10 overflow-hidden rounded-full ml-2.5'>
                 <img src={user.pfp} alt='user profile pic' className='h-full w-full object-fit' />

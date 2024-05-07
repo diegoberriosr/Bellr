@@ -78,7 +78,6 @@ export const AuthProvider = ({children}) => {
                 }
                 else {
                     setLoading(false);
-                    console.log(response);
                 }
             }
             )
@@ -135,7 +134,6 @@ export const AuthProvider = ({children}) => {
         const fourMinutes = 1000 * 60 * 4;
         const interval = setInterval(() => {
             if (authTokens) {
-                console.log('refreshing');
                 updateToken();
             }
         }, fourMinutes);

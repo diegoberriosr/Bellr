@@ -54,7 +54,6 @@ const EmojiMenu = ({ content, setFieldValue }) => {
       setLoading(true);
       
       if ( isVisible && emojis.length === 0) {
-        console.log('calling api...')
         axios({
             url : 'https://emoji-api.com/emojis?access_key=41a0c799cfbd0b093ef290f66d002d48ec7f2aab',
             method : 'GET',

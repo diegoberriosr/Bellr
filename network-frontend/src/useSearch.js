@@ -109,7 +109,6 @@ const useSearch = () => {
         })
         .then(
             setPosts( prevPosts => {
-                console.log(currentUrl)
                 if (currentUrl === '/bookmarked') { return prevPosts.filter(publication => publication.id !== postId)} // If route is user's bookmarked page, remove the post from the array.
 
                 const postIndex = prevPosts.findIndex(publication => publication.id === postId); // Get the post's index.
@@ -162,7 +161,7 @@ const useSearch = () => {
             // Update the posts.
             let updatedPosts = prevPosts.map( publication => {
               // If a post's author is the followed/unfollowed user, update its status.
-              if (publication.user.user_id === authorId) { console.log('changing', !publication.followed) ; return { ...publication, followed : !publication.followed}}  
+              if (publication.user.user_id === authorId) { return { ...publication, followed : !publication.followed}}  
               
               // Otherwise leave the post unaltered.
               else return publication;
@@ -316,9 +315,7 @@ const useSearch = () => {
           setPosts(prevPosts => {
             const origin = prevPosts[0]; // Get the orign from the list of posts.
             let filteredReplies = prevPosts.filter( post => Number(post.id) !== origin.id); // Remove the origin from the top of the list.
-            console.log(filteredReplies)
             let updatedReplies = [res.data.reply, ...filteredReplies] // Append reply to the top of the filtered list.
-            console.log(updatedReplies)
             // Return a list with the origin at the top.
             return [origin, ...updatedReplies];
 

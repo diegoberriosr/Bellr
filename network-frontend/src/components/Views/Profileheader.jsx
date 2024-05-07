@@ -110,17 +110,17 @@ const ProfileHeader = ({ account }) => {
                 <FormattedContent content={account.bio}/>
             </div>
             <div className='flex items-center space-x-[2%] text-gray-600 mt-1.5 w-full'>
-                <div className='flex items-center'>
+                <div className='flex items-center hidden mobile:flex'>
                     <FaRegCalendarAlt />
                     <span className='ml-1'>Joined on {moment(account.date_joined).format('MMM DD YYYY')}</span>
                 </div>
-                { account.website && <div className='flex items-center max-w-[45%] truncate'>
+                { account.website && <div className='flex items-center max-w-[50%] truncate'>
                     <LuLink/>
-                    <a href={account.website} className='ml-1 text-twitter-blue hover:underline cursor-pointer'>{account.website}</a>
+                    <a href={account.website} className='mobile:ml-1 text-twitter-blue hover:underline cursor-pointer'>{account.website}</a>
                     </div>}
-                { account.location && <div className='flex max-w-[45%] truncate items-center'>
+                { account.location && <div className='flex max-w-[15%] truncate items-center'>
                     <MdLocationOn/>
-                    <span  className='ml-1 max-w-[30%]'>{account.location}</span>
+                    <span  className='ml-1'>{account.location}</span>
                     </div>}
             </div>
             <div className='flex text-sm space-x-5 mt-1.5'>
