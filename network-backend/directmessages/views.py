@@ -191,7 +191,8 @@ def get_message_by_id(request):
 
     message_id = request.GET.get('message_id', '')
     unregistered = request.GET.get('unregistered', '')
-
+    
+    unregistered = unregistered.lower() == 'true'
     # Search message in the database, raise an exception if it does not exist
     try:
         message = Message.objects.get(pk=message_id)
