@@ -200,8 +200,9 @@ def get_message_by_id(request):
     
     if (request.user not in message.conversation.users.all()):
         raise Http404(f'ERROR: User does not belong to the conversation')
-    
+    print('unregistered:', unregistered )
     if unregistered is True: # Return the whole conversation if it is not registered on the requester's inbox
+        print('conversation not registered')
         return JsonResponse( message.conversation.serialize(request.user)) 
     
     return JsonResponse(
