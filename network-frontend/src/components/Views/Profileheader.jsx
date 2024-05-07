@@ -106,10 +106,10 @@ const ProfileHeader = ({ account }) => {
         <div className='px-4 pt-20'>
             <h3 className='text-2xl font-bold flex items-center'>{account.profilename} {account.verified && <MdVerified className='ml-0.5 text-twitter-blue'/>}</h3>
             <p className='text-base text-gray-600'>@{account.username}</p>
-            <p className='mt-2.5 text-base'>
+            <div className='mt-2.5 text-base'>
                 <FormattedContent content={account.bio}/>
-            </p>
-            <p className='flex items-center space-x-[2%] text-gray-600 mt-1.5 w-full'>
+            </div>
+            <div className='flex items-center space-x-[2%] text-gray-600 mt-1.5 w-full'>
                 <div className='flex items-center'>
                     <FaRegCalendarAlt />
                     <span className='ml-1'>Joined on {moment(account.date_joined).format('MMM DD YYYY')}</span>
@@ -122,7 +122,7 @@ const ProfileHeader = ({ account }) => {
                     <MdLocationOn/>
                     <span  className='ml-1 max-w-[30%]'>{account.location}</span>
                     </div>}
-            </p>
+            </div>
             <div className='flex text-sm space-x-5 mt-1.5'>
                 <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/following/${account.username}/`)}}><span className='font-bold'>{account.following}</span> Following</p>
                 <p className={`cursor-pointer ${mode.text}`} onClick={() => {navigate(`/followers/${account.username}/`)}}><span className='font-bold'>{account.followers}</span> Followers</p>

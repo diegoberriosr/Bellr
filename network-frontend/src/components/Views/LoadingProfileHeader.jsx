@@ -27,11 +27,11 @@ const EmptyProfileHeader = () => {
             <div className={`text-2xl font-bold flex items-center w-[200px] rounded-full ${mode.highlight}`}/>
             <div className='text-base text-gray-600'/>
             <div className='mt-2.5 text-base'/>
-            <p className='flex items-center space-x-[2%] text-gray-600 mt-1.5 w-full'>
+            <div className='flex items-center space-x-[2%] text-gray-600 mt-1.5 w-full'>
                     <div className={`w-[20%] h-5 rounded-full ${mode.highlight}`}/>
                     <div className={`w-[35%] h-5 rounded-full ${mode.highlight}`}/>
                     <div className={`w-[15%] h-5 rounded-full ${mode.highlight}`}/>
-            </p>
+            </div>
             <div className='flex text-sm space-x-5 mt-1.5'>
                 <p className={`cursor-pointer w-20 h-5 ${mode.highlight} rounded-full`} />
                 <p className={`cursor-pointer w-20 h-5 ${mode.highlight} rounded-full`} />

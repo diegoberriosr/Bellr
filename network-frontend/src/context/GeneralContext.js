@@ -5,23 +5,22 @@ const GeneralContext = createContext();
 
 export default GeneralContext;
 
-
+const DEFAULT_MODE = {
+  'color' : 'twitter-blue',
+  'subColor' : 'black',
+  'background' : 'white',
+  'text' : 'text-black',
+  'subBackground' : 'bg-light-gray',
+  'highlight' : 'bg-light-highlight',
+  'sidebarHighlight' : 'bg-light-sidebar-highlight',
+  'separator' : 'border-light-separator',
+  'spinnerColor' : '#1D9BF0'
+}
 
 export const GeneralProvider = ({ children }) => {
-  
     const {posts, setPosts, setPage, account, setAccount, hasMore, error, loading, setLoading, handleLike, handleTransmit, handleBookmark, handleDelete, handleFollow, 
            handleEdit, handleNew, handleBlock, handleReply} = useSearch();
-    const [mode, setMode] = useState({
-      'color' : 'twitter-blue',
-      'subColor' : 'black',
-      'background' : 'white',
-      'text' : 'text-black',
-      'subBackground' : 'bg-light-gray',
-      'highlight' : 'bg-light-highlight',
-      'sidebarHighlight' : 'bg-light-sidebar-highlight',
-      'separator' : 'border-light-separator',
-      'spinnerColor' : '#1D9BF0'
-    });
+    const [mode, setMode] = useState(DEFAULT_MODE);
     const [ modalOpen, setModalOpen] = useState(false);
     const [ isEditing, setIsEditing ] = useState(false);
     const [ editedPost, setEditedPost] = useState(null);

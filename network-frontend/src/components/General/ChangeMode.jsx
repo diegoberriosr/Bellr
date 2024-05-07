@@ -15,8 +15,9 @@ const ChangeMode = ({ shrink, setShrink }) => {
         let newMode = {...prevMode};
         newMode.color = newColor;
         newMode.spinnerColor = hex;
+        localStorage.setItem('mode',JSON.stringify(newMode));
         return newMode;
-    })
+    });
   }
 
   const updateBackground = (subColor, backgroundColor, textColor, subBackgroundColor, highlight, sidebarHighlight, separator) => {
@@ -29,9 +30,11 @@ const ChangeMode = ({ shrink, setShrink }) => {
         newMode.highlight = highlight;
         newMode.sidebarHighlight = sidebarHighlight;
         newMode.separator = separator;
-
+        localStorage.setItem('mode',JSON.stringify(newMode));
         return newMode;
-    })
+    });
+
+
   };
 
   return (

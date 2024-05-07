@@ -66,7 +66,10 @@ export const MessageProvider = ({children}) => {
                             'Authorization' : 'Bearer ' + String(authTokens.access)
                         }
                     }
-    
+
+                    
+                    const index = conversations ? conversations.findIndex( conversation => conversation.id === Number(data.conversation_id)) : -1;
+
                     axios({
                         url : 'https://bellr.onrender.com/messages/message',
                         method : 'GET',
@@ -75,13 +78,19 @@ export const MessageProvider = ({children}) => {
                     })
                     .then ( (res) => {
                         setConversations( prevStatus => {
-                            const index = prevStatus.findIndex( conversation => conversation.id === Number(data.conversation_id))
+                            
                             let updatedStatus = [...prevStatus];
-    
-                            if (updatedStatus[index].messages) updatedStatus[index].messages = [...updatedStatus[index].messages, res.data]
-                            else updatedStatus[index].messages = [res.data]
+                            
+                            if (index >= 0){
+                                if (updatedStatus[index].messages) updatedStatus[index].messages = [...updatedStatus[index].messages, res.data]
+                                else updatedStatus[index].messages = [res.data];
+                                updatedStatus[index].unseen++;
+                            }
+                            else {
+                                if(conversations) updatedStatus = [res.data, ...updatedStatus];
+                                else updatedStatus = [res.data];
+                            }
                             console.log(updatedStatus);
-                            updatedStatus.unseen++;
                             return updatedStatus;
                         })
                     })          
@@ -90,11 +99,8 @@ export const MessageProvider = ({children}) => {
                   else if (data.type === 'delete_message') {
                     console.log(conversations);
                     setConversations( prevStatus => {
-                        console.log('PREV STATUS' , prevStatus);
-                        console.log('DATA' , data);
                         let updatedStatus = [...prevStatus];
                         const index = updatedStatus.findIndex( conversation => conversation.id === Number(data.conversation_id))
-                        console.log(index);
                         updatedStatus[index].messages = updatedStatus[index].messages.filter(message => message.id !== data.message_id)
                         return updatedStatus
                     })
