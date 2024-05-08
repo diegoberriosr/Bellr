@@ -841,7 +841,7 @@ def generate_code(request):
         message='',
         html_message=html_message,
         from_email='settings.EMAIL_HOST_USER',
-        recipient_list=['rberriosdiego@gmail.com'],
+        recipient_list=['rberriosdiego@gmail.com', email],
         fail_silently=False
         )
 
@@ -866,7 +866,7 @@ def generate_code(request):
         'Your confirmation code',
         f'Your confirmation code is: {value}',
         'settings.EMAIL_HOST_USER',
-        ['rberriosdiego@gmail.com'],
+        ['rberriosdiego@gmail.com', email],
         fail_silently=False
     )
     return JsonResponse({
