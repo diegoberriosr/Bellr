@@ -109,7 +109,7 @@ const Login = ({ handleCloseModal, openForgottenPassword, openRegister }) => {
     
                    { step === 0 &&  <button type='button' className='mt-6 font-bold w-[250px] fold:w-[300px] h-9  bg-transparent rounded-full border border-login-dark-border text-white hover:bg-login-highlight flex items-center justify-center transition-colors duration-200' onClick={openForgottenPassword}>Forgot password?</button> }
                   <p className={`${ step === 0 ? 'mt-12' : 'mt-6'} text-login-light-gray`}>Don't have an account? <span className='text-twitter-blue hover:underline cursor-pointer' onClick={openRegister}>Register</span></p>
-                  {step === 0 && <p className='mt-1 text-twitter-blue cursor-pointer hover:underline' onClick={() => {loginUser({ username : 'testboy' , password : '12345'}, setErrorMessage, setLoading);}}>Log in with a guest account</p>}       
+                  {step === 0 && <p className='mt-1 text-twitter-blue cursor-pointer hover:underline' onClick={() => {loginUser({ username : 'testboy' , password : 'Testboy1'}, setErrorMessage, setLoading);}}>Log in with a guest account</p>}       
                 </div>
             </form>
         </div>
